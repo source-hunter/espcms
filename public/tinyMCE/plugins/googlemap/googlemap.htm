@@ -1,0 +1,26 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{#googlemap.googlemap_title}</title>
+<script language="javascript" type="text/javascript" src="../../tiny_mce_popup.js"></script>
+<script language="javascript" type="text/javascript" src="../../utils/mctabs.js"></script>
+<script language="javascript" type="text/javascript" src="../../utils/form_utils.js"></script>
+<script type="text/javascript" src="../../utils/editable_selects.js"></script>
+<script language="javascript" type="text/javascript" src="js/googlemap.js"></script>
+<link rel="stylesheet" type="text/css" href="css/googlemap.css" />
+<base target="_self" />
+</head>
+<body onload="" style="display: none; margin: 4px;">
+<form onsubmit="return false;" action="#">
+<div class="Container">
+	<div class="divtitle">{#googlemap.googlemap_langaugepicker}</div>
+	<div class="contentdiv"><textarea id="CodeArea" class="CodeArea"></textarea></div>
+	<div class="Options"><a target="_blank" class="infolink02" href="http://ditu.google.cn/maps/empw?url=http:%2F%2Fditu.google.cn%2Fmaps%3Fhl%3Dzh-CN%26ie%3DUTF8%26ll%3D35.86166,104.195397%26spn%3D47.735516,107.138672%26t%3Dm%26z%3D4%26vpsrc%3D1%26brcurrent%3D3,0x31508e64e5c642c1:0x951daa7c349f366f,1%253B5,0,1%26output%3Dembed&hl=zh-CN&gl=cn">{#googlemap.googlemap_ceatecode}</a></div>
+	<div class="Options">{#googlemap.googlemap_code_text}</div>
+	<div class="Actions">
+		<input id="cancel" type="button" value="{#cancel}" language="javascript" onclick="return Cancel_Button_onclick()" />
+		<input id="insert" type="button" value="{#insert}" language="javascript" onclick="return Save_Button_onclick()" />
+	</div>
+</div>
+</form>
+</body>
+</html>

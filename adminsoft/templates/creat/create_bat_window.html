@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<title>[%$softtitle%]</title>
+		<link href="templates/css/baselist.css" rel="stylesheet" type="text/css" />
+		<link href="templates/css/all.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" language="JavaScript">
+			var createmain_doc_mess_title1 = "[%$ST.createmain_doc_mess_title1%]";
+			var createmain_doc_mess_title3 = "[%$ST.createmain_doc_mess_title3%]";
+			var createmain_doc_mess_title4 = "[%$ST.createmain_doc_mess_title4%]";
+			var createmain_doc_mess_title5 = "[%$ST.createmain_doc_mess_title5%]";
+			var createmain_doc_mess_title6 = "[%$ST.createmain_doc_mess_title6%]";
+			var createmain_bat_typeinfo = "[%$ST.createmain_bat_typeinfo%]";
+			var createmain_bat_typeinfo2 = "[%$ST.createmain_bat_typeinfo2%]";
+			var createmain_bat_typeinfo3 = "[%$ST.createmain_bat_typeinfo3%]";
+			var createmain_mess_title3 = "[%$ST.createmain_mess_title3%]";
+			var createmain_mess_title4 = "[%$ST.createmain_mess_title4%]";
+			var createmain_creat_yes = "[%$ST.createmain_creat_yes%]";
+			var createmain_creat_no = "[%$ST.createmain_creat_no%]";
+			var createmain_js_add_ok = "[%$ST.createmain_js_add_ok%]";
+			var createmain_creat_no_c = "[%$ST.createmain_creat_no_c%]";
+			var createmain_creat_no_w = "[%$ST.createmain_creat_no_w%]";
+			var createmain_creat_no_t = "[%$ST.createmain_creat_no_t%]";
+			var createmain_creat_bottonname = "[%$ST.createmain_creat_bottonname%]";
+			var botton_close = "[%$ST.botton_close%]";
+			var createmain_creat_title = "[%$ST.createmain_creat_title%]";
+			var err_createmain_err_title = "[%$ST.err_createmain_err_title%]";
+			var is_html = "[%$is_html%]";
+			$(document).ready(function() {
+				var h = $(window).height();
+				$('#mainwindowhidden').css({height: h - 39});
+				if (is_html == 1) {
+					get_load();
+				} else {
+					$('#filecheckmanger').empty();
+					$('#filecheckmanger').append(err_createmain_err_title);
+				}
+			});
+			function get_load() {
+				$('#coasecreat').attr('disabled', 'true');
+				$('#coasecreat').val(createmain_creat_bottonname);
+				$('#filecheckmanger').remove();
+				$('#filecheckloading').removeClass().addClass('formdiv displaytrue');
+
+				homeload();
+
+				var midlist = '[%$midlist%]';
+
+				var docnumloadurl = "index.php?archive=createmain&action=docnum";
+
+				$('#loadingline').css("width", 0);
+
+				[%if $read.isbatdoc == 1%]
+					$.ajax({
+						type: "POST",
+						url: docnumloadurl,
+						data: "lng=[%$read.lng%]&midlist=" + midlist,
+						success: function(date) {
+							var limit = 10;
+							if (date > 0) {
+
+								var limitnum = Math.round(date / limit + 1);
+
+								var countmax = 500 / limitnum;
+
+								var equanum = 100 / limitnum;
+								$("#loadtext").empty().append(createmain_doc_mess_title4 + date + createmain_doc_mess_title1);
+
+								creatdoc(0, 0, limit, midlist, limitnum, countmax, equanum, 0, 0);
+							}
+						}
+					});
+				[%else%]
+					typest();
+				[%/if%]
+
+					$(this).ajaxStop(function() {
+					$("#htmltext").append("<br>" + createmain_js_add_ok);
+					$('#coasecreat').val(botton_close);
+					$('#coasecreat').attr('disabled', '');
+				});
+			}
+
+			function typest() {
+
+				var midlist = '[%$midlist%]';
+				var midArray = midlist.split(',');
+				var count = midArray.length;
+				if (count <= 0)
+					return false;
+
+				var typeloadurl = "index.php?archive=createmain&action=statmidtype";
+
+				$('#loadingline').css("width", 0);
+				$.ajax({
+					type: "POST",
+					url: typeloadurl,
+					data: "lng=[%$read.lng%]&midlist=" + midlist,
+					success: function(data) {
+						if (data != '') {
+							var typeArray = data.split(',');
+							var typecount = typeArray.length;
+
+							var countmax = 500 / typecount;
+							typeload(data, countmax, 1);
+							$("#loadtext").empty().append(createmain_doc_mess_title5 + typecount + createmain_doc_mess_title1);
+						}
+					}
+				});
+				return true;
+			}
+
+			function typeload(typelist, countmax, forid) {
+				var typeArray = typelist.split(',');
+				if (!typeArray[0]) {
+					substr();
+					return false;
+				}
+				var loadurl = "index.php?archive=createmain&action=creattypesave&class=type";
+				var typeid = typeArray[0];
+
+				$.ajax({
+					type: "POST",
+					url: loadurl,
+					data: "lng=[%$read.lng%]&tid=" + typeid + "&creattype=1",
+					success: function(date) {
+						if (date != 'false') {
+							var str = date + '<br/>';
+							$("#htmltext").empty().append(str);
+
+							var width = forid * countmax;
+							$('#loadingline').css("width", width);
+							typeArray = typeArray.splice(1);
+
+							forid++;
+							var nowtypelist = typeArray.join(',');
+							typeload(nowtypelist, countmax, forid);
+						}
+					}
+				});
+			}
+
+			function substr() {
+
+				var midlist = '[%$midlist%]';
+				var midArray = midlist.split(',');
+				var count = midArray.length;
+				if (count <= 0)
+					return false;
+
+				var loadurl = "index.php?archive=createmain&action=statmidsub";
+
+				$('#loadingline').css("width", 0);
+				$.ajax({
+					type: "POST",
+					url: loadurl,
+					data: "lng=[%$read.lng%]&midlist=" + midlist,
+					success: function(data) {
+						if (data != '') {
+							var sidArray = data.split(',');
+							var sidcount = sidArray.length;
+
+							var countmax = 500 / sidcount;
+
+							subload(data, countmax, 1);
+							var sidstrnum = sidcount - 1;
+							$("#loadtext").empty().append(createmain_doc_mess_title6 + sidstrnum + createmain_doc_mess_title1);
+						}
+					}
+				});
+				return true;
+			}
+
+			function subload(sublist, countmax, forid) {
+
+				var sidArray = sublist.split(',');
+				if (!sidArray[0]) {
+					return false;
+				}
+				var sloadurl = "index.php?archive=createmain&action=creatsubjectsave";
+				var sid = sidArray[0];
+
+				$.ajax({
+					type: "POST",
+					url: sloadurl,
+					data: "lng=[%$read.lng%]&sid=" + sid,
+					success: function(date) {
+						if (date != 'false') {
+							var str = date + '<br/>';
+							$("#htmltext").empty().append(str);
+
+							var width = forid * countmax;
+							$('#loadingline').css("width", width);
+							sidArray = sidArray.splice(1);
+							forid++;
+							var nowsidlist = sidArray.join(',');
+							subload(nowsidlist, countmax, forid);
+						}
+					}
+				});
+			}
+
+			function homeload() {
+				var loadurl = "index.php?archive=createmain&action=indexsave";
+				$.ajax({
+					type: "POST",
+					url: loadurl,
+					data: "lng=[%$read.lng%]"
+				});
+				return true;
+			}
+
+
+			function creatdoc(limitstart, i, limitnummax, midlist, limitnum, countmax, equanum, equ, width) {
+				var loadurl = "index.php?archive=createmain&action=creatdocsave";
+
+				var loadmum = limitstart + limitnummax;
+				if (i < limitnum) {
+					$.ajax({
+						type: "POST",
+						url: loadurl,
+						data: "lng=[%$read.lng%]&midlist=" + midlist + "&limit=" + limitstart + "&limitnummax=" + limitnummax + "&startid=[%$read.startid%]&endid=[%$read.endid%]",
+						success: function(date) {
+							if (date == 'true') {
+
+								width = width + countmax;
+								equ = equ + equanum;
+								var loadstr = limitstart + ' - ' + loadmum + createmain_doc_mess_title3 + '<br/>';
+
+								$("#htmltext").empty().append(loadstr);
+								$('#loadingline').css("width", width);
+
+								i++;
+
+								limitstart = i * limitnummax;
+								creatdoc(limitstart, i, limitnummax, midlist, limitnum, countmax, equanum, equ, width);
+							}
+						}
+					});
+				} else {
+					typest();
+				}
+			}
+			function loadclose() {
+				parent.closeifram();
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="centerrightwindow">
+			<div id="mainwindowhidden">
+				<div class="suggestion">
+					<span class="sugicon"><span class="strong colorgorning2">[%$ST.position_title%]</span><span class="padding-left5 colorgorningage">[%$ST.createmain_creattype_title%]</span></span>
+				</div>
+				<div class="sugtitle-line"></div>
+				<div class="formdiv" id="filecheckmanger">
+					<table border="0" width="100%">
+						<tr>
+							<td id="center" style="padding:25px;"><img alt="" src="templates/images/loading_02.gif" /></td>
+						</tr>
+						<tr>
+							<td id="center" class="strong colorgorning2" style="padding:0px">[%$ST.loading_title_mess%]</td>
+						</tr>
+					</table>
+				</div>
+				<div class="formdiv displaynone" id="filecheckloading">
+					<table border="0" width="100%">
+						<tr>
+							<td id="loadtext" style="padding-top:10px;" class="colorgorning2 center lineheight160"></td>
+						</tr>
+						<tr>
+							<td width="100%" style="padding-top:10px;" class="center">
+								<div class="loadingtable" id="loadingtable">
+									<div class="loadingline" id="loadingline"></div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td id="htmltext" style="padding-top:5px;" class="colorgorningage center lineheight160"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div id="downbotton">
+				<div id="subbotton">
+					<table border="0" width="100%">
+						<tr id="bottonsubmit">
+							<td id="center"><input type="button" name="cancel" id="coasecreat" onClick="javascript:loadclose();" value="[%$ST.botton_close%]" class="buttonface"/></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
