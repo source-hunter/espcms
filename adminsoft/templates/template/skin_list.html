@@ -4,8 +4,9 @@
 	<table border="0" style="border-collapse:collapse" width="100%" bordercolor="#FFFFFF">
 		<tr>
 			<td width="10%">[%$array[list].skid%]</td>
-			<td width="35%">[%$array[list].name%]</td>
+			<td width="25%">[%$array[list].name%]</td>
 			<td width="15%">[%$array[list].code%]</td>
+			<td width="10%">[%if $array[list].iswap==1%][%$ST.skinmain_text_type2%][%else%][%$ST.skinmain_text_type1%][%/if%]</td>
 			<td width="10%" id="infotype">
 				<table>
 					<tr>
@@ -29,7 +30,7 @@
 						[%if @this->powercheck('templates','setting')==true %]
 						<td class="padding-left3">
 							[%if $array[list].isclass==0%]
-							<a class="setedit" onclick="javascript:submiturl('index.php?archive=skinmain&action=setting&skid=[%$array[list].skid%]&code=[%$array[list].code%]&isclass=1&freshid='+Math.random(),'index.php?archive=management&action=load','[%$ST.run_ok%]','[%$ST.skinmain_class_log_mess%]',true,'[%$ST.skinmain_isclass_mess%]','selectform','selectall','check_all');" href="#body" title="[%$ST.setdel_botton%]" hidefocus="true">[%$ST.setedit_userok%]</a>
+							<a class="setedit" onclick="javascript:submiturl('index.php?archive=skinmain&action=setting&skid=[%$array[list].skid%]&code=[%$array[list].code%]&isclass=1&iswap=[%$array[list].iswap%]&freshid='+Math.random(),'index.php?archive=management&action=load','[%$ST.run_ok%]','[%$ST.skinmain_class_log_mess%]',true,'[%$ST.skinmain_isclass_mess%]','selectform','selectall','check_all');" href="#body" title="[%$ST.setdel_botton%]" hidefocus="true">[%$ST.setedit_userok%]</a>
 							[%else%]
 							<a class="setedit4" href="#body" title="[%$ST.setedit_userclose%]" hidefocus="true">[%$ST.setedit_userclose%]</a>
 							[%/if%]

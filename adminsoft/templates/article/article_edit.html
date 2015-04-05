@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <title>[%$softtitle%]</title>
@@ -16,9 +15,7 @@
 <script type="text/javascript" src="js/initedit.js"></script>
 <script type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
-
 	var resizewindow= null;
-
 	window.onresize = function(){
 		var h = $(window).height();
 		if(resizewindow!=h){
@@ -26,7 +23,6 @@
 			resizewindow=h;
 		}
 	}
-
 	function sizewindow(){
 		var h = $(window).height();
 		if(document.getElementById("mainbodybottonauto")){
@@ -51,7 +47,6 @@
 	var mid = "[%$mid%]";
 	var iframename = "[%$iframename%]";
 	var addtype = "[%$type%]";
-
 	$(document).ready(function(){
 		editshow("#content");
 		[%forlist from=$modelatt key=list%]
@@ -59,7 +54,6 @@
 		editsimpleshow("#[%$modelatt[list].attrname%]");
 		[%/if%]
 		[%/forlist%]
-
 		$('#color').EasySiteColorSelect();
 		var h = '[%$iframeheightwindow%]';
 		$('.managebottonadd').css({height:h-40});
@@ -74,10 +68,6 @@
 		});
 		parent.scrolclear();
 	})
-
-
-
-
 	function formverify(formData, jqForm, options) {
 		for (var i=0; i< formData.length; i++){
 			[%forlist from=$modelatt key=list%]
@@ -90,7 +80,6 @@
 		}
 		var queryString = $.param(formData);
 		var get=urlarray(queryString);
-
 		[%forlist from=$modelatt key=list%]
 			[%if ($modelatt[list].isvalidate==1)%]
 			[%if ($modelatt[list].validatetext!='')%]
@@ -104,7 +93,6 @@
 			}
 			[%/if%]
 		[%/forlist%]
-
 		if(get['islink']==1){
 			if(get['link'].match(/^http:\/\/[a-zA-Z\:.0-9-%@#;&?=/_]+$/ig)==null) {
 				document.docadd.link.focus();
@@ -112,7 +100,6 @@
 				return false;
 			}
 		}
-
 		if(get['tid']==0){
 			document.docadd.tid.focus();
 			alert(article_doc_add_tid+article_js_noselect_empty);
@@ -147,22 +134,36 @@
 			}else{
 				alert(article_js_doc_copy_ok);
 			}
-
 		}else{
 			if (addtype=='edit'){
 				alert(article_js_doc_edit_no+'Return message:'+options);
 			}else{
 				alert(article_js_doc_copy_no+'Return message:'+options);
 			}
-
 		}
 		parent.scrolopen();
 		parent.onaletdoc();
 	}
-
+	function keyword(inputname,contentname){
+		var contentvalue=tinyMCE.get(contentname).getContent();
+		var inputvalue=$('#'+inputname).val();
+		contentvalue = contentvalue.replace(/%/g, "%25");
+		contentvalue = contentvalue.replace(/\&/g, "%26");
+		var posturl='index.php?archive=article&action=keyword';
+		$.ajax({
+			type: "POST",
+			url: posturl,
+			data: "keystr_text=" + contentvalue,
+			success: function(data) {
+				if(data!='false'){
+					var newsinputval=data+inputvalue;
+					$('#'+inputname).val(newsinputval);
+				}
+			}
+		});
+	}
 </script>
 </head>
-
 <body>
 <form name="docadd" id="docadd" method="post" action="index.php?archive=article&action=docsave">
 <input type="hidden" name="inputclass" value="[%$type%]">
@@ -253,20 +254,20 @@
 						</tr>
 						[%/if%]
 					[%/forlist%]
-
 					<tr class="trstyle2">
 						<td class="trtitle03" colspan="2">[%$ST.article_doc_tab_title01%]</td>
 					</tr>
 					<tr class="trstyle2">
 						<td class="trtitle01"></td>
 						<td class="trtitle02">
+							<a class="keyselect" href="#body" onclick="keyword('tags','content');">[%$ST.creattag_botton%]</a>
 							<a class="keyselect" href="#body" onclick="javascript:parent.windowsdig('[%$ST.selecttag_botton%]','iframe:index.php?archive=seomanage&action=listwindow&inputtext=tags&listfunction=key&checkfrom=input&mid=[%$mid%]&tid='+document.docadd.tid.value+'&iframename='+self.frameElement.getAttribute('name'),'650px','380px','iframe');">[%$ST.selecttag_botton%]</a>
 						</td>
 					</tr>
 					<tr class="trstyle2">
 						<td class="trtitle01">[%$ST.article_doc_add_tags%]</td>
 						<td class="trtitle02">
-							<input type="text" name="tags" id="tags" maxlength="100" value="[%$read.tags%]" class="infoInput" style="width:98%;"/>
+							<input type="text" name="tags" id="tags" value="[%$read.tags%]" class="infoInput" style="width:98%;"/>
 						</td>
 					</tr>
 					<tr class="trstyle2">
@@ -527,15 +528,15 @@
 		[%if $type=='edit'%]
 		<table width="100%">
 			<tr>
-				<td id="right"><input type="submit" id="docaddsubmitbotton" name="Submit" value="[%$ST.botton_edit%]" class="buttonface" /></td>
-				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:closewindow();" value="[%$ST.botton_edit_reset%]" class="buttonface" /></td>
+				<td id="right"><input type="submit" id="docaddsubmitbotton" name="Submit" value="[%$ST.botton_edit%]" class="button orange" /></td>
+				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:closewindow();" value="[%$ST.botton_edit_reset%]" class="button orange" /></td>
 			</tr>
 		</table>
 		[%else%]
 		<table width="100%">
 			<tr>
-				<td id="right"><input type="submit" id="docaddsubmitbotton" name="Submit" value="[%$ST.botton_add%]" class="buttonface" /></td>
-				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:closewindow();" value="[%$ST.botton_add_reset%]" class="buttonface" /></td>
+				<td id="right"><input type="submit" id="docaddsubmitbotton" name="Submit" value="[%$ST.botton_add%]" class="button orange" /></td>
+				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:closewindow();" value="[%$ST.botton_add_reset%]" class="button orange" /></td>
 			</tr>
 		</table>
 		[%/if%]
@@ -551,7 +552,4 @@
 [%/if%]
 </form>
 </body>
-
 </html>
-
-

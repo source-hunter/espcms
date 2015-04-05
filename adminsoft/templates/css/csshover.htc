@@ -93,4 +93,4 @@ function getElementsBySelect(rule) {
         
         return nodes;
     }
-</script>
+</script>      

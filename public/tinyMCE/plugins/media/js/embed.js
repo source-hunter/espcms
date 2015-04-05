@@ -8,16 +8,16 @@ function writeFlash(p) {
 		'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0',
 		'application/x-shockwave-flash',
 		p
-	);
+		);
 }
 
 function writeShockWave(p) {
 	writeEmbed(
-	'166B1BCA-3F9C-11CF-8075-444553540000',
-	'http://download.macromedia.com/pub/shockwave/cabs/director/sw.cab#version=8,5,1,0',
-	'application/x-director',
+		'166B1BCA-3F9C-11CF-8075-444553540000',
+		'http://download.macromedia.com/pub/shockwave/cabs/director/sw.cab#version=8,5,1,0',
+		'application/x-director',
 		p
-	);
+		);
 }
 
 function writeQuickTime(p) {
@@ -26,7 +26,7 @@ function writeQuickTime(p) {
 		'http://www.apple.com/qtactivex/qtplugin.cab#version=6,0,2,0',
 		'video/quicktime',
 		p
-	);
+		);
 }
 
 function writeRealMedia(p) {
@@ -35,7 +35,7 @@ function writeRealMedia(p) {
 		'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0',
 		'audio/x-pn-realaudio-plugin',
 		p
-	);
+		);
 }
 
 function writeWindowsMedia(p) {
@@ -45,18 +45,18 @@ function writeWindowsMedia(p) {
 		'http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701',
 		'application/x-mplayer2',
 		p
-	);
+		);
 }
 
 function writeEmbed(cls, cb, mt, p) {
 	var h = '', n;
 
 	h += '<object classid="clsid:' + cls + '" codebase="' + cb + '"';
-	h += typeof(p.id) != "undefined" ? 'id="' + p.id + '"' : '';
-	h += typeof(p.name) != "undefined" ? 'name="' + p.name + '"' : '';
-	h += typeof(p.width) != "undefined" ? 'width="' + p.width + '"' : '';
-	h += typeof(p.height) != "undefined" ? 'height="' + p.height + '"' : '';
-	h += typeof(p.align) != "undefined" ? 'align="' + p.align + '"' : '';
+	h += typeof (p.id) != "undefined" ? 'id="' + p.id + '"' : '';
+	h += typeof (p.name) != "undefined" ? 'name="' + p.name + '"' : '';
+	h += typeof (p.width) != "undefined" ? 'width="' + p.width + '"' : '';
+	h += typeof (p.height) != "undefined" ? 'height="' + p.height + '"' : '';
+	h += typeof (p.align) != "undefined" ? 'align="' + p.align + '"' : '';
 	h += '>';
 
 	for (n in p)
@@ -71,3 +71,4 @@ function writeEmbed(cls, cb, mt, p) {
 
 	document.write(h);
 }
+      

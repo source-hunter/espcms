@@ -1,0 +1,24 @@
+[%#%]权限组列表[%#%]
+[%if $menutype == 'grouplist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('system','groupadd')==true %]
+	<li class="menumain"><a id="addinfo" class="addinfo" onclick="javascript:parent.onbotton('[%$ST.botton_add_group|addslashes('hc')%]','index.php?archive=powergroup&action=groupadd&tab=true&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'addinfo',self.frameElement.getAttribute('name'));"  href="#body" title="[%$ST.botton_add_group%]" hidefocus="true">[%$ST.botton_add_group%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	<li class="menumain"><a id="bolt" href="#body" hidefocus="true" hidefocus="true">[%$ST.bolt_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.group_properties_botton%]</span>
+				<ul>
+					<li><a class="menunoclick" id="delclass0" href="#body" onclick="javascript:dbfilter('delclass','delclass',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="delclass1" href="#body" onclick="javascript:dbfilter('delclass','delclass',1,1,3,'selectform','selectall','check_all')" title="[%$ST.group_sys_botton%]" hidefocus="true">[%$ST.group_sys_botton%]</a></li>
+					<li><a class="menuclick" id="delclass2" href="#body" onclick="javascript:dbfilter('delclass','delclass',2,2,3,'selectform','selectall','check_all')" title="[%$ST.group_custom_botton%]" hidefocus="true">[%$ST.group_custom_botton%]</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	[%if @this->powercheck('system','delgroup')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:callrun('index.php?archive=powergroup&action=delgroup','selectinfoid',false,null,null,'index.php?archive=management&action=load','[%$ST.del_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+</ul>
+[%/if%]      

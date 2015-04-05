@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>[%$softtitle%]</title>
+<link href="templates/css/baselist.css" rel="stylesheet" type="text/css" />
+<link href="templates/css/all.css" rel="stylesheet" type="text/css" />
+<link href="templates/css/formdiv.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/control.js"></script>
+<script type="text/javascript" src="js/dialog.js"></script>
+<script type="text/javascript" src="js/colorpicker.js"></script>
+<script type="text/javascript" src="js/initedit.js"></script>
+<script type="text/javascript">
+	var resizewindow= null;
+	window.onresize=function(){var h=$(window).height();if(resizewindow!=h){sizewindow();resizewindow=h;}};function sizewindow(){var h=$(window).height();if(document.getElementById("mainbodybottonauto")){$('.managebottonadd').css({height:h-40});}}
+	$(document).ready(function(){parent.scrolclear();});function synchronization(){parent.windowsdig('Loading','iframe:index.php?archive=management&action=load','400px','180px','iframe',false);$.ajax({type:"GET",url:"index.php?archive=modenmain&action=synchronization",success:function(data){parent.closeifram();if(data=='false'){alert('[%$ST.modenmain_text_setup1%]'+':'+data);}else{alert('[%$ST.modenmain_text_setup2%]');$('#applisthtml').prepend(data);}}});}
+	function appsetup(appid){parent.windowsdig('Loading','iframe:index.php?archive=management&action=load','400px','180px','iframe',false);var bottonidname="#installdiv_"+appid;var loadurl="index.php?archive=modenmain&action=appsetup";$.ajax({type:"POST",url:loadurl,data:"appid="+appid,dataType:'json',success:function(date){parent.closeifram();alert(date.message);if(date.setuptype==1){$(bottonidname).remove();$('#appinstallhtml').prepend(date.outhtml);}}});}
+	function appuninstall(appid){parent.windowsdig('Loading','iframe:index.php?archive=management&action=load','400px','180px','iframe',false);var bottonidname="#installdiv_"+appid;var loadurl="index.php?archive=modenmain&action=appuninstall";$.ajax({type:"POST",url:loadurl,data:"appid="+appid,dataType:'json',success:function(date){parent.closeifram();alert(date.message);if(date.setuptype==1){$(bottonidname).remove();$('#applisthtml').prepend(date.outhtml);}}});}
+	function appupdate(appid){parent.windowsdig('Loading','iframe:index.php?archive=management&action=load','400px','180px','iframe',false);var bottonidname="#installbotton_"+appid;var loadurl="index.php?archive=modenmain&action=appupdate";$.ajax({type:"POST",url:loadurl,data:"appid="+appid,dataType:'json',success:function(date){parent.closeifram();alert(date.message);if(date.setuptype==1){$(bottonidname).empty();$(bottonidname).prepend(date.outhtml);}}});}
+	document.oncontextmenu=new Function('event.returnValue=false;');
+	document.onselectstart=new Function('event.returnValue=false;');
+</script>
+</head>
+<body>
+<div id="mainbodybottonauto" class="managebottonadd">
+	<div class="maindobycontent">
+		<div class="suggestion">
+			<span class="sugicon"><span class="strong colorgorning2">[%$ST.modenmain_text_mess%]</span></span>
+		</div>
+		<div class="manageeditdiv_fff">
+			[%if count($array) > 0%]
+				<div class="app_title_lock"><p>[%$ST.modenmain_text_setup5%]</p></div>
+				<ul class="applist" id="appinstallhtml">
+					[%forlist from=$array key=list%]
+					<li id="installdiv_[%$array[list].appid%]">
+						<img src="[%$loadurl%][%$array[list].applypic%]" title="[%$array[list].applyname%]" class="pic"/>
+						<p class="title">[%$array[list].applyname%]</p>
+						<p class="desc">[%if $array[list].isfree==1%][%$ST.modenmain_text_setup6%][%else%][%$ST.modenmain_text_setup7%][%/if%]</p>
+						<p class="setupicon" id="installbotton_[%$array[list].appid%]">
+							[%if $array[list].isdel==1%]
+							<a href="#" class="button" id="setupicon_[%$array[list].appid%]">[%$ST.modenmain_text_setup8%]</a>
+							[%else%]
+							[%if @this->powercheck('system','appuninstall')==true %]
+								[%if $array[list].volsn<$array[list].updatevol%]
+								<a href="javascript:if (confirm('[%$ST.modenmain_text_setup24%]')) appupdate([%$array[list].appid%]);" class="button three" id="appbotton[%$array[list].appid%]">[%$ST.modenmain_text_setup23%]</a>
+								[%else%]
+								<a href="javascript:if (confirm('[%$ST.modenmain_text_setup9%]')) appuninstall([%$array[list].appid%]);" class="button orange" id="appbotton[%$array[list].appid%]">[%$ST.modenmain_text_setup10%]</a>
+								[%/if%]
+							[%/if%]
+							[%/if%]
+						</p>
+					</li>
+					[%/forlist%]
+				</ul>
+			[%/if%]
+			[%if count($noinstallarray) > 0%]
+				<div class="app_title_lock"><p>[%$ST.modenmain_text_setup11%]</p></div>
+				<ul class="applist" id="applisthtml">
+					[%forlist from=$noinstallarray key=list%]
+					<li id="installdiv_[%$noinstallarray[list].appid%]">
+						<img src="[%$loadurl%][%$noinstallarray[list].applypic%]" title="[%$noinstallarray[list].applyname%]" class="pic"/>
+						<p class="title">[%$noinstallarray[list].applyname%]</p>
+						<p class="desc">[%if $noinstallarray[list].isfree==1%][%$ST.modenmain_text_setup6%][%else%][%$ST.modenmain_text_setup7%][%/if%]</p>
+						<p class="setupicon">
+							[%if @this->powercheck('system','appsetup')==true %]
+							<a disabled="true" href="javascript:appsetup([%$noinstallarray[list].appid%]);" class="button three" id="appbotton[%$noinstallarray[list].appid%]">[%$ST.modenmain_text_setup12%]</a>
+							[%/if%]
+						</p>
+					</li>
+					[%/forlist%]
+				</ul>
+			[%/if%]
+		</div>
+	</div>
+</div>
+<div id="downbotton">
+	<div id="subbotton">
+		<table border="0" width="100%">
+			<tr>
+				<td id="center"><input type="button" name="cancel" onClick="javascript:synchronization();" value="[%$ST.modenmain_text_setup13%]" class="button orange" /></td>
+			</tr>
+		</table>
+	</div>
+</div>
+</body>
+</html>

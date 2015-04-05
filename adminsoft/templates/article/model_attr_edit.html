@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <title>[%$softtitle%]</title>
@@ -11,9 +10,7 @@
 <script type="text/javascript" src="js/form.js"></script>
 <script type="text/javascript" src="js/control.js"></script>
 <script type="text/javascript">
-
 	var resizewindow= null;
-
 	window.onresize = function(){
 		var h = $(window).height();
 		if(resizewindow!=h){
@@ -21,7 +18,6 @@
 			resizewindow=h;
 		}
 	}
-
 	function sizewindow(){
 		var h = $(window).height();
 		if(document.getElementById("mainbodybottonauto")){
@@ -49,7 +45,6 @@
 			return false;
 		});
 	})
-
 	function formverify(formData, jqForm, options) {
 		var queryString = $.param(formData);
 		var get=urlarray(queryString);
@@ -95,7 +90,6 @@
 	}
 </script>
 </head>
-
 <body>
 <form name="modelattredit" id="modelattredit" method="post" action="index.php?archive=modelmanage&action=modelattrsave">
 <input type="hidden" name="inputclass" value="edit">
@@ -216,8 +210,8 @@
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr>
-				<td id="right"><input type="submit" id="submitbotton" name="Submit" value="[%$ST.botton_edit%]" class="buttonface" /></td>
-				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_edit_reset%]" class="buttonface" /></td>
+				<td id="right"><input type="submit" id="submitbotton" name="Submit" value="[%$ST.botton_edit%]" class="button orange" /></td>
+				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_edit_reset%]" class="button orange" /></td>
 			</tr>
 		</table>
 	</div>
@@ -231,7 +225,4 @@
 [%/if%]
 </form>
 </body>
-
 </html>
-
-

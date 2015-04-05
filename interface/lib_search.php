@@ -2,11 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2010 ECISP.CN
-  声明：这不是一个免费的软件，请在许可范围内使用
-
-  作者：Bili E-mail:huangqyun@163.com  QQ:6326420
-  http://www.ecisp.cn	http://www.easysitepm.com
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class lib_search extends connector {
@@ -14,10 +13,8 @@ class lib_search extends connector {
 	function lib_search() {
 		$this->softbase();
 		parent::start_pagetemplate();
-
 		$this->pagetemplate->libfile = true;
 	}
-
 	function call_search($lng, $para, $filename = 'search', $outHTML = null) {
 		$para = $this->fun->array_getvalue($para);
 		$lngpack = $lng ? $lng : $this->CON['is_lancode'];
@@ -29,9 +26,11 @@ class lib_search extends connector {
 		$mid = empty($mid) ? 0 : $mid;
 		$tid = intval($para['tid']);
 		$tid = empty($tid) ? 0 : $tid;
-
 		$att = intval($para['att']);
 		$att = empty($att) ? 0 : $att;
+
+		$keyname = trim($para['keyname']);
+		$keyword = trim($para['keyword']);
 
 		if (!$mid) {
 			$modelarray = $this->get_model(0, $lng, 1, 1);
@@ -70,9 +69,7 @@ class lib_search extends connector {
 			$typearray = $this->get_typelist(array(), 0, $tid, 0, $lng, 0, 1);
 			$now_level = $typearray[$tid]['level'];
 			unset($typearray[$tid]);
-
 			if ($typeview['upid'] > 0) {
-
 				foreach ($typearray as $key => $value) {
 					$typearray[$key]['level'] = $value['level'] - $now_level;
 				}
@@ -91,6 +88,8 @@ class lib_search extends connector {
 		$this->pagetemplate->assign('lngpack', $LANPACK);
 		$this->pagetemplate->assign('mid', $mid);
 		$this->pagetemplate->assign('tid', $tid);
+		$this->pagetemplate->assign('keyword', $keyword);
+		$this->pagetemplate->assign('keyname', $keyname);
 		if (!empty($outHTML)) {
 			$output = $this->pagetemplate->fetch(null, null, $outHTML);
 		} else {
@@ -99,7 +98,4 @@ class lib_search extends connector {
 		return $output;
 	}
 
-
 }
-
-?>

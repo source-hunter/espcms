@@ -1,0 +1,134 @@
+<script type="text/javascript" src="{%$rootdir%}js/pagebotton.js"></script>
+<script type="text/javascript">
+	$().ready(function() {
+		var loadurl = $('#loadurl').val();
+		var limit = $('#limit').val();
+		var countnum = $('#countnum').val();
+		var maxpage = $('#maxpage').val();
+		var nowpage = $('#nowpage').val();
+		var loadname = $('#loadname').val();
+		var pagetextname = $('#pagetextname').val();
+		var pagebottonname = $('#pagebottonname').val();
+		pageload(loadurl, limit, countnum, maxpage, nowpage, loadname, pagetextname, pagebottonname, 'ajaxFormlist');
+	});
+
+
+
+
+
+
+
+
+
+
+	function pageload(loadurl, limit, countnum, maxpage, nowpage, loadname, pagetextname, pagebottonname, formname) {
+		$(this).pagination(countnum, {
+
+			db_max: countnum,
+
+			items_per_page: limit,
+
+			current_page: nowpage,
+			prev_text: "Previous",
+			next_text: "Next",
+			home_text: "Home",
+			end_text: "Last",
+			loadname: loadname,
+			pagetextname: pagetextname,
+			pagebottonname: pagebottonname,
+			formname: formname,
+
+			loadurl: loadurl,
+			callback: pageselectCallback
+		});
+		pageselectCallback(limit, nowpage, maxpage, countnum, pagetextname, loadname, loadurl);
+	}
+
+	function pageselectCallback(limit, nowpage, maxpage, countnum, pagetextname, loadname, loadurl) {
+		$("#nowpage").val(nowpage);
+
+		var limitstard = (limit * nowpage);
+
+
+		$.ajax({
+			type: "get",url: loadurl,data: {'limitstard': limitstard, 'nowpage': nowpage, 'limit': limit},global: false,
+			beforeSend: function() {
+				$('#espcms_bbs_loading').removeClass("displaynone");
+			},
+			success: function(data) {
+				$('#espcms_bbs_loading').addClass("displaynone");
+				$(loadname).empty().append(data);
+			}
+		});
+
+	}
+</script>
+<form name="ajaxFormlist" id="ajaxFormlist" method="post">
+	<input type="hidden" name="loadurl" id="loadurl" value="{%$ajaxurl%}index.php?ac=messmain&at=ajaxlist&did={%$did%}">
+	<!--每页显示数量-->
+	<input type="hidden" name="limit" id="limit" value="{%$limit%}"/>
+	<!--数量总数量-->
+	<input type="hidden" name="countnum" id="countnum" value="{%$countnum%}"/>
+	<!--总翻页数量-->
+	<input type="hidden" name="maxpage" id="maxpage" value="{%$maxpage%}"/>
+	<!--当前翻页数-->
+	<input type="hidden" name="nowpage" id="nowpage" value="0"/>
+	<input type="hidden" name="loadname" id="loadname" value="#bbsajaxlist"/>
+	<input type="hidden" name="pagetextname" id="pagetextname" value="#espcms_bbs_pagelist"/>
+	<input type="hidden" name="pagebottonname" id="pagebottonname" value="#espcms_bbs_pagination"/>
+	<div class="espcms_bbs_loading displaynone" id="espcms_bbs_loading"><img src="{%$rootpath%}images/lightbox-ico-loading.gif"></div>
+	<ul class="espcms_bbs_list_all" id="bbsajaxlist"></ul>
+</form>
+
+<div class="espcms_page_botton">
+	<div id="espcms_bbs_pagelist"></div>
+</div>
+<div class="espcms_page_botton">
+	<div id="espcms_bbs_pagination" class="pagination"></div>
+</div>
+
+<script type="text/javascript">
+	var forum_input_err = "{%$lngpack.forum_input_err%}";
+	var seccode_empty = "{%$lngpack.seescodeerr%}";
+	var email_err = "{%$lngpack.email_err%}";
+</script>
+<form name="messformsave" method="post" action="{%$messform%}" onSubmit="return messform('{%$bbs_isseccode%}')">
+	<input type="hidden" name="userid" value="{%$member.userid%}"/>
+	<input type="hidden" name="did" value="{%$did%}"/>
+	<input type="hidden" name="lng" value="{%$lng%}"/>
+	<input type="hidden" name="tokenkey" value="{%$tokenkey.token_key%}"/>
+	<div class="espcms_bbs_form pt20">
+		<b class="b1"></b><b class="b2"></b><b class="b3"></b><b class="b4"></b>
+		<div class="title"><div class="messageicon"></div><div class="messtitle">Message</div></div>
+		<div class="content">
+			<div class="espcms_form_group">
+				<label for="username" class="control_label">Name</label>
+				<div class="control_required"><input type="text" name="name" id="name" class="col5 infoInput"/></div>
+			</div>
+			<div class="espcms_form_group">
+				<label for="username" class="control_label">Email</label>
+				<div class="control_required"><input type="text" name="email" id="email" class="col5 infoInput"/></div>
+			</div>
+			<div class="espcms_form_group">
+				<label for="content" class="control_label">Content</label>
+				<div class="control_required">
+					<textarea name="content" id="content" rows="6" class="col11 infoInput"></textarea>
+				</div>
+			</div>
+			{%if $bbs_isseccode==1%}
+			<div class="espcms_form_group">
+				<label for="username" class="control_label">Verification</label>
+				<div class="control_required">
+					<input type="text" id="seccode" name="seccode" class=" infoInput" maxlength="4" size="5" style="text-transform: uppercase;"/>
+					<img title="Click on the change" id="memberseccodesrc" onclick="sessionimg('memberseccodesrc', '{%$rootdir%}')" src="{%$seccodelink%}" style="cursor: pointer;height:28px;margin-left:5px;" align="absmiddle"/>
+				</div>
+			</div>
+			{%/if%}
+			<div class="espcms_form_group">
+				<label class="control_label"> </label>
+				<div class="control_required"><input type="submit" id="submit" class="button blue2" value="Submit"> </div>
+			</div>
+		</div>
+		<b class="b5"></b><b class="b6"></b><b class="b7"></b><b class="b8"></b>
+	</div>
+</form>

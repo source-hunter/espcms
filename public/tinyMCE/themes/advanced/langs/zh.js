@@ -61,4 +61,4 @@ toolbar_focus:"\u5DE5\u5177\u6309\u94AE- Alt+Q,\u7F16\u8F91\u5668- Alt-Z,\u5143\
 more_colors:"\u66F4\u591A\u989C\u8272",
 link_delta_width:"40",
 link_delta_height:"60"
-});
+});      

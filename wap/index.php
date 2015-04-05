@@ -1,13 +1,10 @@
 <?php
-
 /*
- * PHP version 5
- * Copyright (c) 2002-2010 ECISP.CN
- * 声明：这不是一个免费的软件，请在许可范围内使用
- * 作者：Bili E-mail:huangqyun@163.com  QQ:6326420
- * http://www.ecisp.cn		官方网址
- * http://www.easysitepm.com	系统演示网址
- * 作用：前面入口
+  PHP version 5
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 error_reporting(0);
 ini_set("magic_quotes_runtime", 0);
@@ -43,19 +40,13 @@ if ($CONFIG['is_close']) {
 }
 include admin_ROOT . 'public/uc_config.php';
 $lngnow = indexget('lng', 'R');
-$lngnow = empty($lngnow) ? $CONFIG['home_lng'] : $lngnow;
-
+$lngnow = empty($lngnow) ? $CONFIG['wap_default_lng'] : $lngnow;
 define('admin_LNG', $lngnow);
-
 define('LANCODE', $CONFIG['is_lancode']);
-
 $lngpack = (admin_LNG == 'big5') ? $CONFIG['is_lancode'] : admin_LNG;
-
 define('admin_LNGDIR', $lngpack . '/');
-
 $rootDIR = $CONFIG['http_pathtype'] ? admin_URL : str_replace('http://' . admin_http, '', admin_URL);
 define('admin_rootDIR', $rootDIR);
-
 if (empty($archive) || empty($action)) {
 	include admin_ROOT . 'interface/public.php';
 	$mainlist = new mainpage();
@@ -81,7 +72,6 @@ if (empty($archive) || empty($action)) {
 		exit('Access error!');
 	}
 }
-
 function indexget($k, $var = 'R', $htmlcode = true, $rehtml = false) {
 	switch ($var) {
 		case 'G':
@@ -103,7 +93,6 @@ function indexget($k, $var = 'R', $htmlcode = true, $rehtml = false) {
 	$putvalue = isset($var[$k]) ? indexdaddslashes($var[$k], 0) : NULL;
 	return $htmlcode ? indexhtmldecode($putvalue) : $putvalue;
 }
-
 function indexdaddslashes($string, $force = 0, $strip = FALSE) {
 	if (!get_magic_quotes_gpc() || $force == 1) {
 		if (is_array($string)) {
@@ -116,7 +105,6 @@ function indexdaddslashes($string, $force = 0, $strip = FALSE) {
 	}
 	return $string;
 }
-
 function indexhtmldecode($str) {
 	if (empty($str)) return $str;
 	if (!is_array($str)) {
@@ -130,7 +118,6 @@ function indexhtmldecode($str) {
 	}
 	return $str;
 }
-
 function is_mobile() {
 	$devices = array(
 	    "operaMobi" => "Opera Mobi",
@@ -157,5 +144,3 @@ function is_mobile() {
 	}
 	return FALSE;
 }
-
-?>

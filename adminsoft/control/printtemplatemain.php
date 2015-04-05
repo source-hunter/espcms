@@ -1,38 +1,27 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onprintlist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
 		}
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_where = ' WHERE styleclass=2 and lng=\'' . $lng . '\'';
-
 		$typeclass = $this->fun->accept('typeclass', 'R');
 		if (!empty($typeclass)) {
 			$db_where.=" AND typeclass='$typeclass'";
@@ -42,10 +31,8 @@ class important extends connector {
 			if ($lockin == 2) $lockin = 0;
 			$db_where.=' AND lockin=' . $lockin;
 		}
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'tmid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_table = db_prefix . 'templates';
@@ -63,20 +50,17 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('template/printtemplate_list');
 	}
-
 	function onprintadd() {
 		include_once admin_ROOT . adminfile . '/include/inc_replace_mailtemplates.php';
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$this->ectemplates->assign('lng', $lng);
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->display('template/printtemplate_add');
 	}
-
 	function onprintedit() {
 		include_once admin_ROOT . adminfile . '/include/inc_print.php';
 		parent::start_template();
@@ -92,7 +76,6 @@ class important extends connector {
 		$tempfile = $type == 'edit' ? 'template/printtemplate_edit' : 'template/printtemplate_copy';
 		$this->ectemplates->display($tempfile);
 	}
-
 	function onpifrmat() {
 		parent::start_template();
 		$tmid = $this->fun->accept('tmid', 'R');
@@ -103,7 +86,6 @@ class important extends connector {
 		$this->ectemplates->assign('read', $read);
 		$this->ectemplates->display('template/printtemplate_frame');
 	}
-
 	function onsave() {
 		$inputclass = $this->fun->accept('inputclass', 'P');
 		$lng = $this->fun->accept('lng', 'P');
@@ -144,7 +126,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onprintdel() {
 		$db_table = db_prefix . 'templates';
 		$tmid = $this->fun->accept('tmid', 'R');
@@ -162,7 +143,4 @@ class important extends connector {
 		$this->dbcache->clearcache('templates_array_' . $lng . '_' . $styleclass, true);
 		exit('true');
 	}
-
 }
-
-?>

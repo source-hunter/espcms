@@ -28,7 +28,7 @@ function initinput() {
 					<td align="center" bgcolor="#ffffff" valign="top" class="centerbg">
 					<table border="0" cellpadding="0" style="width: 90%;" class="style1">
 						<tr>
-							<td class="left"><img alt="" src="templates/images/logo.png" /></td>
+							<td class="left"><img alt="" src="templates/images/logo_intall.jpg" /></td>
 						</tr>
 						<tr>
 							<td class="left line"><img alt="" height="8" src="templates/images/line.jpg" width="782" /></td>

@@ -40,4 +40,4 @@ align_textbottom:"\u6587\u5B57\u4E0B\u65B9",
 align_left:"\u9760\u5DE6",
 align_right:"\u9760\u53F3",
 image_list:"\u56FE\u7247\u5217\u8868"
-});
+});      

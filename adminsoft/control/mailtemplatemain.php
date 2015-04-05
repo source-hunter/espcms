@@ -1,38 +1,27 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onemailtemplatelist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
 		}
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_where = ' WHERE styleclass=3 and lng=\'' . $lng . '\'';
-
 		$typeclass = $this->fun->accept('typeclass', 'R');
 		if (!empty($typeclass)) {
 			$db_where.=" AND typeclass='$typeclass'";
@@ -42,10 +31,8 @@ class important extends connector {
 			if ($lockin == 2) $lockin = 0;
 			$db_where.=' AND lockin=' . $lockin;
 		}
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'tmid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_table = db_prefix . 'templates';
@@ -63,27 +50,20 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('template/mailtemplate_list');
 	}
-
 	function onlistwindow() {
 		parent::start_template();
 		include_once admin_ROOT . adminfile . '/include/command_list.php';
-
 		$digheight = $this->fun->accept('digheight', 'R');
 		$typeclass = $this->fun->accept('typeclass', 'R');
 		$styleclass = $this->fun->accept('styleclass', 'R');
 		$styleclass = empty($styleclass) ? 3 : $styleclass;
-
 		$iframename = $this->fun->accept('iframename', 'R');
-
 		$inputtext = $this->fun->accept('inputtext', 'R');
 		$inputtext = empty($inputtext) ? 'mailcode' : $inputtext;
-
 		$db_table = db_prefix . 'templates';
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_where = ' WHERE styleclass=' . $styleclass . ' and lng=\'' . $lng . '\'';
-
 		$sql = 'SELECT tmid,lng,templatename,templatecode,title,typeclass,styleclass FROM ' . $db_table . $db_where . ' ORDER BY tmid';
 		$rs = $this->db->query($sql);
 		while ($rsList = $this->db->fetch_assoc($rs)) {
@@ -98,7 +78,6 @@ class important extends connector {
 		$this->ectemplates->assign('lng', $lng);
 		$this->ectemplates->display('template/mailtemplate_listwindow');
 	}
-
 	function onmailtemplateadd() {
 		include_once admin_ROOT . adminfile . '/include/inc_replace_mailtemplates.php';
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
@@ -106,7 +85,7 @@ class important extends connector {
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$typeclass = array();
 		foreach ($MAILTEMPLATETYPE as $key => $value) {
 			$typeclassname = $this->lng[$value['name']];
@@ -118,7 +97,6 @@ class important extends connector {
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->display('template/mailtemplate_add');
 	}
-
 	function onmailtemplateedit() {
 		include_once admin_ROOT . adminfile . '/include/inc_replace_mailtemplates.php';
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
@@ -128,7 +106,6 @@ class important extends connector {
 		$type = $this->fun->accept('type', 'G');
 		$db_where = 'tmid=' . $tmid;
 		$read = $this->db->fetch_first('SELECT * FROM ' . $db_table . ' WHERE ' . $db_where);
-
 		$typeclass = array();
 		foreach ($MAILTEMPLATETYPE as $key => $value) {
 			$typeclassname = $this->lng[$value['name']];
@@ -144,7 +121,6 @@ class important extends connector {
 		$tempfile = $type == 'edit' ? 'template/mailtemplate_edit' : 'template/mailtemplate_copy';
 		$this->ectemplates->display($tempfile);
 	}
-
 	function onsave() {
 		$inputclass = $this->fun->accept('inputclass', 'P');
 		$lng = $this->fun->accept('lng', 'P');
@@ -184,7 +160,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onmailtemplatedel() {
 		$db_table = db_prefix . 'templates';
 		$tmid = $this->fun->accept('tmid', 'R');
@@ -202,7 +177,6 @@ class important extends connector {
 		$this->dbcache->clearcache('templates_array_' . $lng . '_' . $styleclass, true);
 		exit('true');
 	}
-
 	function onmaildemo() {
 		$mailsendtitle = $this->lng['mailtemplatemain_demo_title'];
 		$mailsendcontent = $this->lng['mailtemplatemain_demo_content'];
@@ -214,7 +188,6 @@ class important extends connector {
 			exit('false');
 		}
 	}
-
 	function onsetting() {
 		$db_table = db_prefix . 'templates';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -227,11 +200,9 @@ class important extends connector {
 		$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
 		$this->dbcache->clearcache('templates_view_' . $tmid, true);
 		$this->dbcache->clearcache('templates_array', true);
-
 		$this->writelog($this->lng['mailtemplatemain_edit_log'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 	function oncheckcode() {
 		$templatecode = $this->fun->accept('templatecode', 'R');
 		$typeclass = $this->fun->accept('typeclass', 'R');
@@ -246,7 +217,6 @@ class important extends connector {
 		}
 		exit($exportAjax);
 	}
-
 	function ontypeclasslist() {
 		include_once admin_ROOT . adminfile . '/include/inc_replace_mailtemplates.php';
 		$typeclass = $this->fun->accept('typeclass', 'R');
@@ -264,7 +234,4 @@ class important extends connector {
 		$outstr.='</ul>';
 		exit($outstr);
 	}
-
 }
-
-?>

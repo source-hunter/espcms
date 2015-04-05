@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>{%$lngpack.sitename%}</title>
+<meta name="keywords" content="{%$lngpack.keyword%}" />
+<meta name="description" content="{%$lngpack.description%}" />
+<script type="text/javascript" src="{%$rootdir%}js/jquery.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/basicrun.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/jquery.Slide.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/ajax_city.js"></script>
+<link href="{%$rootpath%}css/espcms_v5div.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_public.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_page.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+	$(window).load(function() {
+		$("#clickmenubotton li span").hover(function() {
+			$(this).addClass("menuhover");
+			$(this).parent().find("ul.subnav").slideDown('fast').show();
+			$(this).parent().hover(function() {
+			}, function() {
+				$(this).parent().find("ul.subnav").fadeOut('fast');
+				$(this).parent().find("span").removeClass("menuhover");
+			});
+		});
+	});
+</script>
+</head>
+
+<body>
+{%link file="cn/public/head.html"%}
+<div class="espcms_page_bannpic"><img src="{%$rootpath%}images/bann/type_pic.jpg"/></div>
+<div class="espcms_page">
+	{%if $out=='buylist'%}
+	<script type="text/javascript">
+		var order_amout_err = "{%$lngpack.order_amout_err%}";
+	</script>
+	<div class="pb10 pt20 tc"><img src="{%$rootpath%}images/a1.jpg"/></div>
+	<div class="espcms_member_login_center espcms_formwidth_c">
+		{% if count($array) > 0 %}
+		<div class="title mb20"><div class="messageicon3"></div><div class="messtitle">我的购物车</div></div>
+		<form name="mainform" method="post" action="{%$mlink.orderupdae%}">
+		<table class="tablelist" width="99%" style="margin:0 auto;">
+			<tr>
+				<td class="td01">商品名</td>
+				<td class="td01">图片</td>
+				<td class="td01">商品编号</td>
+				<td class="td01">订购价格</td>
+				<td class="td01">数量</td>
+				<td class="td01">小计</td>
+				<td class="td01">操作</td>
+			</tr>
+			{%forlist from=$array key=i%}
+			<tr>
+				<td class="td02"><a target="_blank" class="infolink01" href="{%$array[i].link%}">{%$array[i].title%}</a></td>
+				<td class="td02"><img src="{%$array[i].pic|zoom(90,90)%}"></td>
+				<td class="td02">{%$array[i].tsn%}</td>
+				<td class="td03">
+					{%$moneytype%}{%$array[i].bprice%}
+					<input type="hidden" name="bprice[]" value="{%$array[i].bprice%}"/>
+					<input type="hidden" name="did[]" value="{%$array[i].did%}"/>
+				</td>
+				<td class="td02">
+					<input type="text" name="amount[]" id="amount{%$array[i].did%}" value="{%$array[i].amount%}" onBlur="javascript:orderamount({%$array[i].did%});" size="2" maxlength="5" class="infoInput"/>
+				</td>
+				<td class="td03">
+					{%$moneytype%}{%$array[i].countprice%}
+					<input type="hidden" name="countprice[]" id="countprice" value="{%$array[i].countprice%}">
+				</td>
+				<td class="td02"><a class="button red" href="javascript:if (confirm('您确定要从购物车移出该商品吗？')) location.href='{%$array[i].dellink%}';">删除</a></td>
+			</tr>
+			{%/forlist%}
+			<tr>
+				<td colspan="16" class="td03"><span class="f14 colorgreg strong">商品总金额：{%$moneytype%}{%$ordertotal%}</span></td>
+			</tr>
+			<tr>
+				<td colspan="16" class="td03">
+					<input type="submit" class="button" name="Submit" value="更新购物车"/>&nbsp;
+					<input name="addch" class="button" type="button" value="清空购物车" onclick="javascript:if (confirm('您确定要清空所选购的商品吗？')) location.href='{%$mlink.clearcart%}';"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="10" class="td03">
+					<table class="tablelist" width="100%" style="margin:0 auto;">
+						<tr>
+							<td class="left"><input name="addch" class="button blue" type="button" value="继续购物" onclick="javascript:location.href='{%$homelink%}';"/></td>
+							<td class="right"><input name="addch" class="button orange" type="button" value="下一步（结算）" onclick="javascript:location.href='{%$mlink.orderpay%}';"/></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		</form>
+		{%else%}
+		<div class="title mb10"><div class="messageicon2"></div><div class="messtitle">购物车提示</div></div>
+		<div class="espcms_form_group tc f14 pt15">您还没有选择订购商品</div>
+		{%/if%}
+	</div>
+	{%elseif $out=='buyedit'%}
+	<!--购物车信息填写-->
+	<script type="text/javascript">
+	{%if $mem_isaddress==1%}
+	$(function() {
+	    sec_cityone('{%$member.country%}','{%$member.province%}');
+	    sec_citytwo('{%$member.province%}','{%$member.city%}');
+	    sec_district('{%$member.city%}','{%$member.district%}');
+	});
+	{%/if%}
+	var citytwo_title = "省";
+	var citythree_title = "市";
+	var district_title = "区";
+	var address_title = "{%$lngpack.address_title%}";
+	var zipcode_empty = "{%$lngpack.zipcode_empty%}";
+	var alias_empty = "{%$lngpack.alias_empty%}";
+	var email_err = "{%$lngpack.email_err%}";
+	var tel_empty = "{%$lngpack.tel_empty%}";
+	</script>
+	<div class="pb10 pt20 tc"><a href="{%$mlink.buylist%}"><img src="{%$rootpath%}images/a2.jpg"/></a></div>
+	<div class="espcms_member_login_center espcms_formwidth_c">
+		{% if count($array) > 0 %}
+		<div class="title mb10"><div class="messageicon3"></div><div class="messtitle">订购商品列表</div></div>
+		<form name="ordersaveform" method="post" action="{%$mlink.ordersave%}" onsubmit="return ordersave()">
+		<input type="hidden" name="userid" value="{%$member.userid%}"/>
+		<input type="hidden" name="productmoney" value="{%$productmoney%}"/>
+		<input type="hidden" name="discount_productmoney" value="{%$discount_productmoney%}"/>
+		<input type="hidden" name="discountmoney" value="{%$discountmoney%}"/>
+		<input type="hidden" name="tokenkey" value="{%$tokenkey.token_key%}"/>
+			<table class="tablelist" width="99%" style="margin:0 auto;">
+				<tr>
+					<td class="td01">商品名</td>
+					<td class="td01">图片</td>
+					<td class="td01">商品编号</td>
+					<td class="td01">订购价格</td>
+					<td class="td01">数量</td>
+					<td class="td01">小计</td>
+				</tr>
+				{%forlist from=$array key=i%}
+				<tr>
+					<td class="td02">
+						<input type="hidden" name="ptitle[]" value="{%$array[i].title%}">
+						<a target="_blank" class="infolink01" href="{%$array[i].link%}">{%$array[i].title%}</a>
+					</td>
+					<td class="td02"><img src="{%$array[i].pic|zoom(90,90)%}"></td>
+					<td class="td02"><input type="hidden" name="tsn[]" value="{%$array[i].tsn%}">{%$array[i].tsn%}</td>
+					<td class="td02">
+						{%$moneytype%}{%$array[i].bprice%}
+						<input type="hidden" name="bprice[]" value="{%$array[i].bprice%}">
+						<input type="hidden" name="oprice[]" value="{%$array[i].oprice%}">
+						<input type="hidden" name="did[]" value="{%$array[i].did%}">
+					</td>
+					<td class="td02">{%$array[i].amount%}<input type="hidden" name="amount[]" id="orderhow" value="{%$array[i].amount%}"></td>
+					<td class="td03">{%$moneytype%}{%$array[i].countprice%}<input type="hidden" name="countprice[]" id="countprice" value="{%$array[i].countprice%}"></td>
+				</tr>
+				{%/forlist%}
+				<tr>
+					<td colspan="6" class="pt10 pb10 tr"><span class="f14 colorgreg strong">商品总金额：{%$moneytype%}{%$productmoney_f%} - 折扣{%$moneytype%}{%$discountmoney%} = {%$moneytype%}{%$discount_productmoney_f%}</span></td>
+				</tr>
+			</table>
+
+			<div class="title mb20 mt20"><div class="messageicon3"></div><div class="messtitle">配送方式</div></div>
+			<table class="tablelist" width="99%" style="margin:0 auto;">
+				{% if count($shipplug) > 0 %}
+				{%forlist from=$shipplug key=i%}
+				<tr>
+					<td class="td03" width="20%">{%$shipplug[i].title%}</td>
+					<td class="td04">
+						<input type="radio" name="osid" value="{%$shipplug[i].osid%}"{%if key=>i==1%} checked{%/if%}>
+						{%if $shipplug[i].price>0%}运费：{%$moneytype%}{%$shipplug[i].price%} {%/if%}{%$shipplug[i].content%}
+					</td>
+				</tr>
+				{%/forlist%}
+				{%else%}
+				<tr>
+					<td class="center">暂无配送方式</td>
+				</tr>
+				{%/if%}
+			</table>
+
+			<div class="title mb20 mt20"><div class="messageicon3"></div><div class="messtitle">支付方式</div></div>
+			<table class="tablelist" width="99%" style="margin:0 auto;">
+				{% if count($payplug) > 0 %}
+				{%forlist from=$payplug key=i%}
+				<tr>
+					<td class="td03" width="20%">{%$payplug[i].payname%}</td>
+					<td class="td04">
+						<input type="radio" name="opid" value="{%$payplug[i].opid%}" {%if key=>i==1%} checked{%/if%}>
+						{%if $shipplug[i].payis>0%}手续费比例：{%$payplug[i].payis%}%{%/if%} {%$payplug[i].paycontent%}
+					</td>
+				</tr>
+				{%/forlist%}
+				{%else%}
+				<tr>
+					<td class="tc">暂无支付方式</td>
+				</tr>
+				{%/if%}
+			</table>
+
+			<div class="title mb20 mt20"><div class="messageicon3"></div><div class="messtitle">填写收货信息</div></div>
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">收货人姓名</label>
+				<div class="control_required20">
+					<input type="text" name="alias" value="{%$member.alias%}" class="col4 infoInput" size="20" maxlength="50"/>
+					<span class="form_message">请输入您的真实姓名</span>
+				</div>
+			</div>
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">性别</label>
+				<div class="control_required20 f14">
+					<input type="radio" value="1" name="sex" {%if $member.sex==1%}checked{%/if%} /> 男&nbsp;
+					<input type="radio" value="0" name="sex" {%if $member.sex==0%}checked{%/if%} /> 女
+				</div>
+			</div>
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">电子邮件</label>
+				<div class="control_required20 f14"><input type="text" name="email" value="{%$member.email%}" maxlength="100" size="50" class="col5 infoInput" /> <span class="form_message">请输入您的真实邮箱</span></div>
+			</div>
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">联系电话</label>
+				<div class="control_required20 f14"><input type="text" name="tel" value="{%$member.tel%}" maxlength="50" size="50" class="col4 infoInput" /> <span class="form_message">请填写联系电话或者手机</span></div>
+			</div>
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">手机</label>
+				<div class="control_required20 f14"><input type="text" name="mobile" value="{%$member.mobile%}" maxlength="50" size="50" class="col4 infoInput" /> </div>
+			</div>
+			{%if $mem_isaddress==1%}
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">地区</label>
+				<div class="control_required20 f14">
+					<select size="1" name="cityone" class="infoInput" id="cityone">
+						<option value="0" {%if $member.country==0%}selected{%/if%}>国家</option>
+						<option value="1" {%if $member.country==1%}selected{%/if%}>中国</option>
+					</select>
+					<select size="1" name="citytwo" class="infoInput" id="citytwo">
+						<option selected value="0">省</option>
+					</select>
+					<select size="1" name="citythree" class="infoInput" id="citythree">
+						<option selected value="0">市</option>
+					</select>
+					<select size="1" name="district" class="infoInput" id="district">
+						<option selected value="0">区</option>
+					</select>
+					<span id="loading">正在读取</span>
+				</div>
+			</div>
+			{%/if%}
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">详细地址</label>
+				<div class="control_required20 f14"><input type="text" name="address" value="{%$member.address%}" maxlength="200" size="80" class="col6 infoInput" /> <span class="form_message">请输入真实的收件地址</span></div>
+			</div>
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">邮编</label>
+				<div class="control_required20 f14"><input type="text" name="zipcode" value="{%$member.zipcode%}" maxlength="10" size="10" class="col3 infoInput" /></div>
+			</div>
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">送货时间</label>
+				<div class="control_required20 f14">
+					<select size="1" name="sendtime" class="infoInput">
+						<option value="1" selected>工作日、双休日与假日均可送货</option>
+						<option value="2">只双休日、假日送货(工作日不用送)</option>
+						<option value="3">只工作日送货(双休日、假日不用送) (注：写字楼/商用地址请客户备注说明)</option>
+						<option value="4">尽量安排其他时间送货,请备注说明</option>
+					</select>
+				</div>
+			</div>
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">备注</label>
+				<div class="control_required20 f14"><textarea name="content" rows="5" cols="60" class="col10 infoInput"></textarea></div>
+			</div>
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">发票抬头</label>
+				<div class="control_required20 f14"><input type="text" name="invpayee" maxlength="100" class="col6 infoInput" /></div>
+			</div>
+			<div class="espcms_form_group">
+				<label for="title" class="control_label16">发票内容</label>
+				<div class="control_required20 f14"><input type="text" name="invcontent" maxlength="100" class="col6 infoInput" /></div>
+			</div>
+			<div class="espcms_form_group">
+				<label class="control_label16"> </label>
+				<div class="control_required20">
+					<input type="submit" id="submit" class="button blue2" value="提交订单"/>
+				</div>
+			</div>
+		</form>
+		{%else%}
+		<div class="title mb10"><div class="messageicon2"></div><div class="messtitle">购物车提示</div></div>
+		<div class="espcms_form_group tc f14 pt15">您还没有选择订购商品</div>
+		{%/if%}
+	</div>
+	{%elseif $out=='buyok'%}
+	<div class="pb10 pt20 tc"><img src="{%$rootpath%}images/a3.jpg"/></div>
+	<div class="espcms_member_login_center espcms_formwidth_c">
+		<div class="title mb30"><div class="messageicon3"></div><div class="messtitle">成功提交订单</div></div>
+		<div class="espcms_form_group tc f14">恭喜，您的订单已提交成功，请记住您的订单号<span class="oninage b">{%$ordersn%}</span></div>
+		<div class="espcms_form_group tc f14 pt15">您订单总金额为：商品合计{%$moneytype%}{%$discount%} + 邮寄费用{%$moneytype%}{%$shipprice%} + 支付手续费{%$moneytype%}{%$payprice%} = <span class="oninage">{%$moneytype%}{%$orderamount%}</span></div>
+		<div class="espcms_form_group tc pt15">{%$orderonline%}</div>
+		{%if $order_ismember%}
+		<div class="espcms_form_group tc pt15">
+			<a class="button blue2" href="{%$mlink.center%}">会员中心</a>  <a class="button blue2" href="{%$homelink%}">返回网站首页</a>
+		</div>
+		{%/if%}
+	</div>
+	{%/if%}
+</div>
+{%link file="cn/public/footer.html"%}
+</body>
+</html>

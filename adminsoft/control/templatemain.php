@@ -1,71 +1,49 @@
 <?php
-
 /*
   PHP version 5
   Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function ontemplatelist() {
 		parent::start_template();
 		include_once admin_ROOT . adminfile . '/include/command_list.php';
-
 		$countnum = intval($this->fun->accept('countnum', 'R'));
 		if (!empty($countnum)) {
 			exit('1000');
 		}
-
 		$dirlist = $this->fun->accept('dirlist', 'R');
-
 		$lng = $this->sitelng;
 		$lng = empty($lng) ? $this->CON['default_lng'] : $lng;
-
 		$templates_fileex = !empty($this->CON['templates_fileex']) ? '*.xml,*.css,*.' . $this->CON['templates_fileex'] : '*.html,*.css,*.xml';
-
 		$skinDir = $this->fun->accept('skindir', 'R');
 		$skinDir = empty($skinDir) ? $this->CON['default_templates'] : $skinDir;
-
 		$fileDir = $this->fun->accept('filedir', 'R');
 		$fileDir = empty($fileDir) ? '' : $fileDir . '/';
-
 		$upfile_dir = admin_ROOT . 'templates/' . $skinDir . '/';
-
-
 		if (!empty($dirlist)) {
 			$upfile_dir = $upfile_dir . $dirlist;
 		}
-
 		if (!$this->fun->filemode($upfile_dir)) {
 			exit($this->lng['filemanage_mode_err']);
 		}
 		$loadurlDIR = $CONLIST['templatelist']['loadurl'] . '&skindir=' . $skinDir . '&filedir=' . $fileDir;
-
 		if (preg_match("/(\/)/i", $dirlist)) {
-
 			$updir = explode('/', $dirlist);
 			array_pop($updir);
 			array_pop($updir);
 			$updirfile = implode('/', $updir);
-
 			$updirtype = 1;
-
 			$uploadurl = empty($updirfile) ? $loadurlDIR . '&dirlist=' : $loadurlDIR . '&dirlist=' . $updirfile . '/';
 		} else {
-
 			$updirtype = 2;
 		}
-
 		$files = @glob($upfile_dir . "{" . $templates_fileex . "}", GLOB_BRACE);
-
 		$filesDIR = @glob($upfile_dir . '*', GLOB_ONLYDIR);
 		$filenum = empty($files) ? 0 : count($files);
 		$fileDirnum = empty($filesDIR) ? 0 : count($filesDIR);
@@ -77,10 +55,8 @@ class important extends connector {
 				$filelist[0] = array();
 			}
 			if ($filenum > 1) {
-
 				foreach ($files as $key => $file) {
 					$filetime = filectime($file);
-
 					if (isset($filelist[1][$filetime + $key])) {
 						$keyset = $filetime + $key + 2;
 					} else {
@@ -88,7 +64,6 @@ class important extends connector {
 					}
 					$filelist[1][$keyset] = $file;
 				}
-
 				krsort($filelist[1]);
 			} elseif ($filenum == 1) {
 				$filelist[1] = $files;
@@ -96,7 +71,6 @@ class important extends connector {
 				$filelist[1] = array();
 			}
 			$filelist = array_merge_recursive($filelist[0], $filelist[1]);
-
 			unset($files);
 			unset($file);
 			$filearray = array();
@@ -105,35 +79,22 @@ class important extends connector {
 				$filearray_temp = array();
 				$mime = $this->getMimeType($file);
 				if ($mime == 'dir') {
-
-
 					$dir = pathinfo($file);
-
 					$loadurl = $loadurlDIR . '&dirlist=' . $dirlist . $dir['basename'] . '/';
 					$filearray_temp['loadurl'] = $loadurl;
-
 					$filearray_temp['filename'] = $dir['basename'];
-
 					$filearray_temp['path'] = $dir['dirname'];
-
 					$filearray_temp['type'] = 'dir';
-
 					$filearray_temp['bottype'] = 'dir';
 				} else {
-
-
-
 					$filearray_temp['fid'] = md5($filepath . $mime['basename']);
 					$filearray_temp['filename'] = $mime['filename'];
 					$filearray_temp['basename'] = $mime['basename'];
-
 					$filearray_temp['path'] = $mime['dirname'];
-
 					$filearray_temp['type'] = strtolower($mime['extension']);
 					$filearray_temp['bottype'] = 'text';
 				}
 				$filearray_temp['time'] = filectime($file);
-
 				$filearray[] = $filearray_temp;
 				$i++;
 			}
@@ -150,68 +111,49 @@ class important extends connector {
 		$this->ectemplates->assign('loadurl', $loadurlDIR);
 		$this->ectemplates->display('template/templates_list');
 	}
-
 	function onlistwindow() {
 		parent::start_template();
 		include_once admin_ROOT . adminfile . '/include/command_list.php';
-
 		$dirlist = $this->fun->accept('dirlist', 'R');
-
 		$lng = $this->sitelng;
 		$lng = empty($lng) ? $this->CON['default_lng'] : $lng;
-
 		$digheight = $this->fun->accept('digheight', 'R');
-
 		$typeclass = $this->fun->accept('typeclass', 'R');
-
 		$fileclass = $this->fun->accept('fileclass', 'R');
-
 		$iframename = $this->fun->accept('iframename', 'R');
-
 		$inputtext = $this->fun->accept('inputtext', 'R');
 		$inputtext = empty($inputtext) ? 'template' : $inputtext;
-
 		$templates_fileex = !empty($this->CON['templates_fileex']) ? '*.' . $this->CON['templates_fileex'] : '*.html,*.css,*.xml';
-
 		$skinDir = $this->fun->accept('skindir', 'R');
-		$skinDir = empty($skinDir) ? $this->CON['default_templates'] : $skinDir;
-
+		if (empty($skinDir)) {
+			$skinDir = $this->CON['default_templates'];
+		} elseif ($skinDir == 'wap') {
+			$skinDir = $this->CON['wap_templates'];
+		}
 		$fileDir = $this->fun->accept('filedir', 'R');
 		$fileDir = empty($fileDir) ? '' : $fileDir . '/';
-
 		$upfile_dir = admin_ROOT . 'templates/' . $skinDir . '/' . $lng . '/' . $fileDir;
-
 		if (!empty($dirlist)) {
 			$upfile_dir = $upfile_dir . $dirlist;
 		}
-
 		if (!$this->fun->filemode($upfile_dir)) {
 			exit($this->lng['filemanage_mode_err']);
 		}
 		$loadurlDIR = $CONLIST['templateslistwindow']['tabloadurl'] . '&inputtext=' . $inputtext . '&typeclass=' . $typeclass . '&skindir=' . $skinDir . '&filedir=' . $fileDir . '&fileclass=' . $fileclass . '&digheight=' . $digheight . '&iframename=' . $iframename;
-
 		if (preg_match("/(\/)/i", $dirlist)) {
-
 			$updir = explode('/', $dirlist);
 			array_pop($updir);
 			array_pop($updir);
 			$updirfile = implode('/', $updir);
-
 			$updirtype = 1;
-
 			$uploadurl = empty($updirfile) ? $loadurlDIR . '&dirlist=' : $loadurlDIR . '&dirlist=' . $updirfile . '/';
 		} else {
-
 			$updirtype = 2;
 		}
-
 		$files = @glob($upfile_dir . "{" . $templates_fileex . "}", GLOB_BRACE);
-
 		$filesDIR = @glob($upfile_dir . '*', GLOB_ONLYDIR);
 		$filenum = count($files);
 		$fileDirnum = count($filesDIR);
-
-
 		if ($filenum > 0 || $fileDirnum > 0) {
 			$filelist = array();
 			if ($fileDirnum > 0) {
@@ -220,10 +162,8 @@ class important extends connector {
 				$filelist[0] = array();
 			}
 			if ($filenum > 1) {
-
 				foreach ($files as $key => $file) {
 					$filetime = filectime($file);
-
 					if (isset($filelist[1][$filetime + $key])) {
 						$keyset = $filetime + $key + 2;
 					} else {
@@ -231,7 +171,6 @@ class important extends connector {
 					}
 					$filelist[1][$keyset] = $file;
 				}
-
 				krsort($filelist[1]);
 			} elseif ($filenum == 1) {
 				$filelist[1] = $files;
@@ -239,7 +178,6 @@ class important extends connector {
 				$filelist[1] = array();
 			}
 			$filelist = array_merge_recursive($filelist[0], $filelist[1]);
-
 			unset($files);
 			unset($file);
 			$filearray = array();
@@ -248,35 +186,22 @@ class important extends connector {
 				$filearray_temp = array();
 				$mime = $this->getMimeType($file);
 				if ($mime == 'dir') {
-
-
 					$dir = pathinfo($file);
-
 					$loadurl = $loadurlDIR . '&dirlist=' . $dirlist . $dir['basename'] . '/';
 					$filearray_temp['loadurl'] = $loadurl;
-
 					$filearray_temp['filename'] = $dir['basename'];
-
 					$filearray_temp['path'] = $dir['dirname'];
-
 					$filearray_temp['type'] = 'dir';
-
 					$filearray_temp['bottype'] = 'dir';
 				} else {
-
-
-
 					$filearray_temp['fid'] = md5($filepath . $mime['basename']);
 					$filearray_temp['filename'] = $mime['filename'];
 					$filearray_temp['basename'] = $mime['basename'];
-
 					$filearray_temp['path'] = $mime['dirname'];
-
 					$filearray_temp['type'] = strtolower($mime['extension']);
 					$filearray_temp['bottype'] = 'text';
 				}
 				$filearray_temp['time'] = filectime($file);
-
 				$filearray[] = $filearray_temp;
 				$i++;
 			}
@@ -296,7 +221,6 @@ class important extends connector {
 		$this->ectemplates->assign('loadurl', $loadurlDIR);
 		$this->ectemplates->display('template/templates_templatemain_listwindow');
 	}
-
 	function ontemplateedit() {
 		parent::start_template();
 		$db_table = db_prefix . 'templates';
@@ -313,7 +237,6 @@ class important extends connector {
 		if ($fileextend == 'php') {
 			exit($this->lng['filemanage_mode_err']);
 		}
-
 		if (@is_file($templatefile)) {
 			$templatecotent = @file_get_contents($templatefile);
 			$templatecotent = !empty($templatecotent) ? htmlspecialchars($templatecotent) : $templatefile;
@@ -329,20 +252,16 @@ class important extends connector {
 		$tempfile = $type == 'edit' ? 'template/templates_edit' : 'template/templates_copy';
 		$this->ectemplates->display($tempfile);
 	}
-
 	function onsave() {
 		$inputclass = $this->fun->accept('inputclass', 'P');
 		$templatecode = $this->fun->accept('templatecode', 'P');
 		$content = $this->fun->accept('content', 'P');
-
 		$dir = $this->fun->accept('dir', 'P');
 		$dir = str_replace('.', '', $dir);
-
 		$filename = $this->fun->accept('filename', 'P');
 		if (empty($dir) || empty($filename) || empty($content)) {
 			exit('false');
 		}
-
 		$fileextend = $this->fun->extendname($filename);
 		if ($fileextend == 'php') {
 			exit('false');
@@ -360,12 +279,10 @@ class important extends connector {
 			if (!$this->fun->filemode($tempdirpath)) {
 				exit('false');
 			}
-
 			$filecontent = stripslashes(htmlspecialchars_decode($content));
 			if (strpos($filecontent, "<?") && strpos($filecontent, "?>")) {
 				exit('false');
 			}
-
 			if (!$this->fun->filewrite($tempdirpath, $filecontent)) {
 				exit('false');
 			}
@@ -386,7 +303,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function ontemplatedel() {
 		$dir = $this->fun->accept('dir', 'R');
 		$dir = str_replace('.', '', $dir);
@@ -394,7 +310,6 @@ class important extends connector {
 		if (empty($dir) || empty($filename)) {
 			exit('false');
 		}
-
 		$fileextend = $this->fun->extendname($filename);
 		if ($fileextend == 'php') {
 			exit('false');
@@ -410,12 +325,10 @@ class important extends connector {
 		$this->writelog($this->lng['templatemain_del_log'], $this->lng['log_extra_ok'] . ' file=' . $dir . $filename);
 		exit('true');
 	}
-
 	function oncheckcode() {
 		$filename = $this->fun->accept('filename', 'R');
 		$templatecode = $this->fun->accept('templatecode', 'R');
 		$dir = $this->fun->accept('dir', 'R');
-
 		$fileextend = $this->fun->extendname($filename);
 		$fileextend = empty($fileextend) ? $this->CON['templates_fileex'] : $fileextend;
 		$tempdirpath = admin_ROOT . 'templates/' . $dir . $templatecode . '.' . $fileextend;
@@ -426,20 +339,15 @@ class important extends connector {
 		}
 		exit($exportAjax);
 	}
-
 	function onlabelcreat() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
 		$plugcode = $this->fun->accept('plugcode', 'R');
-
 		$lng = $this->sitelng;
 		$lng = empty($lng) ? $this->CON['default_lng'] : $lng;
-
 		$lable = $this->fun->readplug(admin_ROOT . 'public/lable');
-
 		$plugcode = empty($plugcode) ? $lable[0]['code'] : $plugcode;
-
 		$modulesid = true;
 		$modules = array();
 		require admin_ROOT . 'public/lable/' . $plugcode . '.php';
@@ -448,10 +356,8 @@ class important extends connector {
 		$this->ectemplates->assign('lable', $lable);
 		$this->ectemplates->assign('lable_config', $lablelist['config']);
 		$this->ectemplates->assign('lablelist', $lablelist);
-
 		$lnglist = $this->get_lng_array($lng);
 		$this->ectemplates->assign('lnglist', $lnglist['list']);
-
 		$mid = $this->fun->accept('mid', 'R');
 		$mid = empty($mid) ? 0 : $mid;
 		$modelarray = $this->get_model(0, $lng, 1);
@@ -459,7 +365,6 @@ class important extends connector {
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->display('template/template_label_creat');
 	}
-
 	function onlabeldb() {
 		$inputclass = $this->fun->accept('inputclass', 'P');
 		$lng = $this->fun->accept('lng', 'P');
@@ -491,21 +396,16 @@ class important extends connector {
 			exit('false');
 		}
 	}
-
 	function onattrindex() {
-
 		$plugcode = $this->fun->accept('code', 'G');
 		$lng = $this->fun->accept('lng', 'G');
 		$lng = empty($lng) ? $this->CON['default_lng'] : $lng;
 		$lnglist = $this->get_lng_array($lng);
-
 		$mid = $this->fun->accept('mid', 'R');
 		$mid = empty($mid) ? 0 : $mid;
 		$modelarray = $this->get_model(0, $lng, 1, 2);
-
 		$modulesid = true;
 		$modules = array();
-
 		include_once admin_ROOT . 'public/lable/' . $plugcode . '.php';
 		$lablelist = $modules[0];
 		unset($modulesid);
@@ -514,7 +414,6 @@ class important extends connector {
 					<td class="trtitle01">' . $this->lng['templatemain_add_label_str'] . '</td>
 					<td class="trtitle02">' . $lablelist['desc'] . '</td>
 				</tr>';
-
 		if ($lablelist['lng'] == 1 && is_array($lnglist['list'])) {
 			$attrlist.='<tr class="trstyle2"><td class="trtitle01">' . $this->lng['createmain_add_lng'] . '</td>
 				<td class="trtitle02"><select size="1" name="lng" id="lng" onchange="javascript:selectlinkagelng(\'mid\',\'index.php?archive=connected&action=scmodellist&lng=\'+this.value);searchoption(1000000,\'' . urlencode($this->lng['all_botton']) . '\')">';
@@ -523,7 +422,6 @@ class important extends connector {
 			}
 			$attrlist.='</select></td></tr>';
 		}
-
 		if ($lablelist['mid'] == 1 && is_array($modelarray['list'])) {
 			$attrlist.='<tr class="trstyle2"><td class="trtitle01">' . $this->lng['createmain_add_mid'] . '</td>
 				<td class="trtitle02"><select size="1" name="mid" id="mid" onchange="javascript:searchoption(this.value,\'' . urlencode($this->lng['all_botton']) . '\')"><option value="0">' . $this->lng['recommanage_type_add_mid_option'] . '</option>';
@@ -532,24 +430,20 @@ class important extends connector {
 			}
 			$attrlist.='</select></td></tr>';
 		}
-
 		if ($lablelist['tid'] == 1) {
 			$attrlist.='<tr class="trstyle2"><td class="trtitle01">' . $this->lng['article_doc_add_tid'] . '</td>
 				<td class="trtitle02"><select size="1" name="tid" id="tid"><option value="0">' . $this->lng['all_botton'] . '</option>';
 			$attrlist.='</select></td></tr>';
 		}
-
 		if ($lablelist['sid'] == 1) {
 			$attrlist.='<tr class="trstyle2"><td class="trtitle01">' . $this->lng['article_doc_add_sid'] . '</td>
 				<td class="trtitle02"><select size="1" name="sid" id="sid"><option value="0">' . $this->lng['all_botton'] . '</option>';
 			$attrlist.='</select></td></tr>';
 		}
-
 		if ($lablelist['dlid'] == 1) {
 			$attrlist.='<tr class="trstyle2"><td class="trtitle01">' . $this->lng['viewtype_botton'] . '</td>
 				<td class="trtitle02"><span id="dlidlist"><input type="radio" value="0" checked="checked" name="dlid"/> ' . $this->lng['all_botton'] . '</span></td></tr>';
 		}
-
 		foreach ($lablelist['config'] as $key => $valuer) {
 			if ($valuer['str']) {
 				$str = '<span class="cautiontitle">' . $valuer['str'] . '</span>';
@@ -588,7 +482,4 @@ class important extends connector {
 		$attrlist.='</table>';
 		exit($attrlist);
 	}
-
 }
-
-?>

@@ -1,38 +1,27 @@
 <?php
-
 /*
   PHP version 5
   Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
   警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
-
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onformlist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
 		}
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_where = ' WHERE lng=\'' . $lng . '\'';
-
 		$isclass = $this->fun->accept('isclass', 'R');
 		if (!empty($isclass)) {
 			if ($isclass == 2) $isclass = 0;
@@ -58,11 +47,13 @@ class important extends connector {
 			if ($ismail == 2) $ismail = 0;
 			$db_where.=' AND ismail=' . $ismail;
 		}
-
-
+		$iswap = $this->fun->accept('iswap', 'R');
+		if (!empty($iswap)) {
+			if ($iswap == 2) $iswap = 0;
+			$db_where.=' AND iswap=' . $iswap;
+		}
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'fgid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_table = db_prefix . 'form_group';
@@ -80,16 +71,11 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('form/form_list');
 	}
-
 	function onformattlist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
@@ -111,11 +97,8 @@ class important extends connector {
 			$wheretext.=' AND isline=' . $isline;
 		}
 		$fgid = $this->fun->accept('fgid', 'R');
-
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'faid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_where = " WHERE fgid=$fgid" . $wheretext;
@@ -134,16 +117,13 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('form/form_att_list');
 	}
-
 	function onformadd() {
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
-
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$memberpuv = $this->get_member_purview_array();
 		$this->ectemplates->assign('memberpuvlist', $memberpuv['list']);
 		$this->ectemplates->assign('timelist', $TIMELIST);
@@ -151,7 +131,6 @@ class important extends connector {
 		$this->ectemplates->assign('lng', $lng);
 		$this->ectemplates->display('form/form_add');
 	}
-
 	function onformedit() {
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
@@ -160,7 +139,6 @@ class important extends connector {
 		$id = $this->fun->accept('id', 'G');
 		$db_where = 'fgid=' . $id;
 		$formread = $this->db->fetch_first('SELECT * FROM ' . $db_table . ' WHERE ' . $db_where);
-
 		$memberpuv = $this->get_member_purview_array($formread['purview']);
 		$this->ectemplates->assign('memberpuvlist', $memberpuv['list']);
 		$this->ectemplates->assign('tab', 'true');
@@ -175,17 +153,15 @@ class important extends connector {
 			$this->ectemplates->display('form/form_edit');
 		}
 	}
-
 	function onformattradd() {
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
 		$fgid = $this->fun->accept('fgid', 'G');
 		$this->ectemplates->assign('fgid', $fgid);
 		$this->ectemplates->assign('tab', 'true');
-		$this->ectemplates->assign('formtypelist', $FORMTYPE);
+		$this->ectemplates->assign('formtypelist', $FORMMEMBERTYPE);
 		$this->ectemplates->display('form/form_att_add');
 	}
-
 	function onformattredit() {
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
@@ -194,11 +170,10 @@ class important extends connector {
 		$db_where = 'faid=' . $faid;
 		$formattrread = $this->db->fetch_first('SELECT * FROM ' . $db_table . ' WHERE ' . $db_where);
 		$this->ectemplates->assign('tab', 'true');
-		$this->ectemplates->assign('formtypelist', $FORMTYPE);
+		$this->ectemplates->assign('formtypelist', $FORMMEMBERTYPE);
 		$this->ectemplates->assign('attrread', $formattrread);
 		$this->ectemplates->display('form/form_att_edit');
 	}
-
 	function onformsave() {
 		parent::start_template();
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -216,17 +191,18 @@ class important extends connector {
 		$putmail = $this->fun->accept('putmail', 'P');
 		$inputtime = $this->fun->accept('inputtime', 'P');
 		$mailcode = $this->fun->accept('mailcode', 'P');
-
+		$pic = $this->fun->accept('pic', 'P');
 		$issms = $this->fun->accept('issms', 'P');
 		$smscode = $this->fun->accept('smscode', 'P');
-
+		$titlestyle = $this->fun->accept('titlestyle', 'P');
+		$iswap = $this->fun->accept('iswap', 'P');
 		$db_table = db_prefix . 'form_group';
 		$date = time();
 		if ($inputclass == 'add') {
 			$isclass = $this->esp_inputclassid;
 			$isclass = empty($isclass) ? 0 : $isclass;
-			$db_field = 'pid,lng,formgroupname,formcode,content,successtext,template,emailatt,addtime,isclass,ismenu,isseccode,ismail,mailcode,inputtime,purview,putmail,issms,smscode';
-			$db_values = "50,'$lng','$formgroupname','$formcode','$content','$successtext','$template','$emailatt',$date,$isclass,$ismenu,$isseccode,$ismail,'$mailcode',$inputtime,$purview,'$putmail',$issms,'$smscode'";
+			$db_field = 'pid,lng,formgroupname,formcode,pic,content,successtext,template,emailatt,addtime,isclass,ismenu,isseccode,ismail,mailcode,inputtime,purview,putmail,issms,smscode,titlestyle,iswap';
+			$db_values = "50,'$lng','$formgroupname','$formcode','$pic','$content','$successtext','$template','$emailatt',$date,$isclass,$ismenu,$isseccode,$ismail,'$mailcode',$inputtime,$purview,'$putmail',$issms,'$smscode','$titlestyle',$iswap";
 			$this->db->query('INSERT INTO ' . $db_table . ' (' . $db_field . ') VALUES (' . $db_values . ')');
 			$this->writelog($this->lng['formmain_add_log'], $this->lng['log_extra_ok'] . ' formgroupname=' . $formgroupname);
 			$this->dbcache->clearcache('formgroup_array_' . $lng, true);
@@ -235,7 +211,7 @@ class important extends connector {
 			$fgid = $this->fun->accept('fgid', 'P');
 			if (empty($fgid)) exit('false');
 			$db_where = 'fgid=' . $fgid;
-			$db_set = "formgroupname='$formgroupname',content='$content',successtext='$successtext',template='$template',emailatt='$emailatt',ismenu=$ismenu,isseccode=$isseccode,ismail=$ismail,mailcode='$mailcode',inputtime=$inputtime,putmail='$putmail',purview=$purview,issms=$issms,smscode='$smscode'";
+			$db_set = "formgroupname='$formgroupname',content='$content',pic='$pic',successtext='$successtext',template='$template',emailatt='$emailatt',ismenu=$ismenu,isseccode=$isseccode,ismail=$ismail,mailcode='$mailcode',inputtime=$inputtime,putmail='$putmail',purview=$purview,issms=$issms,smscode='$smscode',titlestyle='$titlestyle',iswap=$iswap";
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
 			$this->writelog($this->lng['formmain_edit_log'], $this->lng['log_extra_ok'] . ' formgroupname=' . $formgroupname . ' id=' . $fgid);
 			$this->dbcache->clearcache('formgroup_view_' . $id, true);
@@ -243,13 +219,11 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onformattrsave() {
 		include admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
 		$inputclass = $this->fun->accept('inputclass', 'P');
 		$fgid = $this->fun->accept('fgid', 'P');
-
 		$typename = $this->fun->accept('typename', 'P');
 		$attrname = $this->fun->accept('attrname', 'P');
 		$typeremark = $this->fun->accept('typeremark', 'P');
@@ -261,30 +235,24 @@ class important extends connector {
 		$attrrow = empty($attrrow) ? 5 : $attrrow;
 		$isvalidate = $this->fun->accept('isvalidate', 'P');
 		$validatetext = $this->fun->accept('validatetext', 'P');
-
 		$isclass = $this->fun->accept('isclass', 'P');
 		$isclass = empty($isclass) ? 0 : $isclass;
 		$isline = $this->fun->accept('isline', 'P');
 		$isline = empty($isline) ? 0 : $isline;
-
-		$key = $this->fun->array_key($FORMTYPE, $inputtype, 'key');
-		$attrarray = $FORMTYPE[$key];
+		$key = $this->fun->array_key($FORMMEMBERTYPE, $inputtype, 'key');
+		$attrarray = $FORMMEMBERTYPE[$key];
 		if (!$attrarray) {
 			exit('false');
 		}
 		$attrlenther = $attrarray['varlong'];
-
 		$db_table = db_prefix . 'form_attr';
 		$db_table2 = db_prefix . 'form_value';
 		if ($inputclass == 'add') {
-
 			if ($attrarray['alter'] != 'TEXT') {
-
 				$alter = $attrarray['alter'] == 'INT' || $attrarray['alter'] == 'FLOAT' ? $attrarray['alter'] . '(' . $attrarray['varlong'] . ') DEFAULT \'0\'' : $attrarray['alter'] . '(' . $attrarray['varlong'] . ')';
 			} else {
 				$alter = $attrarray['alter'];
 			}
-
 			$renameclass = $this->checkname($attrname, $fgid, $inputtype);
 			if (!$renameclass) {
 				exit('false');
@@ -294,11 +262,9 @@ class important extends connector {
 			if (!$countnum) {
 				$this->db->query('ALTER TABLE ' . $db_table2 . ' ADD COLUMN ' . $attrname . ' ' . $alter . ' NOT NULL');
 			}
-
 			$db_field = 'fgid,pid,typename,typeremark,attrname,inputtype,attrvalue,validatetext,attrsize,attrrow,attrlenther,isclass,isvalidate,isline';
 			$db_values = "$fgid,50,'$typename','$typeremark','$attrname','$inputtype','$attrvalue','$validatetext',$attrsize,$attrrow,$attrlenther,1,$isvalidate,$isline";
 			$this->db->query('INSERT INTO ' . $db_table . ' (' . $db_field . ') VALUES (' . $db_values . ')');
-
 			$this->writelog($this->lng['formmain_attr_add_log'], $this->lng['log_extra_ok'] . ' typename=' . $typename);
 			$this->dbcache->clearcache('formatt_array_' . $fgid, true);
 			exit('true');
@@ -309,7 +275,6 @@ class important extends connector {
 			}
 			$db_set_str = null;
 			$db_set_str.= ",attrvalue='$attrvalue',validatetext='$validatetext'";
-
 			if ($attrsize) {
 				$db_set_str.= ',attrsize=' . $attrsize;
 			}
@@ -321,29 +286,24 @@ class important extends connector {
 			} else {
 				$db_set_str.= ',isvalidate=0';
 			}
-
 			$db_where = 'faid=' . $faid;
 			$db_set = "typename='$typename',typeremark='$typeremark',isline=$isline,isclass=$isclass" . $db_set_str;
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
-
 			$this->writelog($this->lng['formmain_attr_edit_log'], $this->lng['log_extra_ok'] . ' typename=' . $typename . ' id=' . $faid);
 			$this->dbcache->clearcache('formatt_array_' . $fgid, true);
 			exit('true');
 		}
 	}
-
 	function ondelform() {
 		$db_table = db_prefix . 'form_group';
 		$db_table2 = db_prefix . 'form_attr';
 		$db_table3 = db_prefix . 'form_value';
 		$id = $this->fun->accept('id', 'R');
 		if (empty($id)) exit('false');
-
 		$db_where = "fgid=$id";
 		$sql = 'SELECT attrname FROM ' . $db_table2 . ' WHERE ' . $db_where . ' ORDER BY fgid DESC';
 		$rs = $this->db->query($sql);
 		while ($rsList = $this->db->fetch_assoc($rs)) {
-
 			$db_where2 = " WHERE attrname='$rsList[attrname]'";
 			$countnum = $this->db_numrows($db_table2, $db_where2);
 			if ($countnum == 1) {
@@ -360,7 +320,6 @@ class important extends connector {
 		$this->dbcache->clearcache('formatt_view', true);
 		exit('true');
 	}
-
 	function ondelformattr() {
 		$db_table = db_prefix . 'form_attr';
 		$db_table2 = db_prefix . 'form_value';
@@ -372,13 +331,11 @@ class important extends connector {
 		for ($i = 0; $i < $count; $i++) {
 			$db_where = "faid=$infoarray[$i]";
 			$attview = $this->get_formattview($infoarray[$i]);
-
 			$db_where2 = " WHERE attrname='$attview[attrname]'";
 			$countnum = $this->db_numrows($db_table, $db_where2);
 			if ($countnum == 1) {
 				$this->db->query('ALTER TABLE ' . $db_table2 . ' DROP COLUMN ' . $attview['attrname']);
 			}
-
 			$this->db->query('DELETE FROM ' . $db_table . ' WHERE ' . $db_where);
 		}
 		$this->writelog($this->lng['formmain_attr_log_del'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
@@ -386,7 +343,6 @@ class important extends connector {
 		$this->dbcache->clearcache('formatt_view_', true);
 		exit('true');
 	}
-
 	function onattrsort() {
 		$db_table = db_prefix . 'form_attr';
 		$id = $this->fun->accept('infoid', 'P');
@@ -405,7 +361,6 @@ class important extends connector {
 		$this->dbcache->clearcache('formatt_array', true);
 		exit('true');
 	}
-
 	function onformsetting() {
 		$db_table = db_prefix . 'form_group';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -420,7 +375,6 @@ class important extends connector {
 		$this->dbcache->clearcache('formgroup_', true);
 		exit('true');
 	}
-
 	function onattrsetting() {
 		$db_table = db_prefix . 'form_attr';
 		$selectinfoid = $this->fun->accept('attrselectinfoid', 'P');
@@ -435,7 +389,6 @@ class important extends connector {
 		$this->dbcache->clearcache('formatt_array', true);
 		exit('true');
 	}
-
 	function oncheckattrname() {
 		$attrname = $this->fun->accept('attrname', 'R');
 		$fgid = $this->fun->accept('fgid', 'R');
@@ -447,38 +400,32 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function checkname($attrname, $fgid, $inputtype) {
 		include admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		$attlist = array('did', 'lng', 'pid', 'mid', 'aid', 'tid', 'sid', 'fgid', 'isclass', 'islink', 'ishtml', 'ismess', 'isorder',
 		    'attrvalue', 'fvid', 'fgid', 'faid', 'ftid', 'did', 'iscount', 'oid', 'source', 'pic', 'tags', 'keywords',
 		    'description', 'link', 'oprice', 'bprice', 'click', 'addtime', 'uptime', 'template', 'filename', 'filepath', 'daid', 'picname'
 		    , 'picfile', 'addtime', 'dcid', 'content', 'dlid', 'mid', 'labelname', 'doid', 'startime', 'endtime', 'width', 'height',
-		    'istime', 'filetype', 'dvid','name');
+		    'istime', 'filetype', 'dvid', 'name');
 		$attrnamearray = strtolower($attrname);
-
 		if (in_array($attrnamearray, $attlist)) {
 			return false;
 		}
-
-		$key = $this->fun->array_key($FORMTYPE, $inputtype, 'key', 'alter');
+		$key = $this->fun->array_key($FORMMEMBERTYPE, $inputtype, 'key', 'alter');
 		if (empty($key)) {
 			return false;
 		}
-
 		$db_table = db_prefix . 'form_attr';
-
 		$db_where = " WHERE attrname='$attrname' and fgid=$fgid";
 		$countnum = $this->db_numrows($db_table, $db_where);
 		if ($countnum > 0) {
 			return false;
 		} else {
-
 			$db_where = " WHERE attrname='$attrname'";
 			$sql = 'SELECT attrname,inputtype FROM ' . $db_table . $db_where;
 			$rs = $this->db->query($sql);
 			while ($rsList = $this->db->fetch_assoc($rs)) {
-				$keynow = $this->fun->array_key($FORMTYPE, $rsList['inputtype'], 'key', 'alter');
+				$keynow = $this->fun->array_key($FORMMEMBERTYPE, $rsList['inputtype'], 'key', 'alter');
 				if ($keynow != $key) {
 					return false;
 				}
@@ -486,7 +433,6 @@ class important extends connector {
 		}
 		return true;
 	}
-
 	function oncheckformname() {
 		$attlist = array('did', 'lng', 'pid', 'mid', 'aid', 'tid', 'sid', 'fgid', 'isclass', 'islink', 'ishtml', 'ismess', 'isorder',
 		    'attrvalue', 'fvid', 'fgid', 'faid', 'ftid', 'did', 'iscount', 'oid', 'source', 'pic', 'tags', 'keywords',
@@ -496,7 +442,6 @@ class important extends connector {
 		$formcode = $this->fun->accept('formcode', 'R');
 		$lng = $this->fun->accept('lng', 'R');
 		$attrnamearray = strtolower($formcode);
-
 		if (in_array($attrnamearray, $attlist)) {
 			exit('false');
 		}
@@ -510,7 +455,4 @@ class important extends connector {
 		}
 		exit($exportAjax);
 	}
-
 }
-
-?>

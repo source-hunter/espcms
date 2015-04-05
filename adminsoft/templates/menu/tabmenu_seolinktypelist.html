@@ -1,0 +1,17 @@
+[%#%]内链接分组列表[%#%]
+[%if $menutype == 'seolinktypelist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('article','keylinktypeadd')==true %]
+	[%if $tabarray.mid!=''%]
+	<li class="menumain"><a id="addinfo" class="addinfo" onclick="javascript:parent.onbotton('[%$ST.botton_add_seotypelink|addslashes('hc')%]','index.php?archive=seomanage&action=keylinktypeadd&tid=[%$tabarray.tid%]&mid=[%$tabarray.mid%]&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'addinfo',self.frameElement.getAttribute('name'));"  href="#body" title="[%$ST.botton_add_seotypelink%]" hidefocus="true">[%$ST.botton_add_seotypelink%]</a></li>
+	[%else%]
+	<li class="menumain"><a id="addinfo" class="addinfo" onclick="javascript:alert('[%$ST.article_js_doc_add_midtidnoselect%]');return false;"  href="#body" title="[%$ST.botton_add_seotypelink%]" hidefocus="true">[%$ST.botton_add_seotypelink%]</a></li>
+	[%/if%]
+	[%/if%]
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	[%if @this->powercheck('article','delkeytype')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:callrun('index.php?archive=seomanage&action=delkeytype','selectinfoid',false,null,null,'index.php?archive=management&action=load','[%$ST.del_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+</ul>
+[%/if%]      

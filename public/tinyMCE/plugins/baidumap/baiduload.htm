@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.1&services=true"></script>
+		<style type="text/css">
+			*{font-size:12px;padding:0px;margin:0px;}
+			.content{width:100%; height: 350px;padding:0px;margin: 0px}
+			.content table{padding-bottom:5px;padding-top:5px;}
+			.content table td{vertical-align: middle;padding:0px 5px 0px 0px;margin: 0px;}
+			.input{padding:0px 5px;height:25px;line-height: 25px;border:1px solid #d7d7d7;}
+
+			.button{ display: inline-block; zoom: 1; *display: inline; vertical-align: baseline; margin: 0 2px; outline: none; cursor: pointer;
+				 text-align: center; text-decoration: none; font-size:14px; line-height:100%; padding:4px 5px; border:none; border-radius: 2px; color: #fff; background: #A7A9AA;}
+			.button:hover { text-decoration: none; background: #9a9c9d; }
+			.button:active { position: relative; top: 1px;color: #999; }
+			.button.blue { color: #d9eef7; background: #007ead; } .button.blue:hover { background: #00CCFF; } .button.blue:active { color: #80bed6; }
+		</style>
+
+	</head>
+	<body>
+		<div class="content">
+			<table>
+				<tr>
+					<td style="font-weight: bold;color: #737475">搜索城市</td>
+					<td><input id="city" type="text" value="北京" class="input" size="3"/></td>
+					<td style="font-weight: bold;color: #737475">搜索地址</td>
+					<td><input id="address" type="text" value="" class="input" size="18"/></td>
+					<td><a href="javascript:doSearch()" class="button blue">搜索</a></td>
+					<td style="font-weight: bold;color: #737475;padding-left:35px;">输出宽</td>
+					<td><input id="mapwidth" type="text" size="1" value="680" class="input"/></td>
+					<td style="font-weight: bold;color: #737475">输出高</td>
+					<td><input id="mapheight" type="text" size="1" value="450" class="input"/></td>
+					<td><label id="is_dynamic_label" for="is_dynamic"><input id="is_dynamic" type="checkbox" name="is_dynamic" /><span>插入动态地图</span></label></td>
+				</tr>
+			</table>
+			<div style="width:99%;height:340px;border:1px solid gray" id="container"></div>
+		</div>
+		<script type="text/javascript">
+			var map = new BMap.Map("container"), marker, point, styleStr;
+			map.enableScrollWheelZoom();
+			map.enableContinuousZoom();
+			function doSearch() {
+				if (!document.getElementById('city').value) {
+					alert(lang.cityMsg);
+					return;
+				}
+				var search = new BMap.LocalSearch(document.getElementById('city').value, {
+					onSearchComplete: function (results) {
+						if (results && results.getNumPois()) {
+							var points = [];
+							for (var i = 0; i < results.getCurrentNumPois(); i++) {
+								points.push(results.getPoi(i).point);
+							}
+							if (points.length > 1) {
+								map.setViewport(points);
+							} else {
+								map.centerAndZoom(points[0], 13);
+							}
+							point = map.getCenter();
+							marker.setPoint(point);
+						} else {
+							alert('\u5F53\u524D\u5750\u6807\u672A\u641C\u7D22\u5230\uFF0C\u8BF7\u8FD4\u56DE\u91CD\u65B0\u641C\u7D22!');
+						}
+					}
+				});
+				search.search(document.getElementById('address').value || document.getElementById('city').value);
+			}
+			function getPars(str, par) {
+				var reg = new RegExp(par + "=((\\d+|[.,])*)", "g");
+				return reg.exec(str)[1];
+			}
+			function init() {
+				point = new BMap.Point(116.404, 39.915);
+				marker = new BMap.Marker(point);
+				map.addControl(new BMap.NavigationControl());
+				map.centerAndZoom(point, 10);
+				marker.enableDragging();
+				map.addOverlay(marker);
+			}
+			init();
+			document.getElementById('address').onkeydown = function (evt) {
+				evt = evt || event;
+				if (evt.keyCode == 13) {
+					doSearch();
+				}
+			};
+			function onok() {
+				var center = map.getCenter();
+				var zoom = map.zoomLevel;
+				if (document.getElementById('mapwidth').value.match(/^[1-9]{1}[0-9]*$/ig)) {
+					var mapWidth = Number(document.getElementById('mapwidth').value);
+				}
+				if (document.getElementById('mapheight').value.match(/^[1-9]{1}[0-9]*$/ig)) {
+					var mapHeight = Number(document.getElementById('mapheight').value);
+				}
+				var point = marker.getPoint();
+				if (document.getElementById('is_dynamic').checked) {
+					var hostname = onurl();
+					var url = 'http://' + hostname + 'js/show.html#center=' + center.lng + ',' + center.lat + '&zoom=' + zoom + '&width=' + mapWidth + '&height=' + mapHeight + '&markers=' + point.lng + ',' + point.lat + '&markerStyles=' + 'l,A';
+					return ('<iframe class="espcms_baidumap" src="' + url + '" frameborder="0" width="' + (mapWidth + 4) + '" height="' + (mapHeight + 4) + '"></iframe>');
+				} else {
+					var url = "http://api.map.baidu.com/staticimage?center=" + center.lng + ',' + center.lat +
+						"&zoom=" + zoom + "&width=" + mapWidth + '&height=' + mapHeight + "&markers=" + point.lng + ',' + point.lat;
+					return ('<img width="' + mapWidth + '"height="' + mapHeight + '" src="' + url + '"' + (styleStr ? ' style="' + styleStr + '"' : '') + '/>');
+				}
+			}
+
+			function onurl() {
+				var hostname = window.location.host;
+				var pathname = location.pathname;
+				var urlname = 'public/tinyMCE/plugins/baidumap/baiduload.htm';
+				pathname = hostname + pathname.replace(urlname, '');
+				return pathname;
+			}
+		</script>
+	</body>
+</html>

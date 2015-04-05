@@ -6,7 +6,7 @@
 			<td width="5%"><input type="checkbox" name="selectinfoid" value="[%$array[list].fgid%]"></td>
 			<td width="6%">[%$array[list].fgid%]</td>
 			<td width="8%">[%$array[list].lng%]</td>
-			<td width="39%">[%$array[list].formgroupname%]（[%$array[list].formcode%]）</td>
+			<td width="35%">[%$array[list].formgroupname%]（[%$array[list].formcode%]）</td>
 			<td width="6%" id="infotype">
 				<table>
 					<tr>
@@ -14,10 +14,11 @@
 					</tr>
 				</table>
 			</td>
-			<td width="6%" id="infotype">
+			<td width="10%" id="infotype">
 				<table>
 					<tr>
 						<td>[%if $array[list].isseccode==1%]<span class="isseccode_ok" title="[%$ST.formmain_isseccode_ok%]"></span>[%else%]<span class="isseccode_no" title="[%$ST.formmain_isseccode_no%]"></span>[%/if%]</td>
+						<td>[%if $array[list].iswap==1%]<span class="iswap_ok" title="[%$ST.open_botton_title%]"></span>[%else%]<span class="iswap_no" title="[%$ST.close_botton_title%]"></span>[%/if%]</td>
 						<td>[%if $array[list].isclass==1%]<span class="audit_ok" title="[%$ST.formmain_audit_ok%]"></span>[%else%]<span class="audit_no" title="[%$ST.formmain_audit_no%]"></span>[%/if%]</td>
 					</tr>
 				</table>

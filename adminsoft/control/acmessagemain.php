@@ -1,38 +1,27 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onacmessagelist() {
 		parent::start_template();
-
 		$MinPageid = intval($this->fun->accept('MinPageid', 'R'));
-
 		$page_id = intval($this->fun->accept('page_id', 'R'));
-
 		$countnum = intval($this->fun->accept('countnum', 'R'));
-
 		$MaxPerPage = intval($this->fun->accept('MaxPerPage', 'R'));
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
 		}
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_where = ' WHERE lng=\'' . $lng . '\'';
-
 		$isclass = intval($this->fun->accept('isclass', 'R'));
 		if (!empty($isclass)) {
 			if ($isclass == 2) $isclass = 0;
@@ -47,11 +36,8 @@ class important extends connector {
 		if (!empty($did)) {
 			$db_where.=' AND did=' . $did;
 		}
-
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'dmid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_table = db_prefix . 'document_message';
@@ -68,32 +54,25 @@ class important extends connector {
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->display('article/article_message_list');
 	}
-
 	function onacmessagere() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'R');
 		$tab = empty($tab) ? 'true' : $tab;
-
 		$type = $this->fun->accept('type', 'R');
 		$type = empty($type) ? 'edit' : $type;
-
 		$dmid = intval($this->fun->accept('dmid', 'R'));
 		if (empty($dmid)) exit('false');
 		$read = $this->get_docmessage_veiw($dmid);
-
 		$reBook = $this->get_documentview($read['did']);
 		$this->ectemplates->assign('articelread', $reBook);
-
 		if (!empty($read['userid'])) {
 			$rsMember = $this->get_member(null, $read['userid']);
 		}
 		$this->ectemplates->assign('member', $rsMember);
-
 		if (!empty($read['adminid'])) {
 			$rsAdmin = $this->get_admin_view(null, $read['adminid']);
 		}
 		$this->ectemplates->assign('adminview', $rsAdmin);
-
 		$input_default = $this->CON;
 		$this->ectemplates->assign('defaultinput', $input_default);
 		$this->ectemplates->assign('lng', $read['lng']);
@@ -103,9 +82,7 @@ class important extends connector {
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->display('article/article_message_edit');
 	}
-
 	function oninfosave() {
-
 		$inputclass = $this->fun->accept('inputclass', 'P');
 		$lng = $this->fun->accept('lng', 'P');
 		$recontent = $this->fun->accept('recontent', 'P');
@@ -125,7 +102,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onacmessagedel() {
 		$db_table = db_prefix . 'document_message';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -141,7 +117,6 @@ class important extends connector {
 		$this->writelog($this->lng['acmessagelmain_del_log'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 	function onsetting() {
 		$db_table = db_prefix . 'document_message';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -156,7 +131,4 @@ class important extends connector {
 		$this->writelog($this->lng['acmessagelmain_setting_log'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 }
-
-?>

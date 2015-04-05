@@ -2,10 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class SMTP {
@@ -15,11 +15,13 @@ class SMTP {
 	 *  @var int
 	 */
 	var $SMTP_PORT = 25;
+
 	/**
 	 *  SMTP reply line ending
 	 *  @var string
 	 */
 	var $CRLF = "\r\n";
+
 	/**
 	 *  Sets whether debugging is turned on
 	 *  @var bool
@@ -70,7 +72,7 @@ class SMTP {
 	 * @access public
 	 * @return bool
 	 */
-	function Connect($host, $port=0, $tval=30) {
+	function Connect($host, $port = 0, $tval = 30) {
 		# set the error val to null so there is no confusion
 		$this->error = null;
 
@@ -87,12 +89,25 @@ class SMTP {
 			$port = $this->SMTP_PORT;
 		}
 
-		#connect to the smtp server
-		$this->smtp_conn = fsockopen($host, # the host of the server
+		if (function_exists('fsockopen')) {
+			#connect to the smtp server
+			$this->smtp_conn = fsockopen($host, # the host of the server
 				$port, # the port to use
 				$errno, # error number if any
 				$errstr, # error message if any
 				$tval);   # give up after ? secs
+		} elseif (function_exists('pfsockopen')) {
+			#connect to the smtp server
+			$this->smtp_conn = pfsockopen($host, # the host of the server
+				$port, # the port to use
+				$errno, # error number if any
+				$errstr, # error message if any
+				$tval);   # give up after ? secs
+		} elseif (function_exists('stream_socket_client')) {
+			#connect to the smtp server
+			$this->smtp_conn = stream_socket_client($host . ':' . $port, $errno, $errstr, $tval);
+		}
+
 		# verify we connected properly
 		if (empty($this->smtp_conn)) {
 			$this->error = array("error" => "Failed to connect to server",
@@ -138,10 +153,9 @@ class SMTP {
 		$code = substr($rply, 0, 3);
 
 		if ($code != 334) {
-			$this->error =
-				array("error" => "AUTH not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "AUTH not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -155,10 +169,9 @@ class SMTP {
 		$code = substr($rply, 0, 3);
 
 		if ($code != 334) {
-			$this->error =
-				array("error" => "Username not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "Username not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -172,10 +185,9 @@ class SMTP {
 		$code = substr($rply, 0, 3);
 
 		if ($code != 235) {
-			$this->error =
-				array("error" => "Password not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "Password not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -268,10 +280,9 @@ class SMTP {
 		}
 
 		if ($code != 354) {
-			$this->error =
-				array("error" => "DATA command not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "DATA command not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -357,10 +368,9 @@ class SMTP {
 		}
 
 		if ($code != 250) {
-			$this->error =
-				array("error" => "DATA not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "DATA not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -405,10 +415,9 @@ class SMTP {
 		}
 
 		if ($code != 250) {
-			$this->error =
-				array("error" => "EXPN not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "EXPN not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -437,7 +446,7 @@ class SMTP {
 	 * @access public
 	 * @return bool
 	 */
-	function Hello($host="") {
+	function Hello($host = "") {
 		$this->error = null; # so no confusion is caused
 
 		if (!$this->connected()) {
@@ -477,10 +486,9 @@ class SMTP {
 		}
 
 		if ($code != 250) {
-			$this->error =
-				array("error" => $hello . " not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => $hello . " not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -508,7 +516,7 @@ class SMTP {
 	 * @access public
 	 * @return string
 	 */
-	function Help($keyword="") {
+	function Help($keyword = "") {
 		$this->error = null; # to avoid confusion
 
 		if (!$this->connected()) {
@@ -532,10 +540,9 @@ class SMTP {
 		}
 
 		if ($code != 211 && $code != 214) {
-			$this->error =
-				array("error" => "HELP not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "HELP not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -580,10 +587,9 @@ class SMTP {
 		}
 
 		if ($code != 250) {
-			$this->error =
-				array("error" => "MAIL not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "MAIL not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -622,10 +628,9 @@ class SMTP {
 		}
 
 		if ($code != 250) {
-			$this->error =
-				array("error" => "NOOP not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "NOOP not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -646,7 +651,7 @@ class SMTP {
 	 * @access public
 	 * @return bool
 	 */
-	function Quit($close_on_error=true) {
+	function Quit($close_on_error = true) {
 		$this->error = null; # so there is no confusion
 
 		if (!$this->connected()) {
@@ -719,10 +724,9 @@ class SMTP {
 		}
 
 		if ($code != 250 && $code != 251) {
-			$this->error =
-				array("error" => "RCPT not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "RCPT not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -763,10 +767,9 @@ class SMTP {
 		}
 
 		if ($code != 250) {
-			$this->error =
-				array("error" => "RSET failed",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "RSET failed",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -812,10 +815,9 @@ class SMTP {
 		}
 
 		if ($code != 250) {
-			$this->error =
-				array("error" => "SEND not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "SEND not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -860,10 +862,9 @@ class SMTP {
 		}
 
 		if ($code != 250) {
-			$this->error =
-				array("error" => "SAML not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "SAML not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -908,10 +909,9 @@ class SMTP {
 		}
 
 		if ($code != 250) {
-			$this->error =
-				array("error" => "SOML not accepted from server",
-				    "smtp_code" => $code,
-				    "smtp_msg" => substr($rply, 4));
+			$this->error = array("error" => "SOML not accepted from server",
+			    "smtp_code" => $code,
+			    "smtp_msg" => substr($rply, 4));
 			if ($this->do_debug >= 1) {
 				echo "SMTP -> ERROR: " . $this->error["error"] .
 				": " . $rply . $this->CRLF;
@@ -1022,4 +1022,3 @@ class SMTP {
 	}
 
 }
-?>

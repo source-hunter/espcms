@@ -62,6 +62,14 @@ if (!defined('IN_UC')) {
 	}
 } else {
 
+
+
+
+
+
+
+
+
 }
 
 class uc_note {
@@ -70,7 +78,7 @@ class uc_note {
 	var $tablepre = '';
 	var $appdir = '';
 
-	function _serialize($arr, $htmlon = 0) {
+	function _serialize($arr, $htmlon=0) {
 		if (!function_exists('xml_serialize')) {
 			include_once DISCUZ_ROOT . './uc_client/lib/xml.class.php';
 		}
@@ -407,12 +415,12 @@ class uc_note {
 
 }
 
-function _setcookie($var, $value, $life = 0, $prefix = 1) {
+function _setcookie($var, $value, $life=0, $prefix=1) {
 	global $cookiepre, $cookiedomain, $cookiepath, $timestamp, $_SERVER;
 	setcookie(($prefix ? $cookiepre : '') . $var, $value, $life ? $timestamp + $life : 0, $cookiepath, $cookiedomain, $_SERVER['SERVER_PORT'] == 443 ? 1 : 0);
 }
 
-function _authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
+function _authcode($string, $operation='DECODE', $key='', $expiry=0) {
 	$ckey_length = 4;
 
 	$key = md5($key ? $key : UC_KEY);

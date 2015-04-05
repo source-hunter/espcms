@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>[%$softtitle%]</title>
@@ -24,7 +23,7 @@
 	var digheight="[%$digheight%]";
 	var lng="[%$lng%]";
 	var selectmax=Number([%$max%]);
-	
+
 	$(document).ready(function(){
 		var h = parseInt(digheight);
 		$("#mainnextbody").hide();
@@ -43,7 +42,6 @@
 			return false;
 		});
 	})
-
 	function formverify(formData, jqForm, options) {
 		var queryString = $.param(formData);
 		var get=urlarray(queryString);
@@ -65,7 +63,6 @@
 		articlesearch(esarchurl)
 		return false;
 	}
-
 	function articlesearch(loadurl){
 		$('#mainwindowhidden').removeClass().addClass('ordersearchdiv displaynone');
 		$("#mainnextbody").show();
@@ -73,26 +70,18 @@
 		$("#selectbotton2").show();
 		$("#listitle").show();
 		var h = parseInt(digheight);
-		
+
 		var formlist=document.getElementById('selectform');
-
 		var loadurl=loadurl;
-
 		var maxperpage=formlist.elements[1].value;
-
 		var maxhit=formlist.elements[2].value;
-
 		var nowpage=formlist.elements[3].value;
-
 		var loadname=formlist.elements[6].value;
-
 		var pagetextname=formlist.elements[7].value;
-
 		var pagebottonname=formlist.elements[8].value;
 		formlist.elements[0].value = loadurl;
 		pageDimensions(h,maxperpage,maxhit,nowpage,loadurl,loadname,pagetextname,pagebottonname,'selectform');
 	}
-
 	function reselect(){
 		$('#mainwindowhidden').removeClass().addClass('ordersearchdiv displaytrue');
 		$("#mainnextbody").hide();
@@ -100,7 +89,6 @@
 		$("#selectbotton2").hide();
 		$("#listitle").hide();
 	}
-
 	function selectback() {
 		var str=document.getElementsByName("articleselectinfoid");
 		var objarray=str.length;
@@ -110,7 +98,6 @@
 				chestr+=str[i].value+",";
 			}
 		}
-
 		if (selectmax>0){
 			chestr=chestr.substring(0,chestr.length-1);
 			var chestrnum = chestr.split(',');
@@ -119,7 +106,7 @@
 				return false;
 			}
 		}
-		
+
 		if (count_checked_items('selectform')>0){
 			fnupdate(chestr);
 		}else{
@@ -132,7 +119,6 @@
 			return false;
 		}
 	}
-
 	function fnupdate(chestr){
 		if (checkfrom=='input'){
 			checkinput(chestr);
@@ -144,22 +130,18 @@
 			orderedit(chestr);
 		}
 	}
-
 	function orderedit(chestr){
 		parent.frames[iframename].articlelist(chestr);
 		parent.closeifram();
 	}
-
 	function orderadd(chestr){
 		parent.frames[iframename].goodsadd(chestr);
 		parent.closeifram();
 	}
-
 	function checkinput(chestr){
 		parent.frames[iframename].document.getElementById(inputtext).value = chestr;
 		parent.closeifram();
 	}
-
 	function functionshow(chestr,inputtext,getbyid){
 		parent.frames[iframename].addinfolist(chestr,inputtext,getbyid);
 		parent.closeifram();
@@ -170,7 +152,6 @@
 	}
 </script>
 </head>
-
 <body class="bodyflow">
 <div class="centerrightwindow">
 	<div id="mainwindowhidden" class="ordersearchdiv displaytrue">
@@ -227,7 +208,7 @@
 				</tr>
 				<tr class="trstyle2">
 					<td width="20%" class="trtitle01"></td>
-					<td width="80%" class="trtitle02"><input type="submit" name="Submit" id="submitbotton" value="[%$ST.botton_search%]" class="buttonface" title="[%$ST.botton_search%]"/></td>
+					<td width="80%" class="trtitle02"><input type="submit" name="Submit" id="submitbotton" value="[%$ST.botton_search%]" class="button orange" title="[%$ST.botton_search%]"/></td>
 				</tr>
 			</table>
 			</form>
@@ -247,11 +228,11 @@
 		<div class="loadingdiv" id="articleloading"></div>
 		</form>
 	</div>
-	
+
 	<div class="pagelistdiv">
 		<div class="pageinfotext displaynone" id="pageinfo3"></div>
-		<div id="selectbotton" class="pageinfotext" style="padding-top:5px;"><input type="reset" name="reset" onClick="javascript:selectback();" id="release" value="[%$ST.botton_add%]" class="buttonface"  title="[%$ST.botton_add%]" /></div>
-		<div id="selectbotton2" class="pageinfotext" style="padding-top:5px;"><input type="reset" name="reset" onClick="javascript:reselect();" value="[%$ST.botton_reselect%]" class="buttonface"  title="[%$ST.botton_reselect%]" /></div>
+		<div id="selectbotton" class="pageinfotext" style="padding-top:5px;"><input type="reset" name="reset" onClick="javascript:selectback();" id="release" value="[%$ST.botton_add%]" class="button orange"  title="[%$ST.botton_add%]" /></div>
+		<div id="selectbotton2" class="pageinfotext" style="padding-top:5px;"><input type="reset" name="reset" onClick="javascript:reselect();" value="[%$ST.botton_reselect%]" class="button orange"  title="[%$ST.botton_reselect%]" /></div>
 		<div class="pagebottonlist" id="pagebotton"><span id="Pagination3" class="pagination"></span></div>
 	</div>
 </div>

@@ -110,14 +110,14 @@
 	width:13%;
 	font-weight: bold;
 	text-align: right;
-	padding-top:5px;
-	padding-bottom:5px;
+	padding-top:8px;
+	padding-bottom:8px;
 	padding-right: 2px;
 }
 .formtable .trtitle02 {
 	width:87%;
-	padding-top:5px;
-	padding-bottom:5px;
+	padding-top:8px;
+	padding-bottom:8px;
 	padding-left: 5px;
 }
 .formtable .trtitle03 {
@@ -125,8 +125,8 @@
 	font-weight: bold;
 	text-align: left;
 	background-color: #d0dbe8;
-	padding-top:5px;
-	padding-bottom:5px;
+	padding-top:8px;
+	padding-bottom:8px;
 	padding-left: 5px;
 }
 .formtable .infolinked{
@@ -240,7 +240,7 @@ ul.topnav li span.yallow{
 
 ul.topnav li ul.subnav {
 	list-style: none;
-	position: absolute; 
+	position: absolute;
 	top: 87px;
 	background: #A6C5E4;
 	margin: 0;
@@ -449,7 +449,7 @@ html > body .innerbox {
 	min-width: 78px;
 }
 .clickMenu li.hover{
-	z-index: 1 !important; 
+	z-index: 1 !important;
 }
 .clickMenu img.liArrow {
 	position: absolute;
@@ -463,7 +463,7 @@ html > body .innerbox {
 	list-style-type: none;
 	margin: 0px;
 	padding: 0px;
-	border: 1px solid #B8BCA9;
+	border: 1px solid #e0e0e0;
 }
 .menulist li {
 	z-index: 0;
@@ -584,7 +584,7 @@ div.pagination a:active {
 .jericho_tab .tab_pages .jericho_tabs div.tab_left{width:135px;}
 .jericho_tab .tab_pages .jericho_tabs div.tab_right{width:0px;}
 .jericho_tab .tab_pages .tab_unselect{cursor:pointer;}
-.jericho_tab .tab_pages .tab_unselect .tab_left{background:url(../images/botton.png) no-repeat;background-position:0px -58px;color:#b1b9be;}
+.jericho_tab .tab_pages .tab_unselect .tab_left{background:url(../images/botton.png) no-repeat;background-position:0px -58px;color:#fff;}
 .jericho_tab .tab_pages .tab_unselect .tab_right{background:url(../images/botton.png) no-repeat;background-position:0px -58px;}
 .jericho_tab .tab_pages .tab_unselect_h .tab_left{background:url(../images/botton.png) no-repeat;background-position:0px -58px;}
 .jericho_tab .tab_pages .tab_unselect_h .tab_right{background:url(../images/botton.png) no-repeat;background-position:0px -58px;}
@@ -696,10 +696,12 @@ div.pagination a:active {
 }
 
 .albumlist{
+	float: left;
 	margin: 0px auto;
 	width:100%;
 	color:#568edb;
 	line-height: 200%;
+	overflow: hidden;
 }
 .fileloading{
 	display: none;
@@ -709,6 +711,7 @@ div.pagination a:active {
 	list-style: none;
 	margin: 0px 0px 0px 0px;
 	padding: 0;
+	overflow: hidden;
 }
 .albumlist ul li {
 	float: left;
@@ -718,6 +721,7 @@ div.pagination a:active {
 	border: 1px solid #DCE3ED;
 	padding:5px;
 	cursor: pointer;
+	overflow: hidden;
 }
 .albumlist ul li:hover {
 	border: 1px solid #E94B16;
@@ -730,10 +734,23 @@ div.pagination a:active {
 	line-height: 100px;
 	position: relative;
 	display: table-cell;
-	display: block !important;
+	*display: block
 }
 .albumlist ul li p img{
 	vertical-align:middle;
+}
+.panel_dirname{
+	left: 0;
+	top: 75px;
+	background-color: #a2c2da;
+	color:#fff;
+	font-size: 12px;
+	width: 100px;
+	height: 25px;
+	line-height: 25px;
+	overflow: hidden;
+	display: inline;
+	position: absolute;
 }
 .panel_checkbox{
 	background: url(../images/bg_icon.png) -62px top no-repeat;
@@ -755,3 +772,17 @@ div.pagination a:active {
 	color:#fff;
 	display:none;
 }
+.applist{
+	list-style:none;
+	padding:0px;
+	margin:0px auto;
+	overflow:hidden;
+}
+.app_title_lock{width:90%;background: url(../images/title_lock.png) left no-repeat;height:28px;margin:15px 0px;}
+.app_title_lock p{height:28px;line-height: 28px;padding-left:15px;font-weight: bold;}
+.applist li{float: left;width:130px;text-align: center;overflow: hidden;padding-bottom:20px;}
+.applist li p{float: left;width:120px;text-align: center;overflow: hidden}
+.applist li .pic{float: left;width:80px;height:80px;padding:0px 20px;}
+.applist li .title{height:20px;line-height: 20px;font-weight: bold;padding-top:10px;}
+.applist li .desc{padding-top:5px;}
+.applist li .setupicon{padding:10px 0px 0px 0px}

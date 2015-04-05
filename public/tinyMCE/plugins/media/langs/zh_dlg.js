@@ -1,5 +1,5 @@
 tinyMCE.addI18n('zh.media_dlg',{
-title:"\u63D2\u5165/\u7F16\u8F91\u591A\u5A92\u4F53",
+title:"\u63D2\u5165Flash\u52A8\u753B",
 general:"\u4E00\u822C",
 advanced:"\u66F4\u591A\u8BBE\u5B9A",
 file:"\u6587\u4EF6/\u7F51\u5740",

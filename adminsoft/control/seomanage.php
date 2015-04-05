@@ -1,39 +1,28 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onseolinklist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
 		}
-
 		$listtype = $this->fun->accept('listtype', 'R');
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_where = ' WHERE lng=\'' . $lng . '\'';
-
 		$isclass = $this->fun->accept('isclass', 'R');
 		if (!empty($isclass)) {
 			if ($isclass == 2) $isclass = 0;
@@ -66,14 +55,10 @@ class important extends connector {
 		if (!empty($serchekey)) {
 			$db_where.=" AND keywordname like '%$serchekey%'";
 		}
-
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'kid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
-
 		$db_table = db_prefix . 'keylink';
 		if (!empty($countnum)) {
 			$countnum = $this->db_numrows($db_table, $db_where);
@@ -90,71 +75,52 @@ class important extends connector {
 		$templatesfile = ($listtype == 'tab') ? 'seomanage/keylink_window_list' : 'seomanage/keylink_list';
 		$this->ectemplates->display($templatesfile);
 	}
-
 	function onlistwindow() {
 		parent::start_template();
-
 		$mid = intval($this->fun->accept('mid', 'R'));
 		$mid = empty($mid) ? 0 : $mid;
-
 		$tid = intval($this->fun->accept('tid', 'R'));
 		$tid = empty($tid) ? 0 : $tid;
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
-
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$checkfrom = $this->fun->accept('checkfrom', 'R');
 		$checkfrom = empty($checkfrom) ? 'edit' : $checkfrom;
 		$this->ectemplates->assign('checkfrom', $checkfrom);
-
 		$getbyid = $this->fun->accept('getbyid', 'R');
 		$this->ectemplates->assign('getbyid', $getbyid);
-
 		$digheight = $this->fun->accept('digheight', 'R');
 		$this->ectemplates->assign('digheight', $digheight);
-
 		$iframeid = $this->fun->accept('iframeid', 'R');
 		$this->ectemplates->assign('iframeid', $iframeid);
-
 		$inputtext = $this->fun->accept('inputtext', 'R');
 		$inputtext = empty($inputtext) ? 'keywords' : $inputtext;
 		$this->ectemplates->assign('inputtext', $inputtext);
-
 		$modelarray = $this->get_model($mid, $lng, 1);
 		$this->ectemplates->assign('modelarray', $modelarray['list']);
-
 		$typelist = $this->get_typeselect($mid, 0, $tid, $lng, 0, 1, true, false);
 		$this->ectemplates->assign('typelist', $typelist);
 		$this->ectemplates->assign('mid', $mid);
 		$this->ectemplates->assign('lng', $lng);
 		$this->ectemplates->assign('tid', $tid);
-
 		$listfunction = $this->fun->accept('listfunction', 'R');
 		$inputtext = empty($inputtext) ? 'keywords' : $inputtext;
 		$this->ectemplates->assign('listfunction', $listfunction);
 		$this->ectemplates->display('seomanage/keylink_window');
 	}
-
 	function onkeylinkadd() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
-
 		$mid = intval($this->fun->accept('mid', 'R'));
 		$mid = empty($mid) ? 0 : $mid;
-
 		$tid = intval($this->fun->accept('tid', 'R'));
 		$tid = empty($tid) ? 0 : $tid;
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
-
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$typelist = $this->get_typeselect($mid, 0, $tid, $lng, 0, 1, true, false);
 		$this->ectemplates->assign('typelist', $typelist);
-
 		$model = $this->get_modelview($mid, 'modelname');
 		$this->ectemplates->assign('model', $model);
-
 		$this->ectemplates->assign('lng', $lng);
 		$this->ectemplates->assign('path', admin_URL);
 		$this->ectemplates->assign('mid', $mid);
@@ -163,17 +129,14 @@ class important extends connector {
 		$this->ectemplates->assign('domain', $this->CON['domain']);
 		$this->ectemplates->display('seomanage/keylink_add');
 	}
-
 	function onkeylinkedit() {
 		parent::start_template();
 		$db_table = db_prefix . 'keylink';
 		$id = $this->fun->accept('id', 'G');
 		$db_where = 'kid=' . $id;
 		$keyread = $this->db->fetch_first('SELECT * FROM ' . $db_table . ' WHERE ' . $db_where);
-
 		$typelist = $this->get_typeselect($keyread['mid'], 0, $keyread['tid'], $keyread['lng'], 0, 1, true, false);
 		$this->ectemplates->assign('typelist', $typelist);
-
 		$model = $this->get_modelview($keyread['mid'], 'modelname');
 		$this->ectemplates->assign('model', $model);
 		$this->ectemplates->assign('tab', 'true');
@@ -181,7 +144,6 @@ class important extends connector {
 		$this->ectemplates->assign('path', admin_URL);
 		$this->ectemplates->display('seomanage/keylink_edit');
 	}
-
 	function onkeylinksave() {
 		parent::start_template();
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -197,8 +159,7 @@ class important extends connector {
 		$mid = intval($this->fun->accept('mid', 'P'));
 		$tid = intval($this->fun->accept('tid', 'P'));
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
-
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_table = db_prefix . 'keylink';
 		if ($inputclass == 'add') {
 			$db_field = 'lng,pid,mid,tid,hit,keywordname,linkurl,islink,istop,isclass,isreplace';
@@ -217,7 +178,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function ondelkey() {
 		$db_table = db_prefix . 'keylink';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -233,7 +193,6 @@ class important extends connector {
 		$this->dbcache->clearcache('keylink_array', true);
 		exit('true');
 	}
-
 	function onkeysort() {
 		$db_table = db_prefix . 'keylink';
 		$id = $this->fun->accept('infoid', 'P');
@@ -252,7 +211,6 @@ class important extends connector {
 		$this->dbcache->clearcache('keylink_array', true);
 		exit('true');
 	}
-
 	function onsetting() {
 		$db_table = db_prefix . 'keylink';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -267,51 +225,38 @@ class important extends connector {
 		$this->dbcache->clearcache('keylink_array', true);
 		exit('true');
 	}
-
 	function onseolinktypelist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
 		}
-
 		$listtype = $this->fun->accept('listtype', 'R');
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_where = ' WHERE lng=\'' . $lng . '\'';
-
 		$mid = intval($this->fun->accept('mid', 'R'));
 		if (!empty($mid)) {
 			$db_where.=' AND mid=' . $mid;
 		}
-
 		$tid = intval($this->fun->accept('tid', 'R'));
 		if (!empty($tid)) {
 			$db_where.=' AND ' . $this->get_typeid($tid, 'tid', 0, $mid, 0, $lng);
 		}
-
 		$isclass = $this->fun->accept('isclass', 'R');
 		if (!empty($isclass)) {
 			if ($isclass == 2) $isclass = 0;
 			$db_where.=' AND isclass=' . $isclass;
 		}
-
 		$serchekey = $this->fun->accept('serchekey', 'R');
 		if (!empty($serchekey)) {
 			$db_where.=" AND keytypename like '%$serchekey%'";
 		}
-
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'ktid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_table = db_prefix . 'keylink_type';
@@ -327,28 +272,21 @@ class important extends connector {
 		$this->fun->setcookie($this->fun->noncefile() . 'pgid', $page_id, 600);
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->assign('sql', $sql);
-
 		$templatesfile = ($listtype == 'tab') ? 'seomanage/keylinktype_window_list' : 'seomanage/keylinktype_list';
 		$this->ectemplates->display($templatesfile);
 	}
-
 	function onkeylinktypeadd() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
-
 		$mid = intval($this->fun->accept('mid', 'R'));
 		$mid = empty($mid) ? 0 : $mid;
-
 		$tid = intval($this->fun->accept('tid', 'R'));
 		$tid = empty($tid) ? 0 : $tid;
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
-
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$model = $this->get_modelview($mid, 'modelname');
 		$this->ectemplates->assign('model', $model);
-
 		$typelist = $this->get_typeselect($mid, 0, $tid, $lng, 0, 1, true, false);
 		$this->ectemplates->assign('typelist', $typelist);
 		$this->ectemplates->assign('lng', $lng);
@@ -359,25 +297,20 @@ class important extends connector {
 		$this->ectemplates->assign('domain', $this->CON['domain']);
 		$this->ectemplates->display('seomanage/keylinktype_add');
 	}
-
 	function onkeylinktypeedit() {
 		parent::start_template();
 		$db_table = db_prefix . 'keylink_type';
 		$id = $this->fun->accept('id', 'G');
 		$db_where = 'ktid=' . $id;
 		$keyread = $this->db->fetch_first('SELECT * FROM ' . $db_table . ' WHERE ' . $db_where);
-
 		$typelist = $this->get_typeselect($keyread['mid'], 0, $keyread['tid'], $keyread['lng'], 0, 1, true, false);
 		$this->ectemplates->assign('typelist', $typelist);
-
 		$model = $this->get_modelview($keyread['mid'], 'modelname');
 		$this->ectemplates->assign('model', $model);
-
 		$this->ectemplates->assign('tab', 'true');
 		$this->ectemplates->assign('keyread', $keyread);
 		$this->ectemplates->display('seomanage/keylinktype_edit');
 	}
-
 	function onkeylinktypesave() {
 		parent::start_template();
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -387,8 +320,7 @@ class important extends connector {
 		$mid = $this->fun->accept('mid', 'P');
 		$tid = $this->fun->accept('tid', 'P');
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
-
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_table = db_prefix . 'keylink_type';
 		if ($inputclass == 'add') {
 			$db_field = 'lng,mid,tid,keytypename,keyworklist,description,isclass';
@@ -408,7 +340,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function ondelkeytype() {
 		$db_table = db_prefix . 'keylink_type';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -424,7 +355,4 @@ class important extends connector {
 		$this->dbcache->clearcache('keylinktype_array', true);
 		exit('true');
 	}
-
 }
-
-?>

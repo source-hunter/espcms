@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <meta content="zh-cn" http-equiv="Content-Language" />
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
@@ -15,7 +14,6 @@
    		$('#centerlogin').css({height:h});
 	});
 	var resizeTimer = null;
-
 	function sizewindow(){
 		var h = $(window).height();
    		$('#centerlogin').css({height:h});
@@ -42,13 +40,12 @@
 		}
 	}
 </script>
-<!--[if IE 6]> 
-<style type="text/css" media="screen"> 
-body {behavior:url("templates/css/csshover.htc"); } 
+<!--[if IE 6]>
+<style type="text/css" media="screen">
+body {behavior:url("templates/css/csshover.htc"); }
 </style>
-<![endif]--> 
+<![endif]-->
 </head>
-
 <body>
 <div class="login-div">
  <table border="0" cellpadding="0" style="border-collapse: collapse" width="100%" id="centerlogin">
@@ -75,7 +72,7 @@ body {behavior:url("templates/css/csshover.htc"); }
 										<td class="center strong colorgorning2" style="padding-top:5px;">[%$ST.digmessage_spanSeconds_mess_left%]<span id="spanSeconds">5</span>[%$ST.digmessage_spanSeconds_mess_right%]</td>
 									</tr>
 									<tr>
-										<td class="center" style="padding-top:30px;"><input type="submit" name="Submit" value="[%$bottonName%]" class="buttonface" onclick="javascript:location.href='[%$linkURL%]';" title="[%$bottonName%]"/></td>
+										<td class="center" style="padding-top:30px;"><input type="submit" name="Submit" value="[%$bottonName%]" class="button orange" onclick="javascript:location.href='[%$linkURL%]';" title="[%$bottonName%]"/></td>
 									</tr>
 								</table>
 								</td>
@@ -93,5 +90,4 @@ body {behavior:url("templates/css/csshover.htc"); }
 </table>
 </div>
 </body>
-
 </html>

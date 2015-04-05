@@ -1,55 +1,43 @@
+<script type="text/javascript">
+$().ready(function() {$("#tree").treeview({collapsed: true,control:"#sidetreecontrol",prerendered: false,persist: "location"});});
+</script>
 [%if count($array) > 0%]
+<ul id="tree">
 [%forlist from=$array key=list%]
-	<div class="infolist" onselectstart="return false;" [%if $array[list].styleid!=3 %]title="[%$array[list].typename%] - [%$array[list].dir%]/[%$array[list].dirpath%]"[%/if%]>
-		<table border="0" style="border-collapse:collapse" width="100%" bordercolor="#FFFFFF"[%if @this->powercheck('article','typeedit')==true %] ondblClick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typemanage_edit_title%]','index.php?archive=typemanage&action=typeedit&tid=[%$array[list].tid%]&type=edit&styleid=[%$array[list].styleid%]&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'typeedit[%$array[list].tid%]',self.frameElement.getAttribute('name'));"[%/if%]>
+	<li class="open">
+	<div class="infolist" onselectstart="return false;">
+	     <table border="0" style="border-collapse:collapse" width="100%" bordercolor="#FFFFFF">
 			<tr>
 				<td width="3%"><input type="checkbox" name="selectinfoid" value="[%$array[list].tid%]"></td>
 				<td width="6%">
 					<input type="hidden" name="infoid" id="infoid" value="[%$array[list].tid%]">
-					<input type="text" name="pid" size="1" value="[%$array[list].pid%]" class="infoInput" style="width:25px;"  onclick="if(this.value=='[%$array[list].pid%]'){this.value = '';}else {this.select();}" onblur="if(this.value ==''){this.value ='[%$array[list].pid%]';}">
+					<input type="text" name="pid" size="1" value="[%$array[list].pid%]" class="infoInput" style="width:25px;"  onclick="if (this.value == '[%$array[list].pid%]'){this.value = ''; } else {this.select(); }" onblur="if (this.value == ''){this.value = '[%$array[list].pid%]'; }">
 				</td>
 				<td width="5%">[%$array[list].tid%]</td>
-				<td width="22%" id="left" class="padding-left3">
-					[%$array[list].level|treelist('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')%][%if $array[list].level>0%]├─ [%/if%]<a target="_blank" class="[%if $array[list].level==0%]infolink04b[%else%]infolink04[%/if%]" href="[%$array[list].glink%]">[%$array[list].typename%]</a></td>
+				<td width="22%" id="left"[%if count( $array[list].childArray ) <= 0%] class="onefast"[%/if%]><a target="_blank" class="infolink04b" href="[%$array[list].glink%]">[%$array[list].typename%]</a></td>
 				<td width="8%">[%$array[list].stylename%]</td>
-				<!--
-
-
-
-
-
-
-
-
-
-
-
-
-				/	</table>
-				</td>
-				-->
 				<td width="56%" id="infotype">
 					<table border="0" style="border-collapse:collapse" bordercolor="#FFFFFF">
 						<tr>
 							[%if $array[list].styleid<3%]
-							<td><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typemanage_text_infolist_title%]','index.php?archive=management&action=list&listfunction=articlelist&tid=[%$array[list].tid%]&mid=[%$array[list].mid%]&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),true,'typelist[%$array[list].tid%]',self.frameElement.getAttribute('name'));" id="typelist[%$array[list].tid%]" href="#body" title="[%$ST.typemanage_text_infolist_title%]" hidefocus="true">[%$ST.viewfield_botton%]</a></td>
+							<td><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typemanage_text_infolist_title%]', 'index.php?archive=management&action=list&listfunction=articlelist&tid=[%$array[list].tid%]&mid=[%$array[list].mid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), true, 'typelist[%$array[list].tid%]', self.frameElement.getAttribute('name'));" id="typelist[%$array[list].tid%]" href="#body" title="[%$ST.typemanage_text_infolist_title%]" hidefocus="true">[%$ST.viewfield_botton%]</a></td>
 							[%/if%]
 							[%if @this->powercheck('article','typeadd')==true %]
-							<td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typemanage_add_title%]','index.php?archive=typemanage&action=typeadd&upid=[%$array[list].tid%]&lng=[%$array[list].lng%]&topid=[%$array[list].topid%]&styleid=1&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'typeadd[%$array[list].tid%]',self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].tid%]" href="#body" title="[%$array[list].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title%]</a></td>
-							<td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typemanage_add_title%]','index.php?archive=typemanage&action=typeadd&upid=[%$array[list].tid%]&lng=[%$array[list].lng%]&topid=[%$array[list].topid%]&styleid=4&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'typeadd[%$array[list].tid%]',self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].tid%]" href="#body" title="[%$array[list].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title2%]</a></td>
-							<td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typemanage_add_title%]','index.php?archive=typemanage&action=typeadd&upid=[%$array[list].tid%]&lng=[%$array[list].lng%]&topid=[%$array[list].topid%]&styleid=3&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'typeadd[%$array[list].tid%]',self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].tid%]" href="#body" title="[%$array[list].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title3%]</a></td>
+							<td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].tid%]&lng=[%$array[list].lng%]&topid=[%$array[list].topid%]&styleid=1&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].tid%]" href="#body" title="[%$array[list].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title%]</a></td>
+							<td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].tid%]&lng=[%$array[list].lng%]&topid=[%$array[list].topid%]&styleid=4&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].tid%]" href="#body" title="[%$array[list].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title2%]</a></td>
+							<td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].tid%]&lng=[%$array[list].lng%]&topid=[%$array[list].topid%]&styleid=3&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].tid%]" href="#body" title="[%$array[list].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title3%]</a></td>
 							[%/if%]
 							[%if @this->powercheck('article','typeedit')==true %]
-							<td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typemanage_edit_title%]','index.php?archive=typemanage&action=typeedit&tid=[%$array[list].tid%]&type=edit&styleid=[%$array[list].styleid%]&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'typeedit[%$array[list].tid%]',self.frameElement.getAttribute('name'));" id="typeedit[%$array[list].tid%]" href="#body" title="[%$array[list].typename%][%$ST.typemanage_edit_title%]" hidefocus="true">[%$ST.setedit_botton%]</a></td>
+							<td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typemanage_edit_title%]', 'index.php?archive=typemanage&action=typeedit&tid=[%$array[list].tid%]&type=edit&styleid=[%$array[list].styleid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeedit[%$array[list].tid%]', self.frameElement.getAttribute('name'));" id="typeedit[%$array[list].tid%]" href="#body" title="[%$array[list].typename%][%$ST.typemanage_edit_title%]" hidefocus="true">[%$ST.setedit_botton%]</a></td>
 							[%/if%]
 							[%if @this->powercheck('article','typeedit')==true && $array[list].styleid<3%]
-							<td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typeshift_botton%]','index.php?archive=typemanage&action=typeshift&tid=[%$array[list].tid%]&styleid=[%$array[list].styleid%]&type=edit&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false);" href="#body" title="[%$array[list].typename%][%$ST.typeshift_botton%]" hidefocus="true">[%$ST.typeshift_botton%]</a></td>
+							<td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].typename|addslashes('hc')%][%$ST.typeshift_botton%]', 'index.php?archive=typemanage&action=typeshift&tid=[%$array[list].tid%]&styleid=[%$array[list].styleid%]&type=edit&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$array[list].typename%][%$ST.typeshift_botton%]" hidefocus="true">[%$ST.typeshift_botton%]</a></td>
 							[%/if%]
 							[%if @this->powercheck('article','synchro')==true && $array[list].styleid<3%]
-							<td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$ST.botton_synchro%]','index.php?archive=typemanage&action=synchro&tid=[%$array[list].tid%]&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false);" href="#body" title="[%$ST.botton_synchro%]" hidefocus="true">[%$ST.botton_synchro%]</a></td>
+							<td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$ST.botton_synchro%]', 'index.php?archive=typemanage&action=synchro&tid=[%$array[list].tid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$ST.botton_synchro%]" hidefocus="true">[%$ST.botton_synchro_slow%]</a></td>
 							[%/if%]
 							[%if @this->powercheck('article','deltype')==true %]
-							<td class="padding-left3"><a class="setedit" onclick="javascript:submiturl('index.php?archive=typemanage&action=deltype&tid=[%$array[list].tid%]&freshid='+Math.random(),'index.php?archive=management&action=load','[%$ST.run_ok%]','[%$ST.run_no%]',true,'[%$ST.del_messok%]','selectform','selectall','check_all');" href="#body" title="[%$ST.setdel_botton%]" hidefocus="true">[%$ST.setdel_botton%]</a></td>
+							<td class="padding-left3"><a class="setedit" onclick="javascript:submiturl('index.php?archive=typemanage&action=deltype&tid=[%$array[list].tid%]&freshid=' + Math.random(), 'index.php?archive=management&action=load', '[%$ST.run_ok%]', '[%$ST.run_no%]', true, '[%$ST.del_messok%]', 'selectform', 'selectall', 'check_all');" href="#body" title="[%$ST.setdel_botton%]" hidefocus="true">[%$ST.setdel_botton%]</a></td>
 							[%/if%]
 						</tr>
 					</table>
@@ -57,13 +45,258 @@
 			</tr>
 		</table>
 	</div>
+	[%if count( $array[list].childArray ) > 0%]
+		<ul>
+		[%forlist from=$array[list].childArray key=ii%]
+			<li class="open">
+			<div class="infolist" onselectstart="return false;">
+				<table border="0" style="border-collapse:collapse" width="100%" bordercolor="#FFFFFF">
+					   <tr>
+						   <td width="3%"><input type="checkbox" name="selectinfoid" value="[%$array[list].childArray[ii].tid%]"></td>
+						   <td width="6%">
+							   <input type="hidden" name="infoid" id="infoid" value="[%$array[list].childArray[ii].tid%]">
+							   <input type="text" name="pid" size="1" value="[%$array[list].childArray[ii].pid%]" class="infoInput" style="width:25px;"  onclick="if (this.value == '[%$array[list].childArray[ii].pid%]'){this.value = ''; } else {this.select(); }" onblur="if (this.value == ''){this.value = '[%$array[list].childArray[ii].pid%]'; }">
+						   </td>
+						   <td width="5%">[%$array[list].childArray[ii].tid%]</td>
+						   <td width="22%" id="left" class="one"><a target="_blank" class="infolink04" href="[%$array[list].childArray[ii].glink%]">[%$array[list].childArray[ii].typename%]</a></td>
+						   <td width="8%">[%$array[list].childArray[ii].stylename%]</td>
+						   <td width="56%" id="infotype">
+							   <table border="0" style="border-collapse:collapse" bordercolor="#FFFFFF">
+								   <tr>
+									   [%if $array[list].childArray[ii].styleid<3%]
+									   <td><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].typename|addslashes('hc')%][%$ST.typemanage_text_infolist_title%]', 'index.php?archive=management&action=list&listfunction=articlelist&tid=[%$array[list].childArray[ii].tid%]&mid=[%$array[list].childArray[ii].mid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), true, 'typelist[%$array[list].childArray[ii].tid%]', self.frameElement.getAttribute('name'));" id="typelist[%$array[list].childArray[ii].tid%]" href="#body" title="[%$ST.typemanage_text_infolist_title%]" hidefocus="true">[%$ST.viewfield_botton%]</a></td>
+									   [%/if%]
+									   [%if @this->powercheck('article','typeadd')==true %]
+									   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].tid%]&lng=[%$array[list].childArray[ii].lng%]&topid=[%$array[list].childArray[ii].topid%]&styleid=1&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].tid%]" href="#body" title="[%$array[list].childArray[ii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title%]</a></td>
+									   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].tid%]&lng=[%$array[list].childArray[ii].lng%]&topid=[%$array[list].childArray[ii].topid%]&styleid=4&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].tid%]" href="#body" title="[%$array[list].childArray[ii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title2%]</a></td>
+									   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].tid%]&lng=[%$array[list].childArray[ii].lng%]&topid=[%$array[list].childArray[ii].topid%]&styleid=3&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].tid%]" href="#body" title="[%$array[list].childArray[ii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title3%]</a></td>
+									   [%/if%]
+									   [%if @this->powercheck('article','typeedit')==true %]
+									   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].typename|addslashes('hc')%][%$ST.typemanage_edit_title%]', 'index.php?archive=typemanage&action=typeedit&tid=[%$array[list].childArray[ii].tid%]&type=edit&styleid=[%$array[list].childArray[ii].styleid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeedit[%$array[list].childArray[ii].tid%]', self.frameElement.getAttribute('name'));" id="typeedit[%$array[list].childArray[ii].tid%]" href="#body" title="[%$array[list].childArray[ii].typename%][%$ST.typemanage_edit_title%]" hidefocus="true">[%$ST.setedit_botton%]</a></td>
+									   [%/if%]
+									   [%if @this->powercheck('article','typeedit')==true && $array[list].childArray[ii].styleid<3%]
+									   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].typename|addslashes('hc')%][%$ST.typeshift_botton%]', 'index.php?archive=typemanage&action=typeshift&tid=[%$array[list].childArray[ii].tid%]&styleid=[%$array[list].childArray[ii].styleid%]&type=edit&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$array[list].childArray[ii].typename%][%$ST.typeshift_botton%]" hidefocus="true">[%$ST.typeshift_botton%]</a></td>
+									   [%/if%]
+									   [%if @this->powercheck('article','synchro')==true && $array[list].childArray[ii].styleid<3%]
+									   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$ST.botton_synchro%]', 'index.php?archive=typemanage&action=synchro&tid=[%$array[list].childArray[ii].tid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$ST.botton_synchro%]" hidefocus="true">[%$ST.botton_synchro_slow%]</a></td>
+									   [%/if%]
+									   [%if @this->powercheck('article','deltype')==true %]
+									   <td class="padding-left3"><a class="setedit" onclick="javascript:submiturl('index.php?archive=typemanage&action=deltype&tid=[%$array[list].childArray[ii].tid%]&freshid=' + Math.random(), 'index.php?archive=management&action=load', '[%$ST.run_ok%]', '[%$ST.run_no%]', true, '[%$ST.del_messok%]', 'selectform', 'selectall', 'check_all');" href="#body" title="[%$ST.setdel_botton%]" hidefocus="true">[%$ST.setdel_botton%]</a></td>
+									   [%/if%]
+								   </tr>
+							</table>
+						</td>
+					</tr>
+				 </table>
+			 </div>
+
+			[%if count( $array[list].childArray[ii].childArray ) > 0%]
+				<ul>
+				[%forlist from=$array[list].childArray[ii].childArray key=iii%]
+					<li class="open">
+					<div class="infolist" onselectstart="return false;">
+						<table border="0" style="border-collapse:collapse" width="100%" bordercolor="#FFFFFF">
+							   <tr>
+								   <td width="3%"><input type="checkbox" name="selectinfoid" value="[%$array[list].childArray[ii].childArray[iii].tid%]"></td>
+								   <td width="6%">
+									   <input type="hidden" name="infoid" id="infoid" value="[%$array[list].childArray[ii].childArray[iii].tid%]">
+									   <input type="text" name="pid" size="1" value="[%$array[list].childArray[ii].childArray[iii].pid%]" class="infoInput" style="width:25px;"  onclick="if (this.value == '[%$array[list].childArray[ii].childArray[iii].pid%]'){this.value = ''; } else {this.select(); }" onblur="if (this.value == ''){this.value = '[%$array[list].childArray[ii].childArray[iii].pid%]'; }">
+								   </td>
+								   <td width="5%">[%$array[list].childArray[ii].childArray[iii].tid%]</td>
+								   <td width="22%" id="left" class="tow"><a target="_blank" class="infolink04" href="[%$array[list].childArray[ii].childArray[iii].glink%]">[%$array[list].childArray[ii].childArray[iii].typename%]</a></td>
+								   <td width="8%">[%$array[list].childArray[ii].childArray[iii].stylename%]</td>
+								   <td width="56%" id="infotype">
+									   <table border="0" style="border-collapse:collapse" bordercolor="#FFFFFF">
+										   <tr>
+											   [%if $array[list].childArray[ii].childArray[iii].styleid<3%]
+											   <td><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].typename|addslashes('hc')%][%$ST.typemanage_text_infolist_title%]', 'index.php?archive=management&action=list&listfunction=articlelist&tid=[%$array[list].childArray[ii].childArray[iii].tid%]&mid=[%$array[list].childArray[ii].childArray[iii].mid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), true, 'typelist[%$array[list].childArray[ii].childArray[iii].tid%]', self.frameElement.getAttribute('name'));" id="typelist[%$array[list].childArray[ii].childArray[iii].tid%]" href="#body" title="[%$ST.typemanage_text_infolist_title%]" hidefocus="true">[%$ST.viewfield_botton%]</a></td>
+											   [%/if%]
+											   [%if @this->powercheck('article','typeadd')==true %]
+											   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].topid%]&styleid=1&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title%]</a></td>
+											   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].topid%]&styleid=4&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title2%]</a></td>
+											   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].topid%]&styleid=3&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title3%]</a></td>
+											   [%/if%]
+											   [%if @this->powercheck('article','typeedit')==true %]
+											   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].typename|addslashes('hc')%][%$ST.typemanage_edit_title%]', 'index.php?archive=typemanage&action=typeedit&tid=[%$array[list].childArray[ii].childArray[iii].tid%]&type=edit&styleid=[%$array[list].childArray[ii].childArray[iii].styleid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeedit[%$array[list].childArray[ii].childArray[iii].tid%]', self.frameElement.getAttribute('name'));" id="typeedit[%$array[list].childArray[ii].childArray[iii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].typename%][%$ST.typemanage_edit_title%]" hidefocus="true">[%$ST.setedit_botton%]</a></td>
+											   [%/if%]
+											   [%if @this->powercheck('article','typeedit')==true && $array[list].childArray[ii].childArray[iii].styleid<3%]
+											   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].typename|addslashes('hc')%][%$ST.typeshift_botton%]', 'index.php?archive=typemanage&action=typeshift&tid=[%$array[list].childArray[ii].childArray[iii].tid%]&styleid=[%$array[list].childArray[ii].childArray[iii].styleid%]&type=edit&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$array[list].childArray[ii].childArray[iii].typename%][%$ST.typeshift_botton%]" hidefocus="true">[%$ST.typeshift_botton%]</a></td>
+											   [%/if%]
+											   [%if @this->powercheck('article','synchro')==true && $array[list].childArray[ii].childArray[iii].styleid<3%]
+											   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$ST.botton_synchro%]', 'index.php?archive=typemanage&action=synchro&tid=[%$array[list].childArray[ii].childArray[iii].tid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$ST.botton_synchro%]" hidefocus="true">[%$ST.botton_synchro_slow%]</a></td>
+											   [%/if%]
+											   [%if @this->powercheck('article','deltype')==true %]
+											   <td class="padding-left3"><a class="setedit" onclick="javascript:submiturl('index.php?archive=typemanage&action=deltype&tid=[%$array[list].childArray[ii].childArray[iii].tid%]&freshid=' + Math.random(), 'index.php?archive=management&action=load', '[%$ST.run_ok%]', '[%$ST.run_no%]', true, '[%$ST.del_messok%]', 'selectform', 'selectall', 'check_all');" href="#body" title="[%$ST.setdel_botton%]" hidefocus="true">[%$ST.setdel_botton%]</a></td>
+											   [%/if%]
+										   </tr>
+									   </table>
+								   </td>
+							   </tr>
+						   </table>
+					</div>
+						[%if count( $array[list].childArray[ii].childArray[iii].childArray ) > 0%]
+							<ul>
+							[%forlist from=$array[list].childArray[ii].childArray[iii].childArray key=iiii%]
+								<li class="open">
+									<div class="infolist" onselectstart="return false;">
+									<table border="0" style="border-collapse:collapse" width="100%" bordercolor="#FFFFFF">
+										   <tr>
+											   <td width="3%"><input type="checkbox" name="selectinfoid" value="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]"></td>
+											   <td width="6%">
+												   <input type="hidden" name="infoid" id="infoid" value="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]">
+												   <input type="text" name="pid" size="1" value="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].pid%]" class="infoInput" style="width:25px;"  onclick="if (this.value == '[%$array[list].childArray[ii].childArray[iii].childArray[iiii].pid%]'){this.value = ''; } else {this.select(); }" onblur="if (this.value == ''){this.value = '[%$array[list].childArray[ii].childArray[iii].childArray[iiii].pid%]'; }">
+											   </td>
+											   <td width="5%">[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]</td>
+											   <td width="22%" id="left" class="four"><a target="_blank" class="infolink04" href="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].glink%]">[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename%]</a></td>
+											   <td width="8%">[%$array[list].childArray[ii].childArray[iii].childArray[iiii].stylename%]</td>
+											   <td width="56%" id="infotype">
+												   <table border="0" style="border-collapse:collapse" bordercolor="#FFFFFF">
+													   <tr>
+														   [%if $array[list].childArray[ii].childArray[iii].childArray[iiii].styleid<3%]
+														   <td><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename|addslashes('hc')%][%$ST.typemanage_text_infolist_title%]', 'index.php?archive=management&action=list&listfunction=articlelist&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]&mid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].mid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), true, 'typelist[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]', self.frameElement.getAttribute('name'));" id="typelist[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]" href="#body" title="[%$ST.typemanage_text_infolist_title%]" hidefocus="true">[%$ST.viewfield_botton%]</a></td>
+														   [%/if%]
+														   [%if @this->powercheck('article','typeadd')==true %]
+														   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].topid%]&styleid=1&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title%]</a></td>
+														   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].topid%]&styleid=4&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title2%]</a></td>
+														   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].topid%]&styleid=3&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title3%]</a></td>
+														   [%/if%]
+														   [%if @this->powercheck('article','typeedit')==true %]
+														   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename|addslashes('hc')%][%$ST.typemanage_edit_title%]', 'index.php?archive=typemanage&action=typeedit&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]&type=edit&styleid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].styleid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeedit[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]', self.frameElement.getAttribute('name'));" id="typeedit[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename%][%$ST.typemanage_edit_title%]" hidefocus="true">[%$ST.setedit_botton%]</a></td>
+														   [%/if%]
+														   [%if @this->powercheck('article','typeedit')==true && $array[list].childArray[ii].childArray[iii].childArray[iiii].styleid<3%]
+														   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename|addslashes('hc')%][%$ST.typeshift_botton%]', 'index.php?archive=typemanage&action=typeshift&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]&styleid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].styleid%]&type=edit&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].typename%][%$ST.typeshift_botton%]" hidefocus="true">[%$ST.typeshift_botton%]</a></td>
+														   [%/if%]
+														   [%if @this->powercheck('article','synchro')==true && $array[list].childArray[ii].childArray[iii].childArray[iiii].styleid<3%]
+														   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$ST.botton_synchro%]', 'index.php?archive=typemanage&action=synchro&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$ST.botton_synchro%]" hidefocus="true">[%$ST.botton_synchro_slow%]</a></td>
+														   [%/if%]
+														   [%if @this->powercheck('article','deltype')==true %]
+														   <td class="padding-left3"><a class="setedit" onclick="javascript:submiturl('index.php?archive=typemanage&action=deltype&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].tid%]&freshid=' + Math.random(), 'index.php?archive=management&action=load', '[%$ST.run_ok%]', '[%$ST.run_no%]', true, '[%$ST.del_messok%]', 'selectform', 'selectall', 'check_all');" href="#body" title="[%$ST.setdel_botton%]" hidefocus="true">[%$ST.setdel_botton%]</a></td>
+														   [%/if%]
+													   </tr>
+												   </table>
+											   </td>
+										   </tr>
+									   </table>
+									</div>
+
+
+									[%if count( $array[list].childArray[ii].childArray[iii].childArray[iiii].childArray ) > 0%]
+										<ul>
+										[%forlist from=$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray key=iiiii%]
+											<li class="open">
+												<div class="infolist" onselectstart="return false;">
+													<table border="0" style="border-collapse:collapse" width="100%" bordercolor="#FFFFFF">
+														   <tr>
+															   <td width="3%"><input type="checkbox" name="selectinfoid" value="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]"></td>
+															   <td width="6%">
+																   <input type="hidden" name="infoid" id="infoid" value="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]">
+																   <input type="text" name="pid" size="1" value="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].pid%]" class="infoInput" style="width:25px;"  onclick="if (this.value == '[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].pid%]'){this.value = ''; } else {this.select(); }" onblur="if (this.value == ''){this.value = '[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].pid%]'; }">
+															   </td>
+															   <td width="5%">[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]</td>
+															   <td width="22%" id="left" class="five"><a target="_blank" class="infolink04" href="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].glink%]">[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%]</a></td>
+															   <td width="8%">[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].stylename%]</td>
+															   <td width="56%" id="infotype">
+																   <table border="0" style="border-collapse:collapse" bordercolor="#FFFFFF">
+																	   <tr>
+																		   [%if $array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].styleid<3%]
+																		   <td><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename|addslashes('hc')%][%$ST.typemanage_text_infolist_title%]', 'index.php?archive=management&action=list&listfunction=articlelist&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]&mid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].mid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), true, 'typelist[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]', self.frameElement.getAttribute('name'));" id="typelist[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]" href="#body" title="[%$ST.typemanage_text_infolist_title%]" hidefocus="true">[%$ST.viewfield_botton%]</a></td>
+																		   [%/if%]
+																		   [%if @this->powercheck('article','typeadd')==true %]
+																		   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].topid%]&styleid=1&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title%]</a></td>
+																		   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].topid%]&styleid=4&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title2%]</a></td>
+																		   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].topid%]&styleid=3&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title3%]</a></td>
+																		   [%/if%]
+																		   [%if @this->powercheck('article','typeedit')==true %]
+																		   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename|addslashes('hc')%][%$ST.typemanage_edit_title%]', 'index.php?archive=typemanage&action=typeedit&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]&type=edit&styleid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].styleid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeedit[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]', self.frameElement.getAttribute('name'));" id="typeedit[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%][%$ST.typemanage_edit_title%]" hidefocus="true">[%$ST.setedit_botton%]</a></td>
+																		   [%/if%]
+																		   [%if @this->powercheck('article','typeedit')==true && $array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].styleid<3%]
+																		   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename|addslashes('hc')%][%$ST.typeshift_botton%]', 'index.php?archive=typemanage&action=typeshift&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]&styleid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].styleid%]&type=edit&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%][%$ST.typeshift_botton%]" hidefocus="true">[%$ST.typeshift_botton%]</a></td>
+																		   [%/if%]
+																		   [%if @this->powercheck('article','synchro')==true && $array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].styleid<3%]
+																		   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$ST.botton_synchro%]', 'index.php?archive=typemanage&action=synchro&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$ST.botton_synchro%]" hidefocus="true">[%$ST.botton_synchro_slow%]</a></td>
+																		   [%/if%]
+																		   [%if @this->powercheck('article','deltype')==true %]
+																		   <td class="padding-left3"><a class="setedit" onclick="javascript:submiturl('index.php?archive=typemanage&action=deltype&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]&freshid=' + Math.random(), 'index.php?archive=management&action=load', '[%$ST.run_ok%]', '[%$ST.run_no%]', true, '[%$ST.del_messok%]', 'selectform', 'selectall', 'check_all');" href="#body" title="[%$ST.setdel_botton%]" hidefocus="true">[%$ST.setdel_botton%]</a></td>
+																		   [%/if%]
+																	   </tr>
+																   </table>
+															   </td>
+														   </tr>
+													   </table>
+												</div>
+												[%if count( $array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray ) > 0%]
+													<ul>
+													[%forlist from=$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray key=iiiiii%]
+														<li class="open">
+															<div class="infolist" onselectstart="return false;">
+																<table border="0" style="border-collapse:collapse" width="100%" bordercolor="#FFFFFF">
+																	   <tr>
+																		   <td width="3%"><input type="checkbox" name="selectinfoid" value="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]"></td>
+																		   <td width="6%">
+																			   <input type="hidden" name="infoid" id="infoid" value="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]">
+																			   <input type="text" name="pid" size="1" value="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].pid%]" class="infoInput" style="width:25px;"  onclick="if (this.value == '[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].pid%]'){this.value = ''; } else {this.select(); }" onblur="if (this.value == ''){this.value = '[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].pid%]'; }">
+																		   </td>
+																		   <td width="5%">[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]</td>
+																		   <td width="22%" id="left" class="six"><a target="_blank" class="infolink04" href="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].glink%]">[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename%]</a></td>
+																		   <td width="8%">[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].stylename%]</td>
+																		   <td width="56%" id="infotype">
+																			   <table border="0" style="border-collapse:collapse" bordercolor="#FFFFFF">
+																				   <tr>
+																					   [%if $array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].styleid<3%]
+																					   <td><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename|addslashes('hc')%][%$ST.typemanage_text_infolist_title%]', 'index.php?archive=management&action=list&listfunction=articlelist&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]&mid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].mid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), true, 'typelist[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]', self.frameElement.getAttribute('name'));" id="typelist[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]" href="#body" title="[%$ST.typemanage_text_infolist_title%]" hidefocus="true">[%$ST.viewfield_botton%]</a></td>
+																					   [%/if%]
+																					   [%if @this->powercheck('article','typeadd')==true %]
+																					   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].topid%]&styleid=1&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title%]</a></td>
+																					   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].topid%]&styleid=4&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title2%]</a></td>
+																					   <td class="padding-left3"><a class="setedit2" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename|addslashes('hc')%][%$ST.typemanage_add_title%]', 'index.php?archive=typemanage&action=typeadd&upid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]&lng=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].lng%]&topid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].topid%]&styleid=3&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]', self.frameElement.getAttribute('name'));" id="typeadd[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename%][%$ST.typemanage_add_title%]" hidefocus="true">[%$ST.typemanage_add_title3%]</a></td>
+																					   [%/if%]
+																					   [%if @this->powercheck('article','typeedit')==true %]
+																					   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename|addslashes('hc')%][%$ST.typemanage_edit_title%]', 'index.php?archive=typemanage&action=typeedit&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]&type=edit&styleid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].styleid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false, 'typeedit[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]', self.frameElement.getAttribute('name'));" id="typeedit[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename%][%$ST.typemanage_edit_title%]" hidefocus="true">[%$ST.setedit_botton%]</a></td>
+																					   [%/if%]
+																					   [%if @this->powercheck('article','typeedit')==true && $array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].styleid<3%]
+																					   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename|addslashes('hc')%][%$ST.typeshift_botton%]', 'index.php?archive=typemanage&action=typeshift&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]&styleid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].styleid%]&type=edit&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename%][%$ST.typeshift_botton%]" hidefocus="true">[%$ST.typeshift_botton%]</a></td>
+																					   [%/if%]
+																					   [%if @this->powercheck('article','synchro')==true && $array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].styleid<3%]
+																					   <td class="padding-left3"><a class="setedit" onclick="javascript:parent.onbotton('[%$ST.botton_synchro%]', 'index.php?archive=typemanage&action=synchro&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), false);" href="#body" title="[%$ST.botton_synchro%]" hidefocus="true">[%$ST.botton_synchro_slow%]</a></td>
+																					   [%/if%]
+																					   [%if @this->powercheck('article','deltype')==true %]
+																					   <td class="padding-left3"><a class="setedit" onclick="javascript:submiturl('index.php?archive=typemanage&action=deltype&tid=[%$array[list].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]&freshid=' + Math.random(), 'index.php?archive=management&action=load', '[%$ST.run_ok%]', '[%$ST.run_no%]', true, '[%$ST.del_messok%]', 'selectform', 'selectall', 'check_all');" href="#body" title="[%$ST.setdel_botton%]" hidefocus="true">[%$ST.setdel_botton%]</a></td>
+																					   [%/if%]
+																				   </tr>
+																			   </table>
+																		   </td>
+																	   </tr>
+																   </table>
+															</div>
+														</li>
+													[%/forlist%]
+													</ul>
+												[%/if%]
+											</li>
+										[%/forlist%]
+										</ul>
+									[%/if%]
+								</li>
+							[%/forlist%]
+							</ul>
+						[%/if%]
+					</li>
+				[%/forlist%]
+				</ul>
+			[%/if%]
+			</li>
+		[%/forlist%]
+		</ul>
+	[%/if%]
+	</li>
 [%/forlist%]
+</ul>
 [%else%]
-	<div class="infolist">
-		<table border="0" style="border-collapse:collapse" width="100%" bordercolor="#FFFFFF">
-			<tr>
-				<td align="center">[%$ST.list_nothing_title%]</td>
-			</tr>
-		</table>
-	</div>
-[%/if%]
+<div class="infolist">
+	<table border="0" style="border-collapse:collapse" width="100%" bordercolor="#FFFFFF">
+		<tr>
+			<td align="center">[%$ST.list_nothing_title%]</td>
+		</tr>
+	</table>
+</div>
+[%/if%]      

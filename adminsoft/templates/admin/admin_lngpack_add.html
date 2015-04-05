@@ -89,8 +89,14 @@
 		}else{
 			alert(languagepack_js_add_no);
 		}
-		if (tab=='true'){
-			parent.onaletdoc()
+		
+		var refalse = "[%$refalse%]";
+		if (refalse!='1'){
+			if (tab=='true'){
+				parent.onaletdoc();
+			}
+		}else{
+			window.location.reload();
 		}
 	}
 
@@ -165,8 +171,8 @@
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr>
-				<td id="right"><input type="submit" id="submitbotton" name="Submit" value="[%$ST.botton_add%]" class="buttonface" /></td>
-				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_add_reset%]" class="buttonface" /></td>
+				<td id="right"><input type="submit" id="submitbotton" name="Submit" value="[%$ST.botton_add%]" class="button orange" /></td>
+				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_add_reset%]" class="button orange" /></td>
 			</tr>
 		</table>
 	</div>
@@ -174,4 +180,4 @@
 </form>
 </body>
 
-</html>
+</html>      

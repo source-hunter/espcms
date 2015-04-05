@@ -1,0 +1,26 @@
+{%if count($array)>0%}
+{%forlist from=$array key=i%}
+<li>
+	<div class="espcms_bbs_content_a_read_table">
+		<div class="espcms_index">
+			<span class="espcms_bbs_title">Name:{%$array[i].name%}</span>  {%if $array[i].email!=''%} <span class="espcms_bbs_auto">E-mail:{%$array[i].email%}</span>  {%/if%}  <span class="espcms_bbs_time">{%$array[i].addtime|timeformat(3)%}</span>
+		</div>
+		<b class="b1"></b><b class="b2"></b><b class="b3"></b><b class="b4"></b>
+		<div class="content">
+			{%$array[i].content%}
+			{%if $array[i].recontent!=''%}
+			<div class="espcms_bbs_content_b_read_table">
+				<div class="espcms_index_re"><span class="espcms_bbs_title">Administrator</span>   <span class="espcms_bbs_time">Time:{%$array[i].retime|timeformat(3)%}</span></div>
+				<b class="b1"></b><b class="b2"></b><b class="b3"></b><b class="b4"></b>
+				<div class="content">{%$array[i].recontent%}</div>
+				<b class="b5"></b><b class="b6"></b><b class="b7"></b><b class="b8"></b>
+			</div>
+			{%/if%}
+		</div>
+		<b class="b5"></b><b class="b6"></b><b class="b7"></b><b class="b8"></b>
+	</div>
+</li>
+{%/forlist%}
+{%else%}
+<li class="center colorgorningage">No message</li>
+{%/if%}

@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <title>[%$softtitle%]</title>
@@ -14,14 +13,12 @@
 var upfile_empty = "[%$ST.management_upfile_text_cerfile_js_err%]";
 var iframename = "[%$iframename%]";
 var digheight="[%$digheight%]";
-
 $(document).ready(function(){
 	var h = parseInt(digheight);
 	if(document.getElementById("mainbodybottonauto")){
 		$('.managebottonadd').css({height:h-40});
 	}
 });
-
 function upfilecheck() {
 	if( mainform.cerupfilepath.value.length<5 || mainform.cerupfilepath.value=='' ) {
 		alert(upfile_empty)
@@ -29,13 +26,13 @@ function upfilecheck() {
 		return false;
 	}
 }
-
 function resetwindow(){
     parent.closeifram();
 }
+document.oncontextmenu=new Function('event.returnValue=false;');
+document.onselectstart=new Function('event.returnValue=false;');
 </script>
 </head>
-
 <body>
 <form name="mainform" method="post" action="index.php" enctype="multipart/form-data" onSubmit="return upfilecheck()">
 <input type="hidden" name="point" value="admin"/>
@@ -49,20 +46,24 @@ function resetwindow(){
 		</div>
 		<div class="manageeditdiv">
 			<div class="maneditcontent">
-				<table class="formtablewin">
-					<tr class="trstyle2">
-						<td width="15%" class="trtitle01">[%$ST.management_upfile_text_http%]</td>
-						<td width="85%" class="trtitle02">[%$softhttp%] <span class="cautiontitle">[%$ST.management_upfile_text_http_mess%]</span></td>
-					</tr>
-					<tr class="trstyle2">
-						<td width="15%" class="trtitle01">[%$ST.management_upfile_text_vol%]</td>
-						<td width="85%" class="trtitle02">[%$softversion%] [%if $isupfiletrue=="false"%]<span class="cautiontitle2">[%$ST.management_upfile_text_cerfile%]</span>[%/if%]</td>
-					</tr>
-					<tr class="trstyle2">
-						<td class="trtitle01">[%$ST.management_upfile_text_cerfile%]</td>
-						<td class="trtitle02"><input type="file" name="cerupfilepath" maxlength="200" size="50" class="infoInput"></td>
-					</tr>
-				</table>
+				[%if $iscommand=='true'%]
+					<table class="formtablewin">
+						<tr class="trstyle2">
+							<td width="15%" class="trtitle01">[%$ST.management_upfile_text_http%]</td>
+							<td width="85%" class="trtitle02">[%$softhttp%] <span class="cautiontitle">[%$ST.management_upfile_text_http_mess%]</span></td>
+						</tr>
+						<tr class="trstyle2">
+							<td width="15%" class="trtitle01">[%$ST.management_upfile_text_vol%]</td>
+							<td width="85%" class="trtitle02">[%$softversion%] [%if $isupfiletrue=="false"%]<span class="cautiontitle2">[%$ST.management_upfile_text_cerfile%]</span>[%/if%]</td>
+						</tr>
+						<tr class="trstyle2">
+							<td class="trtitle01">[%$ST.management_upfile_text_cerfile%]</td>
+							<td class="trtitle02"><input type="file" name="cerupfilepath" maxlength="200" size="50" class="infoInput"></td>
+						</tr>
+					</table>
+				[%else%]
+					<p style="padding:10px;">[%$ST.management_upfile_text_cerfile_command_err%]</p>
+				[%/if%]
 			</div>
 		</div>
 	</div>
@@ -71,13 +72,12 @@ function resetwindow(){
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr id="bottonsubmit">
-				<td id="right"><input type="submit" name="Submit" value="[%$ST.management_upfile_text_cerfile_bottonok%]" class="buttonface" title="[%$ST.management_upfile_text_cerfile_bottonok%]"/></td>
-				<td id="left" class="padding-left5"><input type="reset" name="reset" value="[%$ST.management_upfile_text_cerfile_bottonno%]" onclick="javascript:resetwindow();" class="buttonface"  title="[%$ST.management_upfile_text_cerfile_bottonno%]"/></td>
+				<td id="right">[%if $iscommand=='true'%]<input type="submit" name="Submit" value="[%$ST.management_upfile_text_cerfile_bottonok%]" class="button orange" title="[%$ST.management_upfile_text_cerfile_bottonok%]"/>[%/if%]</td>
+				<td[%if $iscommand=='true'%] id="left" class="padding-left5"[%/if%]><input type="reset" name="reset" value="[%$ST.management_upfile_text_cerfile_bottonno%]" onclick="javascript:resetwindow();" class="button orange"  title="[%$ST.management_upfile_text_cerfile_bottonno%]"/></td>
 			</tr>
 		</table>
 	</div>
 </div>
 </form>
 </body>
-
 </html>

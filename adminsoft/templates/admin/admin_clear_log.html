@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <title>[%$softtitle%]</title>
@@ -22,22 +21,15 @@
 			$('.managebottonadd').css({height:h-40});
 		}
 		var options = {
-
 			beforeSubmit: formverify,
-
 			success:saveResponse,
-			clearForm: true,
-			resetForm: true
-		}
+			resetForm: false
+		};
 		$('#dellog').submit(function() {
 			$(this).ajaxSubmit(options);
 			return false;
 		});
 	});
-
-
-
-
 	function formverify(formData, jqForm, options) {
 		var queryString = $.param(formData);
 		var get=urlarray(queryString);
@@ -49,7 +41,6 @@
 		}
 		windowsdig('Loading','iframe:index.php?archive=management&action=load','400px','180px','iframe',false);
 	}
-
 	function saveResponse(options,post){
 		resetwindow();
 		if (options=='true'){
@@ -58,13 +49,13 @@
 			alert(run_no);
 		}
 	}
-
 	function resetwindow(){
 		parent.closeifram();
 	}
+		document.oncontextmenu=new Function('event.returnValue=false;');
+	document.onselectstart=new Function('event.returnValue=false;');
 </script>
 </head>
-
 <body>
 <div class="centerrightwindow">
 <form name="dellog" id="dellog" method="post" action="index.php?archive=management&action=clearlog">
@@ -97,13 +88,12 @@
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr>
-				<td id="right"><input type="submit" name="Submit" value="[%$ST.botton_del%]" class="buttonface" title="[%$ST.botton_del%]"/></td>
-				<td id="left" class="padding-left5"><input type="reset" name="reset" value="[%$ST.botton_del_reset%]" onclick="javascript:resetwindow();" class="buttonface"  title="[%$ST.botton_del_reset%]"/></td>
+				<td id="right"><input type="submit" name="Submit" value="[%$ST.botton_del%]" class="button orange" title="[%$ST.botton_del%]"/></td>
+				<td id="left" class="padding-left5"><input type="reset" name="reset" value="[%$ST.botton_del_reset%]" onclick="javascript:resetwindow();" class="button orange"  title="[%$ST.botton_del_reset%]"/></td>
 			</tr>
 		</table>
 	</div>
 </div>
 </form>
 </body>
-
 </html>

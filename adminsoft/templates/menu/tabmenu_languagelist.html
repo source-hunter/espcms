@@ -1,0 +1,40 @@
+[%#%]语言列表[%#%]
+[%if $menutype == 'languagelist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('system','lngadd')==true %]
+	<li class="menumain"><a id="addinfo" class="addinfo" onclick="javascript:parent.onbotton('[%$ST.botton_add_lngadd|addslashes('hc')%]','index.php?archive=language&action=lngadd&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'addinfo',self.frameElement.getAttribute('name'));"  href="#body" title="[%$ST.botton_add_lngadd%]" hidefocus="true">[%$ST.botton_add_lngadd%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	<li class="menumain"><a id="bolt" href="#body" hidefocus="true" hidefocus="true">[%$ST.bolt_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.lock_botton%]</span>
+				<ul>
+					<li><a class="menunoclick" id="isopen0" href="#body" onclick="javascript:dbfilter('isopen','isopen',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="isopen1" href="#body" onclick="javascript:dbfilter('isopen','isopen',1,1,3,'selectform','selectall','check_all')" title="[%$ST.language_audit_ok%]" hidefocus="true">[%$ST.language_audit_ok%]</a></li>
+					<li><a class="menuclick" id="isopen2" href="#body" onclick="javascript:dbfilter('isopen','isopen',2,2,3,'selectform','selectall','check_all')" title="[%$ST.language_audit_no%]" hidefocus="true">[%$ST.language_audit_no%]</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	[%if @this->powercheck('system','dellng')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:callrun('index.php?archive=language&action=dellng','selectinfoid',false,null,null,'index.php?archive=management&action=load','[%$ST.del_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	[%if @this->powercheck('system','lngedit')==true %]
+	<li class="menumain"><a id="sortall" onclick="javascript:sortinput('index.php?archive=language&action=lngsort','index.php?archive=management&action=load','[%$ST.sort_messok%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.pid_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+	[%if @this->powercheck('system','lngedit')==true %]
+	<li class="menumain"><a id="setbotton" href="#body" hidefocus="true" title="[%$ST.set_botton%]">[%$ST.set_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.lock_set_botton%]</span>
+				<ul>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=language&action=setting','selectinfoid',true,'isopen',1,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.language_audit_ok%]" hidefocus="true">[%$ST.language_audit_ok%]</a></li>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=language&action=setting','selectinfoid',true,'isopen',0,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.language_audit_no%]" hidefocus="true">[%$ST.language_audit_no%]</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	[%/if%]
+</ul>
+[%/if%]
+      

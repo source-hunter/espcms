@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>{%$lngpack.sitename%}</title>
+<meta name="keywords" content="{%$lngpack.keyword%}" />
+<meta name="description" content="{%$lngpack.description%}" />
+<script type="text/javascript" src="{%$rootdir%}js/jquery.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/basicrun.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/jquery.Slide.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/menuthree.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/treeviewcookie.js"></script>
+<link href="{%$rootpath%}css/espcms_three.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_public.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_v5div.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_page.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/slider.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{%$rootdir%}index.php?ac=public&at=typepuv&tid={%$type.tid%}"></script>
+<script type="text/javascript">
+	$(window).load(function() {
+		$("#clickmenubotton li span").hover(function() {
+			$(this).addClass("menuhover");
+			$(this).parent().find("ul.subnav").slideDown('fast').show();
+			$(this).parent().hover(function() {
+			}, function() {
+				$(this).parent().find("ul.subnav").fadeOut('fast');
+				$(this).parent().find("span").removeClass("menuhover");
+			});
+		});
+		$("#three").treeview({collapsed: true, control: "#sidetreecontrol", prerendered: false, persist: "location"});
+	});
+</script>
+</head>
+
+<body>
+{%link file="en/public/head.html"%}
+{%if $type.typepic!=''%}
+<div class="espcms_page_bannpic"><img src="{%$rootdir%}{%$type.typepic%}" alt="{%$type.typename%}"/></div>
+{%/if%}
+
+<div class="espcms_page espcms_page_left_linkbg">
+	<div class="espcms_page_left">
+		{%get name=typelist class=utid:$type.topid,tid:$type.tid%}
+		<h2>{%$uptypeview.typename%}</h2>
+		<ul id="three" class="treeview">
+			{%forlist from=$array key=i%}
+			<li{%if count( $array[i].childArray ) <= 0%} class="onefast"{%/if%}>
+				<a href="{%$array[i].link%}" {%if $array[i].selected==1 %}class="hover"{%/if%} title="{%$array[i].typename%}">{%$array[i].typename%}</a>
+				{%if count( $array[i].childArray ) > 0 %}
+				<ul>
+					{%forlist from=$array[i].childArray key=ii%}
+					<li class="treeone">
+						<a href="{%$array[i].childArray[ii].link%}" {%if $array[i].childArray[ii].selected==1 %}class="hover"{%/if%}  title="{%$array[i].childArray[ii].typename%}">{%$array[i].childArray[ii].typename%}</a>
+						{%if count( $array[i].childArray[ii].childArray ) > 0 %}
+							<ul>
+								{%forlist from=$array[i].childArray[ii].childArray key=iii%}
+								<li class="treetow">
+									<a href="{%$array[i].childArray[ii].childArray[iii].link%}" {%if $array[i].childArray[ii].childArray[iii].selected==1 %}class="hover"{%/if%} title="{%$array[i].childArray[ii].childArray[iii].typename%}">{%$array[i].childArray[ii].childArray[iii].typename%}</a>
+									{%if count( $array[i].childArray[ii].childArray[iii].childArray ) > 0 %}
+										<ul>
+											{%forlist from=$array[i].childArray[ii].childArray[iii].childArray key=iiii%}
+											<li class="treefour">
+												<a href="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].link%}" {%if $array[i].childArray[ii].childArray[iii].childArray[iiii].selected==1 %}class="hover"{%/if%} title="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].typename%}">{%$array[i].childArray[ii].childArray[iii].childArray[iiii].typename%}</a>
+												{%if count( $array[i].childArray[ii].childArray[iii].childArray[iiii].childArray ) > 0 %}
+													<ul>
+														{%forlist from=$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray key=iiiii%}
+														<li class="treefive"><a href="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].link%}" {%if $array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].selected==1 %}class="hover"{%/if%} title="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%}">{%$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%}</a></li>
+														{%/forlist%}
+													</ul>
+												{%/if%}
+											</li>
+											{%/forlist%}
+										</ul>
+									{%/if%}
+								</li>
+								{%/forlist%}
+							</ul>
+						{%/if%}
+					</li>
+					{%/forlist%}
+				</ul>
+				{%/if%}
+			</li>
+			{%/forlist%}
+		</ul>
+		{%/get%}
+	</div>
+
+	<div class="espcms_page_right">
+		<div class="espcms_page_typename">{%$type.typename%}</div>
+		<div class="espcms_page_location">{%list name=path class=type:type,id:$type.tid%}</div>
+		<div class="espcms_page_right_line"></div>
+
+		{%if count($array) > 0%}
+		<div class="espcms_pic_index pb20">
+
+			<ul class="mover">
+				{%forlist from=$array key=i%}
+				<li>
+					<div class="pic"><a href="{%$array[i].link%}" title="{%$array[i].title%}"><img src="{%$array[i].pic|zoom(250,150)%}" alt="{%$array[i].title%}"/></a></div>
+					<div class="title"><a target="_blank" class="titlelink strong" title="{%$array[i].title%}" href="{%$array[i].link%}">{%$array[i].ctitle|cutstr(10,'')%}</a></div>
+				</li>
+				{%/forlist%}
+			</ul>
+		</div>
+		<div class="espcms_page_right_line"></div>
+		<div class="espcms_page_botton">
+			<div id="pagelist">{%$pagetext%}</div>
+		</div>
+		<div class="espcms_page_botton">
+			<div id="pagination" class="pagination">
+				{%$pagebotton%}
+			</div>
+		</div>
+		{%else%}
+		<div class="espcms_page_botton">
+			<div id="pagelist">No content</div>
+		</div>
+		{%/if%}
+	</div>
+</div>
+
+{%link file="en/public/footer.html"%}
+</body>
+</html>

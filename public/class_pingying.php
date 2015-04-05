@@ -1,15 +1,12 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class chineseSpell {
-
 	private $chineseSpellList = array(
 	    'a' => -20319,
 	    'ai' => -20317,
@@ -408,7 +405,6 @@ class chineseSpell {
 	    'zun' => -10256,
 	    'zuo' => -10254
 	);
-
 	function tostring($str) {
 		$str = strtolower($str);
 		$str = trim($str);
@@ -419,7 +415,6 @@ class chineseSpell {
 		$str = preg_replace('/[^a-z0-9]/i', '', $str);
 		return $str;
 	}
-
 	public function getFullSpell($chinese, $delimiter = '', $length = 0) {
 		$chinese = iconv('utf-8', 'gbk', $chinese);
 		$spell = $this->getChineseSpells($chinese, $delimiter);
@@ -429,7 +424,6 @@ class chineseSpell {
 		$spell = $this->tostring($spell);
 		return $spell;
 	}
-
 	public function getFirstSpell($chinese, $length = 0) {
 		$chinese = iconv('utf-8', 'gbk', $chinese);
 		$spell = $this->getChineseSpells($chinese, ' ', 1);
@@ -439,7 +433,6 @@ class chineseSpell {
 		$spell = $this->tostring($spell);
 		return $spell;
 	}
-
 	private function getChineseSpell($num, $blank = '') {
 		if ($num > 0 && $num < 160) {
 			return chr($num);
@@ -453,7 +446,6 @@ class chineseSpell {
 			return $result;
 		}
 	}
-
 	private function getChineseSpells($chinese, $delimiter = '', $first = 0) {
 		$result = array();
 		for ($i = 0; $i < strlen($chinese); $i++) {
@@ -469,7 +461,5 @@ class chineseSpell {
 		}
 		return implode($delimiter, $result);
 	}
-
 }
-
 ?>

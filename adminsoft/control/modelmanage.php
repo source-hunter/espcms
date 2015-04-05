@@ -1,29 +1,20 @@
 <?php
-
 /*
   PHP version 5
   Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
   警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
-
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onmodellist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
@@ -49,7 +40,6 @@ class important extends connector {
 			if ($istsn == 2) $istsn = 0;
 			$db_where.=' AND istsn=' . $istsn;
 		}
-
 		$isalbum = $this->fun->accept('isalbum', 'R');
 		if (!empty($isalbum)) {
 			if ($isalbum == 2) $isalbum = 0;
@@ -75,11 +65,8 @@ class important extends connector {
 			if ($islinkdid == 2) $islinkdid = 0;
 			$db_where.=' AND islinkdid=' . $islinkdid;
 		}
-
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'mid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_table = db_prefix . 'model';
@@ -97,16 +84,11 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('article/model_list');
 	}
-
 	function onmodelattlist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
@@ -127,13 +109,9 @@ class important extends connector {
 			if ($issearch == 2) $issearch = 0;
 			$wheretext.=' AND issearch=' . $issearch;
 		}
-
 		$mid = intval($this->fun->accept('mid', 'R'));
-
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'aid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_where = " WHERE mid IN (0,$mid)" . $wheretext;
@@ -153,7 +131,6 @@ class important extends connector {
 		$this->ectemplates->assign('mid', $mid);
 		$this->ectemplates->display('article/model_att_list');
 	}
-
 	function onmodeladd() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
@@ -164,7 +141,6 @@ class important extends connector {
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->display('article/model_add');
 	}
-
 	function onmodeledit() {
 		parent::start_template();
 		$db_table = db_prefix . 'model';
@@ -183,7 +159,6 @@ class important extends connector {
 			$this->ectemplates->display('article/model_edit');
 		}
 	}
-
 	function onmodelattradd() {
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
@@ -193,7 +168,6 @@ class important extends connector {
 		$this->ectemplates->assign('formtypelist', $FORMTYPE);
 		$this->ectemplates->display('article/model_attr_add');
 	}
-
 	function onmodelattredit() {
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
@@ -208,7 +182,6 @@ class important extends connector {
 		$this->ectemplates->assign('modelattrread', $modelattrread);
 		$this->ectemplates->display('article/model_attr_edit');
 	}
-
 	function onmodelsave() {
 		parent::start_template();
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -227,18 +200,18 @@ class important extends connector {
 		$isorder = intval($this->fun->accept('isorder', 'P'));
 		$ismessage = intval($this->fun->accept('ismessage', 'P'));
 		$ispurview = intval($this->fun->accept('ispurview', 'P'));
-
 		$tsnstyle = $this->fun->accept('tsnstyle', 'P');
+		$listtitlestyle = $this->fun->accept('listtitlestyle', 'P');
+		$readtitlestyle = $this->fun->accept('readtitlestyle', 'P');
 		$opid = intval($this->fun->accept('opid', 'P'));
 		$opid = empty($opid) ? 0 : $opid;
-
 		$db_table = db_prefix . 'model';
 		$date = time();
 		$isclass = $this->esp_inputclassid;
 		$isclass = empty($isclass) ? 0 : $isclass;
 		if ($inputclass == 'add') {
-			$db_field = 'lng,modelname,pagemax,pagesylte,isclass,lockin,istsn,isbase,addtime,isalbum,isextid,issid,isfgid,islinkdid,isorder,ismessage,ispurview,tsnstyle,opid';
-			$db_values = "'$lng','$modelname',$pagemax,$pagesylte,$isclass,0,$istsn,$isbase,$date,$isalbum,$isextid,$issid,$isfgid,$islinkdid,$isorder,$ismessage,$ispurview,'$tsnstyle',$opid";
+			$db_field = 'lng,modelname,pagemax,listtitlestyle,readtitlestyle,pagesylte,isclass,lockin,istsn,isbase,addtime,isalbum,isextid,issid,isfgid,islinkdid,isorder,ismessage,ispurview,tsnstyle,opid';
+			$db_values = "'$lng','$modelname',$pagemax,'$listtitlestyle','$readtitlestyle',$pagesylte,$isclass,0,$istsn,$isbase,$date,$isalbum,$isextid,$issid,$isfgid,$islinkdid,$isorder,$ismessage,$ispurview,'$tsnstyle',$opid";
 			$this->db->query('INSERT INTO ' . $db_table . ' (' . $db_field . ') VALUES (' . $db_values . ')');
 			$this->writelog($this->lng['modelmanage_add_log'], $this->lng['log_extra_ok'] . ' modelname=' . $modelname);
 			$this->dbcache->clearcache('model_array_' . $lng, true);
@@ -247,7 +220,7 @@ class important extends connector {
 			$id = $this->fun->accept('id', 'P');
 			$db_where = 'mid=' . $id;
 			$db_set = "modelname='$modelname',pagemax=$pagemax,pagesylte=$pagesylte,isbase=$isbase,istsn=$istsn,isalbum=$isalbum,isextid=$isextid,issid=$issid,isfgid=$isfgid,islinkdid=$islinkdid,
-			isorder=$isorder,ismessage=$ismessage,ispurview=$ispurview,tsnstyle='$tsnstyle',opid=$opid";
+			isorder=$isorder,ismessage=$ismessage,ispurview=$ispurview,tsnstyle='$tsnstyle',opid=$opid,listtitlestyle='$listtitlestyle',readtitlestyle='$readtitlestyle'";
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
 			$this->writelog($this->lng['modelmanage_edit_log'], $this->lng['log_extra_ok'] . ' modelname=' . $modelname . ' id=' . $id);
 			$this->dbcache->clearcache('model_view_' . $id, true);
@@ -256,13 +229,11 @@ class important extends connector {
 		} elseif ($inputclass == 'copy') {
 			$id = intval($this->fun->accept('id', 'P'));
 			if (empty($id)) exit('false');
-
-			$db_field = 'lng,modelname,pagemax,pagesylte,isclass,lockin,istsn,isbase,addtime,isalbum,isextid,issid,isfgid,islinkdid,tsnstyle,opid';
-			$db_values = "'$lng','$modelname',$pagemax,$pagesylte,$isclass,0,$istsn,$isbase,$date,$isalbum,$isextid,$issid,$isfgid,$islinkdid,'$tsnstyle',$opid";
+			$db_field = 'lng,modelname,pagemax,listtitlestyle,readtitlestyle,pagesylte,isclass,lockin,istsn,isbase,addtime,isalbum,isextid,issid,isfgid,islinkdid,tsnstyle,opid';
+			$db_values = "'$lng','$modelname',$pagemax,'$listtitlestyle','$readtitlestyle',$pagesylte,$isclass,0,$istsn,$isbase,$date,$isalbum,$isextid,$issid,$isfgid,$islinkdid,'$tsnstyle',$opid";
 			$this->db->query('INSERT INTO ' . $db_table . ' (' . $db_field . ') VALUES (' . $db_values . ')');
 			$installid = $this->db->insert_id();
 			if (empty($installid)) exit('false');
-
 			$db_where = " WHERE mid=$id";
 			$db_table = db_prefix . 'model_att';
 			$sql = 'SELECT * FROM ' . $db_table . $db_where;
@@ -275,7 +246,6 @@ class important extends connector {
 				'$rsList[attrvalue]',$rsList[attrsize],$rsList[attrrow],$rsList[attrlenther],$rsList[isclass]),";
 			}
 			if ($i > 0) {
-
 				$newinstall = substr($installstr, 0, strlen($installstr) - 1);
 				$this->db->query($newinstall);
 			}
@@ -284,7 +254,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onmodelattrsave() {
 		include admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
@@ -305,28 +274,21 @@ class important extends connector {
 		$isclass = $this->fun->accept('isclass', 'P');
 		$smid = $this->fun->accept('smid', 'P');
 		$lockin = $this->fun->accept('lockin', 'P');
-
 		$inputclass = $mid == 0 && $lockin == 1 ? 'copy' : $inputclass;
-
 		$key = $this->fun->array_key($FORMTYPE, $inputtype, 'key');
 		$attrarray = $FORMTYPE[$key];
 		if (!$attrarray) {
 			exit('false');
 		}
 		$attrlenther = $attrarray['varlong'];
-
-
 		$db_table = db_prefix . 'model_att';
 		$db_table2 = db_prefix . 'document_attr';
 		if ($inputclass == 'add') {
-
 			if ($attrarray['alter'] != 'TEXT') {
-
 				$alter = $attrarray['alter'] == 'INT' || $attrarray['alter'] == 'FLOAT' ? $attrarray['alter'] . '(' . $attrarray['varlong'] . ') DEFAULT \'0\'' : $attrarray['alter'] . '(' . $attrarray['varlong'] . ')';
 			} else {
 				$alter = $attrarray['alter'];
 			}
-
 			$renameclass = $this->checkname($attrname, $mid, $inputtype);
 			if (!$renameclass) {
 				exit('false');
@@ -336,11 +298,9 @@ class important extends connector {
 			if (!$countnum) {
 				$this->db->query('ALTER TABLE ' . $db_table2 . ' ADD COLUMN ' . $attrname . ' ' . $alter . ' NOT NULL');
 			}
-
 			$db_field = 'pid,mid,typename,typeremark,attrname,inputtype,attrvalue,attrsize,attrrow,attrlenther,isclass,validatetext,isvalidate,issearch,lockin,islockin,issys';
 			$db_values = "50,$mid,'$typename','$typeremark','$attrname','$inputtype','$attrvalue',$attrsize,$attrrow,$attrlenther,$isclass,'$validatetext',$isvalidate,$issearch,0,1,0";
 			$this->db->query('INSERT INTO ' . $db_table . ' (' . $db_field . ') VALUES (' . $db_values . ')');
-
 			$this->writelog($this->lng['modelmanage_attr_add_log'], $this->lng['log_extra_ok'] . ' typename=' . $typename);
 			$this->dbcache->clearcache('modeatt_array_' . $mid, true);
 			exit('true');
@@ -350,16 +310,13 @@ class important extends connector {
 				return false;
 			}
 			$db_set_str = null;
-
 			$db_set_str.= ",attrvalue='$attrvalue',validatetext='$validatetext'";
-
 			if ($attrsize) {
 				$db_set_str.= ',attrsize=' . $attrsize;
 			}
 			if ($attrrow) {
 				$db_set_str.= ',attrrow=' . $attrrow;
 			}
-
 			if ($isvalidate) {
 				$db_set_str.= ',isvalidate=' . $isvalidate;
 			} else {
@@ -370,18 +327,14 @@ class important extends connector {
 			} else {
 				$db_set_str.= ',issearch=0';
 			}
-
 			$db_where = 'aid=' . $aid;
 			$db_set = "typename='$typename',typeremark='$typeremark',isclass=$isclass" . $db_set_str;
-
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
-
 			$this->writelog($this->lng['modelmanage_attr_edit_log'], $this->lng['log_extra_ok'] . ' typename=' . $typename . ' att=' . $attrname . ' id=' . $aid);
 			$this->dbcache->clearcache('modeatt_array_' . $mid, true);
 			$this->dbcache->clearcache('model_atrr_view_' . $aid, true);
 			exit('true');
 		} elseif ($inputclass == 'copy') {
-
 			$aid = $this->fun->accept('aid', 'P');
 			if (empty($aid)) {
 				return false;
@@ -389,14 +342,12 @@ class important extends connector {
 			$db_field = 'pid,mid,typename,typeremark,attrname,inputtype,attrvalue,attrsize,attrrow,attrlenther,isclass,validatetext,isvalidate,issearch,lockin,islockin,issys';
 			$db_values = "50,$smid,'$typename','$typeremark','$attrname','$inputtype','$attrvalue',$attrsize,$attrrow,$attrlenther,$isclass,'$validatetext',$isvalidate,0,1,1,$aid";
 			$this->db->query('INSERT INTO ' . $db_table . ' (' . $db_field . ') VALUES (' . $db_values . ')');
-
 			$this->writelog($this->lng['modelmanage_attr_add_log'], $this->lng['log_extra_ok'] . ' typename=' . $typename);
 			$this->dbcache->clearcache('modeatt_array_' . $mid, true);
 			$this->dbcache->clearcache('model_atrr_view_' . $aid, true);
 			exit('true');
 		}
 	}
-
 	function ondelmodel() {
 		$db_table = db_prefix . 'model';
 		$db_table2 = db_prefix . 'model_att';
@@ -408,7 +359,6 @@ class important extends connector {
 		$sql = 'SELECT * FROM ' . $db_table2 . ' WHERE ' . $db_where2 . ' ORDER BY aid DESC';
 		$rs = $this->db->query($sql);
 		while ($rsList = $this->db->fetch_assoc($rs)) {
-
 			$db_where3 = " WHERE attrname='$rsList[attrname]'";
 			$countnum = $this->db_numrows($db_table2, $db_where3);
 			if ($countnum == 1) {
@@ -423,7 +373,6 @@ class important extends connector {
 		$this->dbcache->clearcache('modeatt_array_' . $id, true);
 		exit('true');
 	}
-
 	function ondelattr() {
 		$db_table = db_prefix . 'model_att';
 		$db_table2 = db_prefix . 'document_attr';
@@ -436,14 +385,12 @@ class important extends connector {
 			$db_where = "aid=$aidarray[$i]";
 			$attview = $this->get_modelattview($aidarray[$i]);
 			if (!$attview['lockin']) {
-
 				$db_where2 = " WHERE attrname='$attview[attrname]'";
 				$countnum = $this->db_numrows($db_table, $db_where2);
 				if ($countnum == 1) {
 					$this->db->query('ALTER TABLE ' . $db_table2 . ' DROP COLUMN ' . $attview['attrname']);
 				}
 			}
-
 			if ($attview['islockin']) {
 				$this->db->query('DELETE FROM ' . $db_table . ' WHERE ' . $db_where);
 				$this->dbcache->clearcache('model_atrr_view_' . $aidarray[$i], true);
@@ -453,7 +400,6 @@ class important extends connector {
 		$this->dbcache->clearcache('modeatt_array', true);
 		exit('true');
 	}
-
 	function onattrsort() {
 		$db_table = db_prefix . 'model_att';
 		$id = $this->fun->accept('infoid', 'P');
@@ -484,7 +430,6 @@ class important extends connector {
 		$this->dbcache->clearcache('model_atrr', true);
 		exit('true');
 	}
-
 	function onmodelsetting() {
 		$db_table = db_prefix . 'model';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -499,7 +444,6 @@ class important extends connector {
 		$this->dbcache->clearcache('model_', true);
 		exit('true');
 	}
-
 	function oncheckattrname() {
 		$attrname = $this->fun->accept('attrname', 'R');
 		$mid = $this->fun->accept('mid', 'R');
@@ -511,7 +455,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function checkname($attrname, $mid, $inputtype) {
 		include admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		$attlist = array('datid', 'did', 'lng', 'pid', 'mid', 'aid', 'tid', 'sid', 'fgid', 'isclass', 'islink', 'ishtml', 'ismess', 'isorder',
@@ -520,24 +463,19 @@ class important extends connector {
 		    , 'picfile', 'addtime', 'dcid', 'content', 'dlid', 'mid', 'labelname', 'doid', 'startime', 'endtime', 'width', 'height',
 		    'istime', 'filetype', 'dvid');
 		$attrnamearray = strtolower($attrname);
-
 		if (in_array($attrnamearray, $attlist)) {
 			return false;
 		}
-
 		$key = $this->fun->array_key($FORMTYPE, $inputtype, 'key', 'alter');
 		if (empty($key)) {
 			return false;
 		}
-
 		$db_table = db_prefix . 'model_att';
-
 		$db_where = " WHERE mid IN (0,$mid) and attrname='$attrname'";
 		$countnum = $this->db_numrows($db_table, $db_where);
 		if ($countnum > 0) {
 			return false;
 		} else {
-
 			$db_where = " WHERE attrname='$attrname'";
 			$sql = 'SELECT attrname,inputtype FROM ' . $db_table . $db_where;
 			$rs = $this->db->query($sql);
@@ -550,7 +488,4 @@ class important extends connector {
 		}
 		return true;
 	}
-
 }
-
-?>

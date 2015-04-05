@@ -1,0 +1,44 @@
+[%#%]订单列表[%#%]
+[%if $menutype == 'orderlist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('order','orderadd')==true %]
+	<li class="menumain"><a id="addinfo" class="addinfo" onclick="javascript:parent.onbotton('[%$ST.botton_add_orderadd|addslashes('hc')%]','index.php?archive=ordermain&action=orderadd&tab=true&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'addinfo',self.frameElement.getAttribute('name'));"  href="#body" title="[%$ST.botton_add_orderadd%]" hidefocus="true">[%$ST.botton_add_orderadd%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	<li class="menumain"><a id="bolt" href="#body" hidefocus="true" hidefocus="true">[%$ST.bolt_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.ordermain_text_ordertype%]</span>
+				<ul>
+					<li><a class="menunoclick" id="ordertype0" href="#body" onclick="javascript:dbfilter('ordertype','ordertype',0,0,7,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="ordertype1" href="#body" onclick="javascript:dbfilter('ordertype','ordertype',1,1,7,'selectform','selectall','check_all')" title="[%$ST.ordermain_text_ordertype1%]" hidefocus="true">[%$ST.ordermain_text_ordertype1%]</a></li>
+					<li><a class="menuclick" id="ordertype2" href="#body" onclick="javascript:dbfilter('ordertype','ordertype',2,2,7,'selectform','selectall','check_all')" title="[%$ST.ordermain_text_ordertype2%]" hidefocus="true">[%$ST.ordermain_text_ordertype2%]</a></li>
+					<li><a class="menuclick" id="ordertype3" href="#body" onclick="javascript:dbfilter('ordertype','ordertype',3,3,7,'selectform','selectall','check_all')" title="[%$ST.ordermain_text_ordertype3%]" hidefocus="true">[%$ST.ordermain_text_ordertype3%]</a></li>
+					<li><a class="menuclick" id="ordertype4" href="#body" onclick="javascript:dbfilter('ordertype','ordertype',4,4,7,'selectform','selectall','check_all')" title="[%$ST.ordermain_text_ordertype4%]" hidefocus="true">[%$ST.ordermain_text_ordertype4%]</a></li>
+					<li><a class="menuclick" id="ordertype5" href="#body" onclick="javascript:dbfilter('ordertype','ordertype',5,5,7,'selectform','selectall','check_all')" title="[%$ST.ordermain_text_ordertype5%]" hidefocus="true">[%$ST.ordermain_text_ordertype5%]</a></li>
+					<li><a class="menuclick" id="ordertype6" href="#body" onclick="javascript:dbfilter('ordertype','ordertype',6,6,7,'selectform','selectall','check_all')" title="[%$ST.ordermain_text_ordertype6%]" hidefocus="true">[%$ST.ordermain_text_ordertype6%]</a></li>
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.ordermain_text_paysn%]</span>
+				<ul>
+					<li><a class="menunoclick" id="ispaysn0" href="#body" onclick="javascript:dbfilter('ispaysn','ispaysn',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="ispaysn1" href="#body" onclick="javascript:dbfilter('ispaysn','ispaysn',1,1,3,'selectform','selectall','check_all')" title="[%$ST.ordermain_text_paysn1%]" hidefocus="true">[%$ST.ordermain_text_paysn1%]</a></li>
+					<li><a class="menuclick" id="ispaysn2" href="#body" onclick="javascript:dbfilter('ispaysn','ispaysn',2,2,3,'selectform','selectall','check_all')" title="[%$ST.ordermain_text_paysn2%]" hidefocus="true">[%$ST.ordermain_text_paysn2%]</a></li>
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.ordermain_text_shippingsn%]</span>
+				<ul>
+					<li><a class="menunoclick" id="isshippingsn0" href="#body" onclick="javascript:dbfilter('isshippingsn','isshippingsn',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="isshippingsn1" href="#body" onclick="javascript:dbfilter('isshippingsn','isshippingsn',1,1,3,'selectform','selectall','check_all')" title="[%$ST.ordermain_text_shippingsn1%]" hidefocus="true">[%$ST.ordermain_text_shippingsn1%]</a></li>
+					<li><a class="menuclick" id="isshippingsn2" href="#body" onclick="javascript:dbfilter('isshippingsn','isshippingsn',2,2,3,'selectform','selectall','check_all')" title="[%$ST.ordermain_text_shippingsn2%]" hidefocus="true">[%$ST.ordermain_text_shippingsn2%]</a></li>
+				</ul>
+			</li>
+			<li><a class="menuclick" id="searchall" href="#body" onclick="javascript:refreshurl('selectform')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.getalllist_botton%]</a></li>
+		</ul>
+	</li>
+	<li class="menumain"><a id="search" href="javascript:parent.windowsdig('[%$ST.ordermain_search_botton%]','iframe:index.php?archive=ordermain&action=search&iframename='+self.frameElement.getAttribute('name'),'600px','450px','iframe',true);" title="[%$ST.ordermain_search_botton%]" hidefocus="true">[%$ST.search_botton%]</a></li>
+	[%if @this->powercheck('order','orderdel')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:callrun('index.php?archive=ordermain&action=orderdel','selectinfoid',false,null,null,'index.php?archive=management&action=load','[%$ST.del_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+</ul>
+[%/if%]      

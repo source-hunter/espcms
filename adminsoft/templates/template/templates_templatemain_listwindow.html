@@ -19,10 +19,10 @@
 	var loadurl="[%$loadurl%]";
 	var iframename = "[%$iframename%]";
 	var inputtext = "[%$inputtext%]";
-	
+
 	$(document).ready(function(){
 		var h = parseInt(fheight);
-		$('#mainbodybottonauto').css({height:h-73});
+		$('#mainbodybottonauto').css({height:h-80});
 	})
 
 	function refile(){
@@ -80,7 +80,7 @@
 	}
 </script>
 </head>
-	
+
 <body>
 <input type="hidden" name="maxselect" value="1"/>
 <input type="hidden" name="filelist" value=""/>
@@ -145,12 +145,12 @@
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr id="bottonsubmit">
-				<td id="right"><input type="submit" name="Submit" id="submitbotton" onclick="javascript:refile();" value="[%$ST.botton_add%]" class="buttonface" title="[%$ST.botton_add%]"/></td>
-				<td id="left" class="padding-left5"><input type="reset" name="reset" onclick="javascript:resetwindow();" id="release" value="[%$ST.botton_upfile_reset%]" class="buttonface"  title="[%$ST.botton_upfile_reset%]" /></td>
+				<td id="right"><input type="submit" name="Submit" id="submitbotton" onclick="javascript:refile();" value="[%$ST.botton_add%]" class="button orange" title="[%$ST.botton_add%]"/></td>
+				<td id="left" class="padding-left5"><input type="reset" name="reset" onclick="javascript:resetwindow();" id="release" value="[%$ST.botton_upfile_reset%]" class="button orange"  title="[%$ST.botton_upfile_reset%]" /></td>
 			</tr>
 		</table>
 	</div>
 </div>
 </body>
 
-</html>
+</html>      

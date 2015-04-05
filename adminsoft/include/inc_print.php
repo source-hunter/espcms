@@ -2,11 +2,11 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
+
  */
 
 $printinc = array(
@@ -33,4 +33,3 @@ $printinc = array(
     20 => (array(title => '日', value => '21', content => date('d', time()), fontsize => '9pt', face => '宋体', fontwidth => '', fontstyle => '',)),
     21 => (array(title => '√', value => '22', content => '√', fontsize => '9pt', face => '宋体', fontwidth => '700', fontstyle => 'italic',))
 );
-?>

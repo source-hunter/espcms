@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <title>[%$softtitle%]</title>
@@ -11,9 +10,7 @@
 <script type="text/javascript" src="js/control.js"></script>
 <script type="text/javascript" src="js/form.js"></script>
 <script type="text/javascript">
-
 	var resizewindow= null;
-
 	window.onresize = function(){
 		var h = $(window).height();
 		if(resizewindow!=h){
@@ -21,7 +18,6 @@
 			resizewindow=h;
 		}
 	}
-
 	function sizewindow(){
 		var h = $(window).height();
 		if(document.getElementById("mainbodybottonauto")){
@@ -46,10 +42,6 @@
 		});
 		parent.scrolclear();
 	})
-
-
-
-
 	function formverify(formData) {
 		var queryString = $.param(formData);
 		var get=urlarray(queryString);
@@ -75,14 +67,12 @@
 		parent.scrolopen();
 		parent.onaletdoc()
 	}
-
 	function searchoption(tolng,title){
 		var mid=document.synchroedit.mid.value;
 		selectlinkagelng('tid','index.php?archive=connected&action=sctypelist&islinkd=1&optiontitle='+title+'&mid='+mid+'&lng='+tolng);
 	}
 </script>
 </head>
-
 <body>
 <form name="synchroedit" id="synchroedit" method="post" action="index.php?archive=typemanage&action=synchrosave">
 <input type="hidden" name="tid" value="[%$typeread.tid%]">
@@ -131,13 +121,12 @@
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr>
-				<td id="right"><input type="submit" name="Submit" value="[%$ST.botton_synchro_1%]" class="buttonface" /></td>
-				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:closewindow();" value="[%$ST.botton_synchro_2%]" class="buttonface" /></td>
+				<td id="right"><input type="submit" name="Submit" value="[%$ST.botton_synchro_1%]" class="button orange" /></td>
+				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:closewindow();" value="[%$ST.botton_synchro_2%]" class="button orange" /></td>
 			</tr>
 		</table>
 	</div>
 </div>
 </form>
 </body>
-
 </html>

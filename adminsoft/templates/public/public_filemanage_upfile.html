@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>[%$softtitle%]</title>
@@ -16,6 +15,7 @@
 	var filemanage_js_upfile_ok = "[%$ST.filemanage_js_upfile_ok%]";
 	var filemanage_js_upfile_no = "[%$ST.filemanage_js_upfile_no%]";
 	var fheight="[%$fheight%]";
+	var isgetback="[%$isgetback%]";
 	$(window).load(function(){
 		var h = parseInt(fheight);
 		$('#mainbodybottonauto').css({height:h-39});
@@ -28,10 +28,6 @@
 			return false;
 		});
 	});
-
-
-
-
 	function formverify(formData, jqForm, options) {
 		var queryString = $.param(formData);
 		var get=urlarray(queryString);
@@ -41,18 +37,16 @@
 			return false;
 		}
 	}
-
 	function saveResponse(options){
 		var inputstr="<td class=\"trtitle02\" id=\"upfilepath\"><input type=\"file\" name=\"upfilepath\" maxlength=\"200\" size=\"50\" class=\"infoInput\"></td>";
 		$("#upfilepath").replaceWith(inputstr);
-
 		var strarray = options.split('|');
-
 		if (strarray[1]!=undefined){
-
-
+			if (isgetback==1 || isgetback==2){
+				parent.refile('',1);
+				return false;
+			}
 			$("#resulttable").removeClass('displaynone');
-
 			if (strarray[1]=='img'){
 				var outfile=strarray[3] ? strarray[3] : strarray[0];
 				if (strarray[2]=='1'){
@@ -78,15 +72,18 @@
 	document.onselectstart=new Function('event.returnValue=false;');
 </script>
 </head>
-
 <body class="bodyflow">
 <form name="upfile" id="upfile" method="post" enctype="multipart/form-data" action="index.php?archive=filemanage&action=upfilesave">
 <input type="hidden" name="path" id="path" value="[%$path%]"/>
-<input type="hidden" name="MAX_FILE_SIZE" id="maxfile" value="[%$maxfile%]">
-<input type="hidden" name="img_width" value="[%$img_width%]">
-<input type="hidden" name="img_height" value="[%$img_height%]">
-<input type="hidden" name="filetype" value="[%$filetype%]">
-<input type="hidden" name="lng" value="[%$lng%]">
+<input type="hidden" name="MAX_FILE_SIZE" id="maxfile" value="[%$maxfile%]"/>
+<input type="hidden" name="img_width" value="[%$img_width%]"/>
+<input type="hidden" name="img_height" value="[%$img_height%]"/>
+<input type="hidden" name="filetype" value="[%$filetype%]"/>
+<input type="hidden" name="lng" value="[%$lng%]"/>
+<input type="hidden" name="isgetback" value="[%$isgetback%]"/>
+[%if $amid%]
+<input type="hidden" name="amid" id="amid" value="[%$amid%]"/>
+[%/if%]
 <div id="mainbodybottonauto" class="managebottonadd">
 	<div class="maindobycontent">
 		<div class="maneditcontent">
@@ -96,6 +93,7 @@
 					<td class="trtitle02" id="upfilepath"><input type="file" name="upfilepath" maxlength="200" size="50" class="infoInput"></td>
 				</tr>
 				[%if $filetype=='img'%]
+				[%if !$amid%]
 				<tr class="trstyle2">
 					<td class="trtitle01">[%$ST.filemanage_file_upfile_isamid_str%]</td>
 					<td class="trtitle02">
@@ -118,6 +116,7 @@
 						</select>
 					</td>
 				</tr>
+				[%/if%]
 				<tr class="trstyle2">
 					<td class="trtitle01"></td>
 					<td class="trtitle02">
@@ -156,9 +155,9 @@
 				<td id="center">
 					<table border="0" style="margin: 0 auto;">
 						<tr >
-							<td><input type="submit" name="Submit" id="submitbotton" value="[%$ST.botton_upfile%]" class="buttonface" title="[%$ST.botton_upfile%]"/></td>
-							<td style="padding:0px 5px 0px 5px;"><input type="reset" name="reset" onClick="javascript:location.reload();" id="refresh" value="[%$ST.refresh_botton_photoab%]" class="buttonface"  title="[%$ST.refresh_botton_photoab%]" /></td>
-							<td><input type="reset" name="reset" onClick="javascript:parent.resetwindow();" id="release" value="[%$ST.botton_upfile_reset%]" class="buttonface"  title="[%$ST.botton_upfile_reset%]" /></td>
+							<td><input type="submit" name="Submit" id="submitbotton" value="[%$ST.botton_upfile%]" class="button orange" title="[%$ST.botton_upfile%]"/></td>
+							<td style="padding:0px 5px 0px 5px;"><input type="reset" name="reset" onClick="javascript:location.reload();" id="refresh" value="[%$ST.refresh_botton_photoab%]" class="button orange"  title="[%$ST.refresh_botton_photoab%]" /></td>
+							<td><input type="reset" name="reset" onClick="javascript:parent.resetwindow();" id="release" value="[%$ST.botton_upfile_reset%]" class="button orange"  title="[%$ST.botton_upfile_reset%]" /></td>
 						</tr>
 					</table>
 				</td>

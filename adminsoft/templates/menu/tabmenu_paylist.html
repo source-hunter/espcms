@@ -1,0 +1,39 @@
+[%#%]支付方式列表[%#%]
+[%if $menutype == 'paylist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('order','payplugadd')==true %]
+	<li class="menumain"><a id="addinfo" class="addinfo" onclick="javascript:parent.onbotton('[%$ST.botton_add_payplugadd|addslashes('hc')%]','index.php?archive=payplug&action=payplugadd&tab=true&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'addinfo',self.frameElement.getAttribute('name'));"  href="#body" title="[%$ST.botton_add_payplugadd%]" hidefocus="true">[%$ST.botton_add_payplugadd%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	<li class="menumain"><a id="bolt" href="#body" hidefocus="true" hidefocus="true">[%$ST.bolt_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.user_type_botton%]</span>
+				<ul>
+					<li><a class="menunoclick" id="payisclass0" href="#body" onclick="javascript:dbfilter('payisclass','isclass',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="payisclass1" href="#body" onclick="javascript:dbfilter('payisclass','isclass',1,1,3,'selectform','selectall','check_all')" title="[%$ST.open_botton_title%]" hidefocus="true">[%$ST.open_botton_title%]</a></li>
+					<li><a class="menuclick" id="payisclass2" href="#body" onclick="javascript:dbfilter('payisclass','isclass',2,2,3,'selectform','selectall','check_all')" title="[%$ST.close_botton_title%]" hidefocus="true">[%$ST.close_botton_title%]</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	[%if @this->powercheck('order','payplugedit')==true %]
+	<li class="menumain"><a id="sortall" onclick="javascript:sortinput('index.php?archive=payplug&action=sort','index.php?archive=management&action=load','[%$ST.sort_messok%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.pid_botton%]</a></li>
+	[%/if%]
+	[%if @this->powercheck('order','payplugdel')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:callrun('index.php?archive=payplug&action=payplugdel','selectinfoid',false,null,null,'index.php?archive=management&action=load','[%$ST.del_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+	[%if @this->powercheck('order','payplugedit')==true %]
+	<li class="menumain"><a id="setbotton" href="#body" hidefocus="true" title="[%$ST.set_botton%]">[%$ST.set_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.user_type_set_botton%]</span>
+				<ul>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=payplug&action=setting','selectinfoid',true,'isclass',1,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.open_botton_title%]" hidefocus="true">[%$ST.open_botton_title%]</a></li>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=payplug&action=setting','selectinfoid',true,'isclass',0,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.close_botton_title%]" hidefocus="true">[%$ST.close_botton_title%]</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	[%/if%]
+</ul>
+[%/if%]      

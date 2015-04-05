@@ -1,16 +1,12 @@
 <?php
-
 /*
   PHP version 5
   Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
   警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
-
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class gather {
-
 	function request_url() {
 		if (isset($_SERVER['REQUEST_URI'])) {
 			$uri = $_SERVER['REQUEST_URI'];
@@ -23,7 +19,6 @@ class gather {
 		}
 		return $uri;
 	}
-
 	function get_php_url() {
 		$request_url = $this->request_url();
 		if (!empty($request_url)) {
@@ -36,7 +31,6 @@ class gather {
 		}
 		return $nowurl;
 	}
-
 	function CearIfram($text) {
 		$text = preg_replace("'<script[^\f]*?(\/script>)'si", "", $text); //去掉script代码
 		$text = preg_replace("/<iframe(.*?)<\/iframe>/isU", "", $text);
@@ -45,7 +39,6 @@ class gather {
 		$text = preg_replace("/height=\"[^\"']*[\"']/i", "", $text);
 		return $text;
 	}
-
 	function GetAlabNum($fnum) {
 		$nums = array("０", "１", "２", "３", "４", "５", "６", "７", "８", "９");
 		$fnums = "0123456789";
@@ -55,9 +48,7 @@ class gather {
 		if ($fnum == "") $fnum = 0;
 		return $fnum;
 	}
-
 	function replacechar($str, $rechar) {
-
 		$reArray = preg_split("/\n/", $rechar);
 		foreach ($reArray as $key => $value) {
 			$retext = explode('|', $value);
@@ -67,7 +58,6 @@ class gather {
 		}
 		return $str;
 	}
-
 	function htmldecode($str) {
 		if (empty($str)) return;
 		if ($str == "") return $str;
@@ -96,7 +86,6 @@ class gather {
 		$str = preg_replace("'<style[^\f]*?(\/style>)'si", "", $str);
 		return $str;
 	}
-
 	function Text2Html($txt) {
 		$txt = str_replace("  ", "　", $txt);
 		$txt = str_replace("<", "&lt;", $txt);
@@ -104,13 +93,11 @@ class gather {
 		$txt = preg_replace("/[\r\n]{1,}/isU", "<br/>\r\n", $txt);
 		return $txt;
 	}
-
 	function ClearHtml($str) {
 		$str = str_replace('<', '&lt;', $str);
 		$str = str_replace('>', '&gt;', $str);
 		return $str;
 	}
-
 	function relative_to_absolute($content, $feed_url) {
 		preg_match('/(http|https|ftp):\/\//', $feed_url, $protocol);
 		$server_url = preg_replace("/(http|https|ftp|news):\/\//", "", $feed_url);
@@ -126,7 +113,6 @@ class gather {
 		}
 		return $new_content;
 	}
-
 	function get_all_url($code, $gatherclass = true) {
 		if ($gatherclass) {
 			preg_match_all('/<a[\s\S]*?href=["|\']?([^>"\' ]+)["|\']?\s*[^>]*>([^>]+)<\/a>/i', $code, $arr);
@@ -135,7 +121,6 @@ class gather {
 		}
 		return array('name' => $arr[2], 'url' => $arr[1]);
 	}
-
 	function get_all_url_notitle($code, $gatherclass = true) {
 		if ($gatherclass) {
 			preg_match_all('/<a[\s\S]*?href=["|\']?([^>"\' ]+)["|\']?\s*[^>]*>(.+?)<\/a>/si', $code, $arr);
@@ -144,7 +129,6 @@ class gather {
 		}
 		return array('name' => $arr[2], 'url' => $arr[1]);
 	}
-
 	function get_out_texturl($urlarray, $outtext) {
 		$newurlarray = array();
 		for ($i = 0; $i < count($urlarray['url']); $i++) {
@@ -154,7 +138,6 @@ class gather {
 		}
 		return $newurlarray;
 	}
-
 	function get_tag_data($str, $start, $end) {
 		if ($start == '' || $end == '') {
 			return;
@@ -163,31 +146,24 @@ class gather {
 		$str = explode($end, $str[1]);
 		return $str[0];
 	}
-
 	function get_tr_array($table) {
 		$table = preg_replace("'<td[^>]*?>'si", '"', $table);
 		$table = str_replace("</td>", '",', $table);
 		$table = str_replace("</tr>", "{tr}", $table);
-
 		$table = preg_replace("'<[\/\!]*?[^<>]*?>'si", "", $table);
-
 		$table = preg_replace("'([\r\n])[\s]+'", "", $table);
 		$table = str_replace(" ", "", $table);
 		$table = str_replace(" ", "", $table);
-
 		$table = explode(",{tr}", $table);
 		array_pop($table);
 		return $table;
 	}
-
 	function get_td_array($table, $urlstr = 1, $picstr = 1, $titlestr = 1, $arraydelid = 1) {
 		$table = preg_replace("'<table[^>]*?>'si", "", $table);
 		$table = preg_replace("'<tr[^>]*?>'si", "", $table);
 		$table = preg_replace("'<td[^>]*?>'si", "", $table);
 		$table = str_replace("</tr>", "{tr}", $table);
 		$table = str_replace("</td>", "{td}", $table);
-
-
 		$table = explode('{tr}', $table);
 		array_pop($table);
 		foreach ($table as $key => $tr) {
@@ -205,7 +181,6 @@ class gather {
 		}
 		return $td_array;
 	}
-
 	function get_table_array($table, $urlstr = 1, $picstr = 1, $titlestr = 1, $arraydelid = 1) {
 		$table = preg_replace("'<table[^>]*?>'si", "", $table);
 		$table = preg_replace("'<tr[^>]*?>'si", "", $table);
@@ -220,7 +195,6 @@ class gather {
 		}
 		return $table_array;
 	}
-
 	function split_en_str($str, $distinct = true) {
 		preg_match_all('/([a-zA-Z]+)/', $str, $match);
 		if ($distinct == true) {
@@ -229,7 +203,6 @@ class gather {
 		sort($match[1]);
 		return $match[1];
 	}
-
 	function replaceContent($content, $urlname) {
 		$srcname = 'src=\'' . $urlname;
 		$srcname2 = 'background="' . $urlname;
@@ -239,7 +212,6 @@ class gather {
 		$contentall = str_replace('src="', $srcname3, $contentall);
 		return $contentall;
 	}
-
 	function get_domain($url) {
 		$pattern = "/[\w-]+\.(com|net|org|gov|cc|biz|info|cn)(\.(cn|hk))*/";
 		preg_match($pattern, $url, $matches);
@@ -263,7 +235,6 @@ class gather {
 			}
 		}
 	}
-
 	function get_httpdomain($url) {
 		$pattern = "/[\w-.]+\.(com|net|org|gov|cc|biz|info|cn)(\.(cn|hk))*/";
 		preg_match($pattern, $url, $matches);
@@ -287,7 +258,6 @@ class gather {
 			}
 		}
 	}
-
 	function cevin_http_open($url) {
 		$opts = array('http' => array('method' => "GET", 'timeout' => 60,));
 		$context = stream_context_create($opts);
@@ -298,9 +268,8 @@ class gather {
 			return false;
 		}
 	}
-
 	function openfile($url, $conf = array()) {
-		if (!function_exists('curl_init') or !is_array($conf)) return FALSE;
+		if (!function_exists('curl_init') or ! is_array($conf)) return FALSE;
 		$post = '';
 		$purl = parse_url($url);
 		$arr = array('post' => FALSE, 'return' => TRUE, 'cookie' => 'cookie.txt',);  //定义POST－COOKIE文件
@@ -312,22 +281,12 @@ class gather {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		}
 		curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, true);
-
-
-
 		curl_setopt($ch, CURLOPT_URL, $url);
-
-
 		/*
-
 		  curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, true);
-
 		  curl_setopt($ch, CURLOPT_PROXYAUTH, CURLAUTH_BASIC);
-
 		  curl_setopt($ch, CURLOPT_PROXY, "122.224.72.11");
-
 		  curl_setopt($ch, CURLOPT_PROXYPORT, 2009);
-
 		  curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
 		  curl_setopt($ch, CURLOPT_URL, $url);
 		 */
@@ -344,12 +303,9 @@ class gather {
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 		}
 		$result = curl_exec($ch);
-
-
 		curl_close($ch);
 		return $result;
 	}
-
 	function get_page_content($url) {
 		$url = eregi_replace('^http://', '', $url);
 		$temp = explode('/', $url);
@@ -367,13 +323,11 @@ class gather {
 			$Content .= $str;
 		}
 		@fclose($fp);
-
 		if (preg_match("/^HTTP\/\d.\d 301 Moved Permanently/is", $Content)) {
 			if (preg_match("/Location:(.*?)\r\n/is", $Content, $murl)) {
 				return get_page_content($murl[1]);
 			}
 		}
-
 		if (preg_match("/^HTTP\/\d.\d 200 OK/is", $Content)) {
 			preg_match("/Content-Type:(.*?)\r\n/is", $Content, $murl);
 			$contentType = trim($murl[1]);
@@ -382,14 +336,12 @@ class gather {
 		}
 		return $Content;
 	}
-
 	function filedbwrite($filename, $conentlist) {
 		$textfilename = $filename;  //指定数据写入的文件名
 		$fp = fopen($textfilename, 'w+'); //打开文件
 		fwrite($fp, $conentlist);  //读取文件内容
 		fclose($fp);
 	}
-
 	function dbinspection($urlfilename, $jsclass = true) {
 		$conentlist = $this->openfile($urlfilename);  //打开目标网址
 		if (!$conentlist) {
@@ -400,7 +352,6 @@ class gather {
 		}
 		return $conentlist;
 	}
-
 	function getContent($sourceStr, $startStr, $endStart, $echoid = true) {
 		if (!$echoid) {
 			$s = preg_quote($startStr);
@@ -409,25 +360,14 @@ class gather {
 			$s = $startStr;
 			$e = $endStart;
 		}
-
-
-
-
 		$s = str_replace(" ", "[\s]", $s);
 		$e = str_replace(" ", "[\s]", $e);
 		$s = str_replace("\r\n", "[\s]", $s);
 		$e = str_replace("\r\n", "[\s]", $e);
-
-
-
-
-
 		preg_match("@" . $s . "(.*?)" . $e . "@is", $sourceStr, $tpl);
 		$content = $tpl[1];
-
 		return $content;
 	}
-
 	function getContentall($sourceStr, $startStr, $endStart, $echoid = true) {
 		if (!$echoid) {
 			$s = preg_quote($startStr);
@@ -440,24 +380,17 @@ class gather {
 		$e = str_replace(" ", "[\s]", $e);
 		$s = str_replace("\r\n", "[\s]", $s);
 		$e = str_replace("\r\n", "[\s]", $e);
-
-
-
-
 		preg_match_all("@" . $s . "(.*?)" . $e . "@is", $sourceStr, $tpl);
 		$content = $tpl[1];
 		return $content;
 	}
-
 	function imageList($message) {
 		$reg = "/<img[^>]*\s+src\s*=\s*(\'|\")*\s*([^\'\"\s]*)\s*(\'|\")*[^>]*>/is";
 		preg_match_all($reg, $message, $img_array, PREG_PATTERN_ORDER);
 		$img_array = array_unique($img_array[2]);
 		return $img_array;
 	}
-
 	function pathurl($urlfilename, $bookurl) {
-
 		if (strcasecmp(substr($bookurl, 0, 4), 'http') == 0) {
 			return $bookurl;
 		}
@@ -479,7 +412,6 @@ class gather {
 			}
 			$nowbookurl = 'http://' . $urlfilename['host'] . '/' . $newurl . $betbookarray; //补全网址
 		} else {
-
 			if (substr($bookurl, 0, 1) == '/') {
 				$nowbookurl = 'http://' . $urlfilename['host'] . $bookurl;
 			} else {
@@ -489,15 +421,13 @@ class gather {
 		}
 		return $nowbookurl;
 	}
-
 	function urlnewarray($urlfilename) {
 		$neturl = explode('/', $urlfilename);
 		foreach ($neturl as $key => $variable) {
-			if (!empty($variable)) $newarray[] = $variable;
+			if (!empty($variable)) {
+				$newarray[] = $variable;
+			}
 		}
 		return $newarray;
 	}
-
 }
-
-?>

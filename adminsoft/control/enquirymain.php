@@ -2,10 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class important extends connector {
@@ -13,16 +13,11 @@ class important extends connector {
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onlist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
@@ -55,10 +50,8 @@ class important extends connector {
 		if (!empty($serchekey)) {
 			$db_where.=" AND $keyname like '%$serchekey%'";
 		}
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'eid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_table = db_prefix . 'enquiry';
@@ -76,23 +69,19 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('enquiry/enquiry_list');
 	}
-
 	function onsearch() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'R');
 		$tab = empty($tab) ? 'true' : $tab;
 		$this->ectemplates->display("enquiry/enquiry_search");
 	}
-
 	function onenquiryedit() {
 		parent::start_template();
-
 		$type = $this->fun->accept('type', 'G');
 		$eid = $this->fun->accept('eid', 'G');
 		$db_table = db_prefix . 'enquiry';
 		$db_where = ' WHERE eid=' . $eid;
 		$read = $this->db->fetch_first('SELECT * FROM ' . $db_table . $db_where);
-
 		$db_table = db_prefix . 'enquiry_info';
 		$sql = 'SELECT * FROM ' . $db_table . $db_where . ' ORDER BY eiid DESC';
 		$rs = $this->db->query($sql);
@@ -113,7 +102,6 @@ class important extends connector {
 			$this->ectemplates->display('enquiry/enquiry_read');
 		}
 	}
-
 	function onsave() {
 		$inputclass = $this->fun->accept('inputclass', 'P');
 		$enquirysn = $this->fun->accept('enquirysn', 'R');
@@ -133,7 +121,6 @@ class important extends connector {
 		$content = $this->fun->accept('content', 'R');
 		$editresult = $this->fun->accept('editresult', 'R');
 		$db_table = db_prefix . 'enquiry';
-
 		$eid = $this->fun->accept('eid', 'P');
 		if (empty($eid)) {
 			exit('false');
@@ -146,7 +133,6 @@ class important extends connector {
 		$this->writelog($this->lng['enquirymain_edit_log'], $this->lng['log_extra_ok'] . ' enquirysn=' . $enquirysn);
 		exit('true');
 	}
-
 	function onenquirymode() {
 		$db_table = db_prefix . 'enquiry';
 		$eid = $this->fun->accept('eid', 'P');
@@ -159,7 +145,6 @@ class important extends connector {
 		$this->writelog($this->lng['enquirymain_edit_log'], $this->lng['log_extra_ok'] . ' eid=' . $eid);
 		exit('true');
 	}
-
 	function onenquirydel() {
 		$db_table = db_prefix . 'enquiry';
 		$db_table1 = db_prefix . 'enquiry_info';
@@ -175,14 +160,12 @@ class important extends connector {
 		$this->writelog($this->lng['enquirymain_del_log'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 	function onprint() {
 		parent::start_template();
 		$eid = $this->fun->accept('eid', 'G');
 		$db_table = db_prefix . 'enquiry';
 		$db_where = ' WHERE eid=' . $eid;
 		$read = $this->db->fetch_first('SELECT * FROM ' . $db_table . $db_where);
-
 		$db_table = db_prefix . 'enquiry_info';
 		$sql = 'SELECT * FROM ' . $db_table . $db_where . ' ORDER BY eiid DESC';
 		$rs = $this->db->query($sql);
@@ -190,11 +173,9 @@ class important extends connector {
 		while ($rsList = $this->db->fetch_assoc($rs)) {
 			$array[] = $rsList;
 		}
-
 		$read['province'] = $this->get_cityview($read['province'], 'cityname');
 		$read['city'] = $this->get_cityview($read['city'], 'cityname');
 		$read['district'] = $this->get_cityview($read['district'], 'cityname');
-
 		$sread = array();
 		$sread['order_companyname'] = $this->CON['order_companyname'];
 		$sread['order_contact'] = $this->CON['order_contact'];
@@ -207,12 +188,22 @@ class important extends connector {
 		$sread['admine_mail'] = $this->CON['admine_mail'];
 		$sread['domain'] = $this->CON['domain'];
 
+		$this->ectemplates->assign('barcode', $this->barcode($read['enquirysn']));
 		$this->ectemplates->assign('sread', $sread);
 		$this->ectemplates->assign('order', $read);
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->display('enquiry/enquiry_print');
 	}
 
-}
+	function barcode($code = null) {
+		if (empty($code)) {
+			return false;
+		}
+		$ipadd = $this->fun->ip($_SERVER['REMOTE_ADDR']);
+		$getnetval = convert_uudecode($this->CON['getnetval']);
+		$softvol = $this->CON['softvol'];
+		$codeurl = $getnetval . 'index.php?ac=siteauthentication&at=barcode&code=' . $code . '&vol=' . $softvol . '&siteurl=' . urlencode(admin_ClassURL) . '&sitename=' . urlencode($this->CON['sitename']) . '&iplong=' . $ipadd . '&email=' . urlencode($this->CON['admine_mail']) . '&dbcode=' . db_pscode;
+		return $codeurl;
+	}
 
-?>
+}

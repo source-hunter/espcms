@@ -1,0 +1,10 @@
+{%get name=tags class=max:10%}
+{% if count(tags)>0 %}
+<h2 style="margin-top:15px;">TAG</h2>
+<div class="leftCotnet pt5 pb5 lh26">
+	{%forlist from=$array key=i%}
+	<a class="espcms_key keyword{%key=>i%}" title="{%$array[i].title%}" href="{%$array[i].link%}">{%$array[i].title%}</a>
+	{%/forlist%}
+</div>
+{%/if%}
+{%/get%}

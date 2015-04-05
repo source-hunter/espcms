@@ -1,0 +1,47 @@
+.espcms_book .desc_h1 {
+	background-color: #f0f0f0;
+	font-size:14px;
+	line-height: 250%;
+	padding:5px;
+	border:1px solid #e5e5e5;
+	font-weight: bold;
+}
+
+.espcms_book .item {
+	padding: 20px 0;
+	border-bottom: 1px solid #ededed;
+}
+.espcms_book .item .avatar {
+	float: left;
+	width: 200px;
+}
+.espcms_book .item .desc {
+	float: left;
+	padding:0px;
+	padding-left:20px;
+	width: 550px;
+}
+.espcms_book .item .desc h2 {
+	padding:0px;
+	margin: 0px;
+	margin-bottom: 10px;
+	font-size: 30px;
+	line-height: 1.5;
+}
+.espcms_book .item .desc h3 {
+	font-size: 20px;
+	margin: 0px;
+	margin-bottom: 10px;
+}
+.espcms_book .item .desc p {
+	line-height: 2;
+}
+.espcms_book_padding15 ul{
+	padding:0px;
+	margin: 0px;
+}
+.espcms_book_padding15 ul li{
+	margin: 0px;
+	margin-left:  40px;
+	padding:0px;
+}

@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <title>[%$softtitle%]</title>
@@ -30,16 +29,11 @@
 			return false;
 		});
 	});
-
-
-
-
 	function formverify(formData, jqForm, options) {
 		$('#filecheckmanger').removeClass().addClass('formdiv displaynone');
 		$('#filecheckloading').removeClass().addClass('formdiv displaytrue');
 		$('#submitbotton').attr('disabled','true');
 	}
-
 	function saveResponse(options){
 		if (options=='true'){
 			alert(clearcache_filecheck_js_filedirok);
@@ -50,15 +44,14 @@
 			resetwindow();
 			return false;
 		}
-		
 	}
-
 	function resetwindow(){
 		parent.closeifram();
 	}
+	document.oncontextmenu=new Function('event.returnValue=false;');
+	document.onselectstart=new Function('event.returnValue=false;');
 </script>
 </head>
-
 <body>
 <form name="filecheck" id="filecheck" method="post" action="index.php?archive=management&action=clearcache">
 <input type="hidden" name="execute" value="1"/>
@@ -105,13 +98,12 @@
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr id="bottonsubmit">
-				<td id="right"><input type="submit" name="Submit" id="submitbotton" value="[%$ST.botton_cear%]" class="buttonface" title="[%$ST.botton_cear%]"/></td>
-				<td id="left" class="padding-left5"><input type="reset" name="reset" value="[%$ST.botton_cear_reset%]" onclick="javascript:resetwindow();" class="buttonface"  title="[%$ST.botton_cear_reset%]"/></td>
+				<td id="right"><input type="submit" name="Submit" id="submitbotton" value="[%$ST.botton_cear%]" class="button orange" title="[%$ST.botton_cear%]"/></td>
+				<td id="left" class="padding-left5"><input type="reset" name="reset" value="[%$ST.botton_cear_reset%]" onclick="javascript:resetwindow();" class="button orange"  title="[%$ST.botton_cear_reset%]"/></td>
 			</tr>
 		</table>
 	</div>
 </div>
 </form>
 </body>
-
 </html>

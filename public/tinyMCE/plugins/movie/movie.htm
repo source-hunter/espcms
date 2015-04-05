@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>{#movie.movie_title}</title>
+		<script language="javascript" type="text/javascript" src="../../tiny_mce_popup.js"></script>
+		<script language="javascript" type="text/javascript" src="../../utils/mctabs.js"></script>
+		<script language="javascript" type="text/javascript" src="../../utils/form_utils.js"></script>
+		<script type="text/javascript" src="../../utils/editable_selects.js"></script>
+		<script language="javascript" type="text/javascript" src="js/movie.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/movie.css" />
+		<base target="_self" />
+	</head>
+	<body style="margin: 4px;">
+		<div class="Container">
+			<div class="divtitle" style="font-weight: bold;color: #CE5C36">{#movie.movie_langaugepicker}</div>
+			<div class="contentdiv">
+				<table>
+					<tr>
+						<td>{#movie.movie_pagecode}</td>
+						<td><input type="text" name="moviefile" id="moviefile" value="" class="infoInput" style="width:380px;"/></td>
+						<td id="srcbrowsercontainer"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="contentdiv">
+				<table>
+					<tr>
+						<td>{#movie.movie_width}</td>
+						<td><input type="text" name="width" size="3" id="width" value="680" class="infoInput"/></td>
+						<td style="padding-left:10px;">{#movie.movie_height}</td>
+						<td><input type="text" name="height" size="3" id="height" value="480" class="infoInput"/></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="Actions">
+				<input id="insert" type="button" value="{#insert}" language="javascript" onclick="return Save_Button_onclick()" />
+				<input id="cancel" type="button" value="{#cancel}" language="javascript" onclick="return Cancel_Button_onclick()" />
+			</div>
+		</div>
+	</body>
+</html>

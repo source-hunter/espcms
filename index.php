@@ -1,15 +1,11 @@
 <?php
-
 /*
- * PHP version 5
- * Copyright (c) 2002-2010 ECISP.CN
- * 声明：这不是一个免费的软件，请在许可范围内使用
- * 作者：Bili E-mail:huangqyun@163.com  QQ:6326420
- * http://www.ecisp.cn		官方网址
- * http://www.easysitepm.com	系统演示网址
- * 作用：前面入口
+  PHP version 5
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 error_reporting(0);
 ini_set("magic_quotes_runtime", 0);
 ini_set('memory_limit', '640M');
@@ -25,43 +21,35 @@ define('admin_FROM', true);
 define('admin_WAP', false);
 $URL_QUERY = explode('index.php', admin_ClassURL);
 if (!empty($URL_QUERY[1])) {
-	if (!preg_match("/^[^!@~`\'\"#\*\(\)\+\{\}\[\]\\/\<\>\;]{2,16}$/i", $URL_QUERY[1])) exit('Parameter error!');
+	if (!preg_match("/^[^!@~`\'\"#\*\(\)\+\{\}\[\]\\/\<\>\;]{2,16}$/i", $URL_QUERY[1])) {
+		exit('Parameter error!');
+	}
 }
-
 define('admin_AGENT', $_SERVER['HTTP_USER_AGENT']);
 if (!@include admin_ROOT . 'datacache/public.php') {
 	header('Content-type: text/html; charset=utf-8');
-	exit('提醒：系统未安装或数据库配置文件丢失, 如未安装<a href="install/index.php"><b>请点击安装系统！</b></a>');
+	header('location:install/index.php');
+	exit;
 }
-
 $archive = indexget('ac', 'R');
-
 $action = indexget('at', 'R');
-require admin_ROOT . 'public/class_connector.php';
-
 if (!@include admin_ROOT . 'datacache/command.php') {
 	header('Content-type: text/html; charset=utf-8');
-	exit('错误：系统文件丢失，登陆后台会自动生成!<br>Filename : datacache/command.php<br><a href="' . admin_URL . adminfile . '">点陆登陆管理平台!</a>');
+	header('location:' . admin_URL . adminfile);
+	exit;
 }
-
+require admin_ROOT . 'public/class_connector.php';
 if ($CONFIG['is_close']) {
 	header('Content-type: text/html; charset=utf-8');
 	exit($CONFIG['close_content']);
 }
-
 include admin_ROOT . 'public/uc_config.php';
-
 define('admin_LNG', $CONFIG['home_lng']);
-
 define('LANCODE', $CONFIG['is_lancode']);
-
 $lngpack = (admin_LNG == 'big5') ? $CONFIG['is_lancode'] : admin_LNG;
-
 define('admin_LNGDIR', $lngpack . '/');
-
 $rootDIR = $CONFIG['http_pathtype'] ? admin_URL : str_replace('http://' . admin_http, '', admin_URL);
 define('admin_rootDIR', $rootDIR);
-
 if (empty($archive) || empty($action)) {
 	include admin_ROOT . 'interface/public.php';
 	$mainlist = new mainpage();
@@ -71,7 +59,8 @@ if (empty($archive) || empty($action)) {
 		exit('Access error!');
 	}
 } else {
-	if (in_array($archive, array('article', 'forum', 'search', 'bbssearch', 'forummain', 'messmain', 'special', 'respond', 'public', 'scriptout', 'enquiry', 'enquirymain', 'form', 'formmain', 'ordermain', 'membermain', 'member', 'forum', 'order'))) {
+	if (in_array($archive, array('article', 'forum', 'search', 'bbssearch', 'forummain', 'messmain', 'special', 'respond', 'public',
+		    'scriptout', 'enquiry', 'enquirymain', 'form', 'formmain', 'ordermain', 'membermain', 'member', 'forum', 'order', 'weixinmain'))) {
 		$action = 'in_' . $action;
 		if (!file_exists(admin_ROOT . "interface/$archive.php")) {
 			exit('Access error!');
@@ -87,18 +76,6 @@ if (empty($archive) || empty($action)) {
 		exit('Access error!');
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
 function indexget($k, $var = 'R', $htmlcode = true, $rehtml = false) {
 	switch ($var) {
 		case 'G':
@@ -120,11 +97,6 @@ function indexget($k, $var = 'R', $htmlcode = true, $rehtml = false) {
 	$putvalue = isset($var[$k]) ? indexdaddslashes($var[$k], 0) : NULL;
 	return $htmlcode ? indexhtmldecode($putvalue) : $putvalue;
 }
-
-
-
-
-
 function indexdaddslashes($string, $force = 0, $strip = FALSE) {
 	if (!get_magic_quotes_gpc() || $force == 1) {
 		if (is_array($string)) {
@@ -137,9 +109,10 @@ function indexdaddslashes($string, $force = 0, $strip = FALSE) {
 	}
 	return $string;
 }
-
 function indexhtmldecode($str) {
-	if (empty($str)) return $str;
+	if (empty($str)) {
+		return $str;
+	}
 	if (!is_array($str)) {
 		$str = htmlspecialchars(trim($str));
 		$str = str_ireplace("Xss", "", $str);
@@ -151,7 +124,6 @@ function indexhtmldecode($str) {
 	}
 	return $str;
 }
-
 function is_mobile() {
 	$devices = array(
 	    "operaMobi" => "Opera Mobi",
@@ -178,21 +150,16 @@ function is_mobile() {
 	}
 	return FALSE;
 }
-
 class Timer {
-
 	var $StartTime = 0;
 	var $StopTime = 0;
 	var $TimeSpent = 0;
-
 	function start() {
 		$this->StartTime = microtime();
 	}
-
 	function stop() {
 		$this->StopTime = microtime();
 	}
-
 	function spent() {
 		if ($this->TimeSpent) {
 			return $this->TimeSpent;
@@ -207,7 +174,4 @@ class Timer {
 			return substr($this->TimeSpent, 0, 8) . "秒";
 		}
 	}
-
 }
-
-?>

@@ -1,0 +1,13 @@
+[%#%]微信关键字管理[%#%]
+[%if $menutype == 'wxkeywordlist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('communicate','wxkeywordlist')==true %]
+	<li class="menumain"><a class="addinfo" onclick="javascript:parent.onbotton('[%$ST.weixinmain_add_addwxkey|addslashes('hc')%]','index.php?archive=weixinmain&action=addwxkey&wxid=[%$tabarray.wxid%]&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'addwxkey[%$tabarray.wxid%]',self.frameElement.getAttribute('name'));" id="addwxkey[%$tabarray.wxid%]"  href="#body" title="[%$ST.weixinmain_add_addwxkey%]" hidefocus="true">[%$ST.weixinmain_add_addwxkey%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	[%if @this->powercheck('communicate','wxkeywordlist')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:callrun('index.php?archive=weixinmain&action=wxkeydel','selectinfoid',false,null,null,'index.php?archive=management&action=load','[%$ST.del_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+</ul>
+[%/if%]      

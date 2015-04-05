@@ -2,11 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class important extends connector {
@@ -14,16 +13,11 @@ class important extends connector {
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onshiplist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
@@ -39,13 +33,10 @@ class important extends connector {
 			if ($iscash == 2) $iscash = 0;
 			$db_where.=' AND iscash=' . $iscash;
 		}
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'osid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
-
 		$db_table = db_prefix . 'order_shipping';
 		if (!empty($countnum)) {
 			$countnum = $this->db_numrows($db_table, $db_where);
@@ -61,7 +52,6 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('order/order_shiplist');
 	}
-
 	function onshipplugadd() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
@@ -69,7 +59,6 @@ class important extends connector {
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->display('order/order_shipplugadd');
 	}
-
 	function onshipplugedit() {
 		parent::start_template();
 		$osid = $this->fun->accept('osid', 'G');
@@ -80,7 +69,6 @@ class important extends connector {
 		$this->ectemplates->assign('read', $read);
 		$this->ectemplates->display('order/order_shipplugedit');
 	}
-
 	function onshipsave() {
 		parent::start_template();
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -113,7 +101,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onsort() {
 		$db_table = db_prefix . 'order_shipping';
 		$id = $this->fun->accept('infoid', 'P');
@@ -132,7 +119,6 @@ class important extends connector {
 		$this->dbcache->clearcache('ordership_array', true);
 		exit('true');
 	}
-
 	function onsetting() {
 		$db_table = db_prefix . 'order_shipping';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -147,7 +133,6 @@ class important extends connector {
 		$this->dbcache->clearcache('ordership_array', true);
 		exit('true');
 	}
-
 	function onshipplugdel() {
 		$db_table = db_prefix . 'order_shipping';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -166,5 +151,3 @@ class important extends connector {
 	}
 
 }
-
-?>

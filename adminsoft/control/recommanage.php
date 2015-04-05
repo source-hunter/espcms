@@ -1,55 +1,40 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onrecomlist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
 		}
 		$db_table = db_prefix . 'document_label';
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_where = ' WHERE lng=\'' . $lng . '\'';
-
 		$mid = $this->fun->accept('mid', 'R');
 		if (!empty($mid)) {
 			$db_where.= ' AND mid=' . $mid;
 		}
-
 		if (!empty($countnum)) {
 			$countnum = $this->db_numrows($db_table, $db_where);
 			exit($countnum);
 		}
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'dlid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
-
 		$sql = 'SELECT * FROM ' . $db_table . $db_where . ' ORDER BY ' . $limitkey . ' ' . $limitclass . ' LIMIT ' . $MinPageid . ',' . $MaxPerPage;
 		$rs = $this->db->query($sql);
 		while ($rsList = $this->db->fetch_assoc($rs)) {
@@ -61,16 +46,13 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('article/recommand_list');
 	}
-
 	function onrecomadd() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
-
 		$lng = $this->sitelng;
 		$mid = $this->fun->accept('mid', 'G');
 		$mid = empty($mid) ? 0 : $mid;
-
 		$modelarray = $this->get_model($mid, $lng, 0, 2, 0);
 		$this->ectemplates->assign('modelarray', $modelarray['list']);
 		$this->ectemplates->assign('tab', $tab);
@@ -78,7 +60,6 @@ class important extends connector {
 		$this->ectemplates->assign('upid', $upid);
 		$this->ectemplates->display('article/recommand_add');
 	}
-
 	function onrecomedit() {
 		parent::start_template();
 		$db_table = db_prefix . 'document_label';
@@ -91,7 +72,6 @@ class important extends connector {
 		$this->ectemplates->assign('type', $type);
 		$this->ectemplates->display('article/recommand_edit');
 	}
-
 	function onrecomsave() {
 		parent::start_template();
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -121,7 +101,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function ondelrecomm() {
 		$db_table = db_prefix . 'document_label';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -137,7 +116,4 @@ class important extends connector {
 		$this->dbcache->clearcache('doclabel_array', true);
 		exit('true');
 	}
-
 }
-
-?>

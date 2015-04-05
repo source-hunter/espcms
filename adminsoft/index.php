@@ -1,13 +1,11 @@
 <?php
-
 /*
   PHP version 5
   Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 error_reporting(0);
 ini_set("magic_quotes_runtime", 0);
 ini_set('memory_limit', '640M');
@@ -27,18 +25,15 @@ define('admin_WAP', false);
 define('admin_AGENT', $_SERVER['HTTP_USER_AGENT']);
 require admin_ROOT . 'datacache/public.php';
 require admin_ROOT . 'public/class_connector.php';
-
 $archive = indexget('archive', 'R');
 $archive = empty($archive) ? 'adminuser' : $archive;
-
 $action = indexget('action', 'R');
 $action = empty($action) ? 'login' : $action;
-
 if (in_array($archive, array('acmessagemain', 'adminuser', 'advertmain', 'adverttypemain', 'albummain', 'article', 'bbsmain', 'bbstypemain', 'callmain',
-	    'citylist', 'connected', 'createmain', 'createseomain', 'enquirymain', 'filemain', 'filemanage', 'formmain', 'formmessmain', 'language', 'languagepack',
+	    'citylist', 'connected', 'createmain', 'createseomain', 'upgrademain', 'enquirymain', 'filemain', 'filemanage', 'formmain', 'formmessmain', 'language', 'languagepack',
 	    'lib_menu', 'mailinvite', 'mailsendmain', 'mailtemplatemain', 'management', 'memattmanage', 'membermain', 'memclassmanage', 'modelmanage', 'ordermain',
 	    'payplug', 'payreceipt', 'powergroup', 'printtemplatemain', 'recommanage', 'seomanage', 'shipplug', 'shipreceipt', 'sitemain', 'skinmain', 'sqlmanage', 'smstemplatemain',
-	    'subjectmanage', 'templatemain', 'typemanage', 'mobliemain', 'smsmain'))) {
+	    'subjectmanage', 'templatemain', 'typemanage', 'mobliemain', 'smsmain', 'weixinmain', 'modenmain'))) {
 	if (!file_exists(admin_ROOT . adminfile . "/control/$archive.php")) {
 		exit('Access error!');
 	}
@@ -53,7 +48,6 @@ if (in_array($archive, array('acmessagemain', 'adminuser', 'advertmain', 'advert
 } else {
 	exit('Access error!');
 }
-
 function indexget($k, $var = 'R', $htmlcode = true) {
 	switch ($var) {
 		case 'G':
@@ -75,7 +69,6 @@ function indexget($k, $var = 'R', $htmlcode = true) {
 	$putvalue = isset($var[$k]) ? indexdaddslashes($var[$k], 0) : NULL;
 	return $htmlcode ? indexhtmldecode($putvalue) : $putvalue;
 }
-
 function indexdaddslashes($string, $force = 0, $strip = FALSE) {
 	if (!get_magic_quotes_gpc() || $force == 1) {
 		if (is_array($string)) {
@@ -88,9 +81,10 @@ function indexdaddslashes($string, $force = 0, $strip = FALSE) {
 	}
 	return $string;
 }
-
 function indexhtmldecode($str) {
-	if (empty($str)) return $str;
+	if (empty($str)) {
+		return $str;
+	}
 	if (!is_array($str)) {
 		$str = htmlspecialchars(trim($str));
 		$str = str_ireplace("Xss", "", $str);
@@ -102,5 +96,3 @@ function indexhtmldecode($str) {
 	}
 	return $str;
 }
-
-?>

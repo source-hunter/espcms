@@ -1,24 +1,22 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 error_reporting(0);
-@set_time_limit(1000);
 ini_set("magic_quotes_runtime", 0);
-date_default_timezone_set('PRC');
 ini_set('memory_limit', '640M');
+ini_set('default_charset', 'utf-8');
+date_default_timezone_set('PRC');
 header('Content-type: text/html; charset=utf-8');
 define('adminfile', 'install');
 define('admin_ClassURL', 'http://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/')));
 define('admin_URL', str_replace('/' . adminfile, '/', admin_ClassURL));
 define('admin_ROOT', substr(__FILE__, 0, strrpos(__FILE__, adminfile)));
 define('admin_DIR', pathinfo(__FILE__, PATHINFO_DIRNAME));
-
 require admin_ROOT . 'install/fun_center.php';
 require admin_ROOT . 'install/class_db.php';
 require admin_ROOT . 'install/lan_inc.php';
@@ -36,7 +34,6 @@ $ectemplates->left_delimiter = '[%';
 $ectemplates->right_delimiter = '%]';
 $ectemplates->libdir = 'lib_public.php';
 $ectemplates->templatesDIR = '';
-
 $step = intval(accept('step', 'R')) ? intval(accept('step', 'R')) : 0;
 $ectemplates->assign('step', $step);
 $ectemplates->assign('LAN', $LAN);
@@ -46,7 +43,6 @@ if ($step == 3) {
 if (file_exists($installlock)) {
 	message($LAN['install_errno_1000'], $LAN['install_errno_1045'], 0, 1);
 }
-
 if ($step == 0) {
 	$ectemplates->display('step');
 } elseif ($step == 1) {
@@ -59,6 +55,7 @@ if ($step == 0) {
 	$dbclass = intval(accept('dbclass', 'R')) ? intval(accept('dbclass', 'R')) : 0;
 	if ($dbclass == 0) {
 		$ectemplates->assign('domain', admin_URL);
+		$ectemplates->assign('app_items', $func_app);
 		$ectemplates->display('step');
 	} elseif ($dbclass == 1) {
 		$dbhost = accept('dbhost', 'R');
@@ -74,36 +71,36 @@ if ($step == 0) {
 		$sitename = accept('sitename', 'R');
 		$domain = accept('domain', 'R');
 		$admine_mail = accept('admine_mail', 'R');
-
-		$setupcreatsql = "DROP TABLE IF EXISTS esp_admin_member,esp_admin_powergroup,esp_advert,esp_advert_type,esp_album_file,esp_album_images,esp_bbs,esp_bbs_typelist,esp_calling,esp_city,esp_config,esp_document,esp_document_album,esp_document_attr,esp_document_content,esp_document_label,esp_document_message,esp_enquiry,esp_enquiry_info,esp_filename,esp_form_attr,esp_form_group,esp_form_value,esp_keylink,esp_keylink_type,esp_lng,esp_lngpack,esp_logs,esp_mailinvite_list,esp_mailinvite_type,esp_mailsend,esp_mailsend_log,esp_member,esp_member_attr,esp_member_class,esp_member_value,esp_menubotton,esp_menulink,esp_model,esp_model_att,esp_order,esp_order_info,esp_order_pay,esp_order_payreceipt,esp_order_shipping,esp_order_shipreceipt,esp_skin,esp_subjectlist,esp_templates,esp_typelist";
+		$apptype = accept('apptype', 'R');
+		$setupcreatsql = "DROP TABLE IF EXISTS esp_admin_member,esp_admin_powergroup,esp_album_file,esp_album_images,esp_apply,esp_city,esp_config,esp_document,esp_document_album,esp_document_attr,esp_document_content,esp_document_label,esp_document_message,esp_enquiry,esp_enquiry_info,esp_filename,esp_form_attr,esp_form_group,esp_form_value,esp_keylink,esp_keylink_type,esp_lng,esp_lngpack,esp_logs,esp_mailinvite_list,esp_mailinvite_type,esp_mailsend,esp_mailsend_log,esp_member,esp_member_attr,esp_member_class,esp_member_value,esp_menulink,esp_moblie_list,esp_moblie_type,esp_model,esp_model_att,esp_order,esp_order_info,esp_order_pay,esp_order_payreceipt,esp_order_shipping,esp_order_shipreceipt,esp_site,esp_skin,esp_smssendlist,esp_subjectlist,esp_templates,esp_typelist";
+		foreach ($func_app as $key => $value) {
+			if ($value['isdel'] && in_array($value['appcode'], $apptype)) {
+				$setupcreatsql.=$value['dbsql'];
+			}
+		}
+		$dbarray = explode(',', $setupcreatsql);
 		$setupcreatsql = str_replace(ORIG_TABLEPRE, $tablepre, $setupcreatsql);
-
 		$postlist = $_POST;
 		if (empty($dbname)) {
-
 			message($LAN['dbname_invalid'], $LAN['dbnameempay']);
 		} else {
 			if (!@mysql_connect($dbhost, $dbuser, $dbpw)) {
 				$errno = mysql_errno();
 				$error = mysql_error();
 				if ($errno == 1045) {
-
 					message($LAN['database_errno_1045'], $error);
 				} elseif ($errno == 2003) {
-
 					message($LAN['database_errno_2003'], $error);
 				} else {
 					message($LAN['database_connect_error'], $error);
 				}
 			}
-
 			if (mysql_get_server_info() > '4.1') {
 				mysql_query("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET " . DBCHARSET);
 			} else {
 				mysql_query("CREATE DATABASE IF NOT EXISTS `$dbname`");
 			}
 			if (mysql_errno()) {
-
 				message($LAN['database_errno_1044'], mysql_error());
 			}
 			mysql_close();
@@ -113,15 +110,19 @@ if ($step == 0) {
 		}
 		$password = md5($password);
 		$nowtime = time();
-
 		config_edit($postlist);
 		$db = new dbmysq;
 		$db->connect($dbhost, $dbuser, $dbpw, $dbname, DBCHARSET);
-
 		$sql = file_get_contents($sqlfile);
-
+		$sql.= file_get_contents($sqlfile_dbinstall);
 		if ($demodb) {
-			$sql.=file_get_contents($sqlfile2);
+			$sql.=file_get_contents($sqlfile_demodb);
+		}
+		foreach ($func_app as $key => $value) {
+			if ($value['isdel'] && in_array($value['appcode'], $apptype)) {
+				$sqlfilepath = admin_ROOT . './install/dbmysql/' . $value['sqlfile'];
+				$sql.=file_get_contents($sqlfilepath);
+			}
 		}
 		$sql = str_replace("\r\n", "\n", $sql);
 		$sql = str_replace("\r", "\n", str_replace("`" . ORIG_TABLEPRE, "`" . $tablepre, $sql));
@@ -136,9 +137,7 @@ if ($step == 0) {
 			$num++;
 		}
 		unset($sql);
-
 		show_install();
-
 		if ($setupdbtype) {
 			$db->query($setupcreatsql);
 		}
@@ -160,6 +159,21 @@ if ($step == 0) {
 		$db->query("UPDATE " . $tablepre . "config SET value='$domain' WHERE valname='domain'");
 		$db->query("UPDATE " . $tablepre . "config SET value='$sitename' WHERE valname='sitename'");
 		$db->query("UPDATE " . $tablepre . "config SET value='$admine_mail' WHERE valname='admine_mail'");
+		$db->query("UPDATE " . $tablepre . "lngpack SET langstr='$sitename' WHERE keycode='sitename'");
+		foreach ($func_app as $key => $value) {
+			if ($value['isdel'] && !in_array($value['appcode'], $apptype)) {
+				$app_sql_menuid = implode(',', $value['menuid']);
+				$db_where = "mlid IN ($app_sql_menuid)";
+				$db->query('UPDATE ' . $tablepre . 'menulink SET isclass=0 WHERE ' . $db_where);
+				$db->query('UPDATE ' . $tablepre . 'apply SET isetup=0 WHERE ' . "applycode='$value[appcode]'");
+				foreach ($value['file'] as $filename) {
+					$appdelfile = admin_ROOT . $filename;
+					delfile($appdelfile);
+				}
+			} else {
+				$db->query('UPDATE ' . $tablepre . 'apply SET isetup=1 WHERE ' . "applycode='$value[appcode]'");
+			}
+		}
 		if (!file_exists($installlock)) {
 			@touch(admin_ROOT . './datacache/install.lock');
 		}
@@ -169,4 +183,3 @@ if ($step == 0) {
 		}
 	}
 }
-?>

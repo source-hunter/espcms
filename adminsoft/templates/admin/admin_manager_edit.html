@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <title>[%$softtitle%]</title>
@@ -11,9 +10,7 @@
 <script type="text/javascript" src="js/control.js"></script>
 <script type="text/javascript" src="js/form.js"></script>
 <script type="text/javascript">
-
 	var resizewindow= null;
-
 	window.onresize = function(){
 		var h = $(window).height();
 		if(resizewindow!=h){
@@ -21,7 +18,6 @@
 			resizewindow=h;
 		}
 	}
-
 	function sizewindow(){
 		var h = $(window).height();
 		if(document.getElementById("mainbodybottonauto")){
@@ -37,9 +33,7 @@
 		var h = '[%$iframeheightwindow%]';
 		$('.managebottonadd').css({height:h-40});
 		var options = {
-
 			beforeSubmit: formverify,
-
 			success:saveResponse
 		}
 		$('#manageedit[%$memberinfo.id%]').submit(function() {
@@ -47,10 +41,6 @@
 			return false;
 		});
 	})
-
-
-
-
 	function formverify(formData) {
 		var queryString = $.param(formData);
 		var get=urlarray(queryString);
@@ -70,7 +60,6 @@
 				document.manageedit.password.focus();
 				return false;
 			}
-
 		}
 		parent.windowsdig('Loading','iframe:index.php?archive=management&action=load','400px','180px','iframe',false);
 	}
@@ -86,7 +75,6 @@
 	}
 </script>
 </head>
-
 <body>
 <form name="manageedit" id="manageedit[%$memberinfo.id%]" method="post" action="index.php?archive=management&action=managesava">
 <input type="hidden" name="inputclass" value="edit">
@@ -113,7 +101,7 @@
 						<td class="trtitle01">[%$ST.mangerlist_add_password2%]</td>
 						<td class="trtitle02"><input type="password" name="password2" size="25" maxlength="30"  class="infoInput"/></td>
 					</tr>
-			
+
 					<tr class="trstyle2">
 						<td class="trtitle01">[%$ST.mangerlist_add_name%]</td>
 						<td class="trtitle02"><input type="text" name="name" size="20" maxlength="40" value="[%$memberinfo.name%]" class="infoInput"/></td>
@@ -163,13 +151,12 @@
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr>
-				<td id="right"><input type="submit" name="Submit" value="[%$ST.botton_edit%]" class="buttonface" /></td>
-				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_edit_reset%]" class="buttonface" /></td>
+				<td id="right"><input type="submit" name="Submit" value="[%$ST.botton_edit%]" class="button orange" /></td>
+				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_edit_reset%]" class="button orange" /></td>
 			</tr>
 		</table>
 	</div>
 </div>
 </form>
 </body>
-
 </html>

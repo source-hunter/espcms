@@ -1,28 +1,20 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onmemclasslist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
@@ -45,10 +37,8 @@ class important extends connector {
 		}
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'mcid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
-
 		$sql = 'SELECT mcid,rankname,isinter,integra,isclass,lockin FROM ' . $db_table . $db_where . ' ORDER BY ' . $limitkey . ' ' . $limitclass . ' LIMIT ' . $MinPageid . ',' . $MaxPerPage;
 		$rs = $this->db->query($sql);
 		while ($rsList = $this->db->fetch_assoc($rs)) {
@@ -58,7 +48,6 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('member/class_list');
 	}
-
 	function onclassadd() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
@@ -66,7 +55,6 @@ class important extends connector {
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->display('member/class_add');
 	}
-
 	function onclassedit() {
 		parent::start_template();
 		$db_table = db_prefix . 'member_class';
@@ -76,7 +64,6 @@ class important extends connector {
 		$this->ectemplates->assign('classread', $classread);
 		$this->ectemplates->display('member/class_edit');
 	}
-
 	function onclasssave() {
 		parent::start_template();
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -104,7 +91,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onmemberclassdel() {
 		$db_table = db_prefix . 'member_class';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -121,7 +107,6 @@ class important extends connector {
 		$this->dbcache->clearcache('memberclass_array', true);
 		exit('true');
 	}
-
 	function onsetting() {
 		$db_table = db_prefix . 'member_class';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -136,7 +121,4 @@ class important extends connector {
 		$this->dbcache->clearcache('memberclass_array', true);
 		exit('true');
 	}
-
 }
-
-?>

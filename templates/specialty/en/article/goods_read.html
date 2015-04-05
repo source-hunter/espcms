@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>{%$lngpack.sitename%}</title>
+<meta name="keywords" content="{%$lngpack.keyword%}" />
+<meta name="description" content="{%$lngpack.description%}" />
+<script type="text/javascript" src="{%$rootdir%}js/jquery.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/basicrun.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/jquery.Slide.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/photoshow.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/menuthree.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/treeviewcookie.js"></script>
+<link href="{%$rootpath%}css/espcms_three.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{%$rootdir%}js/jquery.lightbox-0.5.min.js"></script>
+<link href="{%$rootpath%}css/jquery.lightbox-0.5.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="{%$rootpath%}css/espcms_public.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_v5div.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_page.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/slider.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{%$rootdir%}index.php?ac=public&at=readpuv&did={%$read.did%}"></script>
+<script type="text/javascript">
+	$(window).load(function() {
+		$("#clickmenubotton li span").hover(function() {
+			$(this).addClass("menuhover");
+			$(this).parent().find("ul.subnav").slideDown('fast').show();
+			$(this).parent().hover(function() {
+			}, function() {
+				$(this).parent().find("ul.subnav").fadeOut('fast');
+				$(this).parent().find("span").removeClass("menuhover");
+			});
+		});
+		$('#mycarousel').jcarousel({start: 1});
+		$('#mycarousel a').lightBox({
+			imageLoading: '{%$rootpath%}images/lightbox-ico-loading.gif',
+			imageBtnClose: '{%$rootpath%}images/lightbox-btn-close.gif',
+			imageBtnPrev: '{%$rootpath%}images/lightbox-btn-prev.gif',
+			imageBtnNext: '{%$rootpath%}images/lightbox-btn-next.gif'
+		});
+		$("#three").treeview({collapsed: true, control: "#sidetreecontrol", prerendered: false, persist: "location"});
+	});
+</script>
+</head>
+
+<body>
+{%link file="en/public/head.html"%}
+{%if $type.typepic!=''%}
+<div class="espcms_page_bannpic"><img src="{%$rootdir%}{%$type.typepic%}" alt="{%$type.typename%}"/></div>
+{%/if%}
+
+<div class="espcms_page espcms_page_left_linkbg">
+	<div class="espcms_page_left">
+		{%get name=typelist class=utid:$type.topid,tid:$type.tid%}
+		<h2>{%$uptypeview.typename%}</h2>
+		<ul id="three" class="treeview">
+			{%forlist from=$array key=i%}
+			<li{%if count( $array[i].childArray ) <= 0%} class="onefast"{%/if%}>
+				<a href="{%$array[i].link%}" {%if $array[i].selected==1 %}class="hover"{%/if%} title="{%$array[i].typename%}">{%$array[i].typename%}</a>
+				{%if count( $array[i].childArray ) > 0 %}
+				<ul>
+					{%forlist from=$array[i].childArray key=ii%}
+					<li class="treeone">
+						<a href="{%$array[i].childArray[ii].link%}" {%if $array[i].childArray[ii].selected==1 %}class="hover"{%/if%}  title="{%$array[i].childArray[ii].typename%}">{%$array[i].childArray[ii].typename%}</a>
+						{%if count( $array[i].childArray[ii].childArray ) > 0 %}
+							<ul>
+								{%forlist from=$array[i].childArray[ii].childArray key=iii%}
+								<li class="treetow">
+									<a href="{%$array[i].childArray[ii].childArray[iii].link%}" {%if $array[i].childArray[ii].childArray[iii].selected==1 %}class="hover"{%/if%} title="{%$array[i].childArray[ii].childArray[iii].typename%}">{%$array[i].childArray[ii].childArray[iii].typename%}</a>
+									{%if count( $array[i].childArray[ii].childArray[iii].childArray ) > 0 %}
+										<ul>
+											{%forlist from=$array[i].childArray[ii].childArray[iii].childArray key=iiii%}
+											<li class="treefour">
+												<a href="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].link%}" {%if $array[i].childArray[ii].childArray[iii].childArray[iiii].selected==1 %}class="hover"{%/if%} title="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].typename%}">{%$array[i].childArray[ii].childArray[iii].childArray[iiii].typename%}</a>
+												{%if count( $array[i].childArray[ii].childArray[iii].childArray[iiii].childArray ) > 0 %}
+													<ul>
+														{%forlist from=$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray key=iiiii%}
+														<li class="treefive"><a href="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].link%}" {%if $array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].selected==1 %}class="hover"{%/if%} title="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%}">{%$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%}</a></li>
+														{%/forlist%}
+													</ul>
+												{%/if%}
+											</li>
+											{%/forlist%}
+										</ul>
+									{%/if%}
+								</li>
+								{%/forlist%}
+							</ul>
+						{%/if%}
+					</li>
+					{%/forlist%}
+				</ul>
+				{%/if%}
+			</li>
+			{%/forlist%}
+		</ul>
+		{%/get%}
+	</div>
+	<div class="espcms_page_right">
+		<div class="espcms_page_typename">{%$type.typename%}</div>
+		<div class="espcms_page_location">{%list name=path class=type:type,id:$type.tid%}</div>
+		<div class="espcms_page_right_line"></div>
+
+		<div class="espcms_book">
+			<div class="espcms_pro_pic"><img src="{%$read.pic|zoom(390,260)%}" alt="{%$read.title%}" style="width:390px;height:260px;"/></div>
+			<dl class="espcms_pro_title">
+				<dt><h1>{%$read.title%}</h1></dt>
+				<dd class="f14">
+					TAG：
+					{%forlist from=$tag key=i%}
+					<a target="_blank" class="espcms_key keyword{%key=>i%}" title="{%$tag[i].title%}" href="{%$tag[i].link%}">{%$tag[i].title%}</a>
+					{%/forlist%}
+				</dd>
+				<dd class="f14">Product number：{%$read.tsn%}</dd>
+				<dd class="f14">Market Price：￥{%$read.oprice%}</dd>
+				<dd class="f14">Buying price：<span class="espcms_priceclass">￥{%$read.bprice%}</span></dd>
+				<dd class="espcms_pro_orderbotton"><a target="_blank" class="button blue2" href="{%$read.buylink%}">Order</a>&nbsp;<a target="_blank" class="button blue2" href="{%$read.enqlink%}">Enquiry</a></dd>
+			</dl>
+		</div>
+		{%if count($photo)>0%}
+		<div class="espcms_page_labelname">Photos View</div>
+		<div class="espcms_page_right_line"></div>
+		<div class="espcms_pro_photo">
+			<ul id="mycarousel" class="jcarousel-skin-tango">
+				{%forlist from=$photo key=i%}
+				<li><a href="{%$rootdir%}{%$photo[i].picfile%}" title="{%$photo[i].picname%}"><img src="{%$photo[i].picfile|zoom(90,80)%}"/></a></li>
+				{%/forlist%}
+			</ul>
+		</div>
+		{%/if%}
+
+		<div class="espcms_page_labelname">Description</div>
+		<div class="espcms_page_right_line"></div>
+		<div class="espcms_book_padding15 lh26 ti2">{%$read.content%}</div>
+
+		{% if count($page)>0 %}
+		<div class="espcms_page_botton">
+			<div id="pagination" class="pagination">
+				{%if $read.plink!=''%}
+				<span><a href="{%$read.plink%}">Previous</a></span>
+				{%/if%}
+				{%forlist from=$page key=i%}
+				{%if $page[i].n==1%}
+				<span class="current disabled">{%$page[i].num%}</span>
+				{%else%}
+				<span><a href="{%$page[i].link%}">{%$page[i].num%}</a></span>
+				{%/if%}
+				{%/forlist%}
+				{%if $read.nlink!=''%}
+				<span><a href="{%$read.nlink%}">Next</a></span>
+				{%/if%}
+			</div>
+		</div>
+		{%/if%}
+
+		{%if $read.linkdid!=''%}
+		<div class="espcms_page_labelname">Related Products</div>
+		<div class="espcms_page_right_line"></div>
+		<div class="espcms_pic_index pb20">
+			<ul class="lh">
+				{%get name=list class=mid:$read.mid,tid:$read.tid,linkdid:$read.linkdid,max:6%}
+				{%forlist from=$array key=i%}
+				<li>
+					<div class="p-img ld"><a href="{%$array[i].link%}" title="{%$array[i].title%}"><img src="{%$array[i].pic|zoom(137,132,'',2)%}" alt="{%$array[i].title%}"/></a></div>
+					<div class="p-name"><a target="_blank" title="{%$array[i].title%}" href="{%$array[i].link%}">{%$array[i].ctitle|cutstr(10,'')%}</a></div>
+					<div class="p-price"><strong>￥{%$array[i].bprice%}</strong></div>
+					<div class="p-botton"><a href="{%$array[i].buylink%}" class="button dahui">Order</a></div>
+				</li>
+				{%/forlist%}
+				{%/get%}
+			</ul>
+		</div>
+		{%/if%}
+		<div class="espcms_page_labelname">Message</div>
+		<div class="espcms_page_right_line"></div>
+		<div class="espcms_book pb20">
+			{%list name=messlist class=did:$read.did,max:5%}
+		</div>
+	</div>
+</div>
+{%link file="en/public/footer.html"%}
+</body>
+</html>

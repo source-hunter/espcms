@@ -1,0 +1,49 @@
+.treeview, .treeview ul {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	overflow: hidden;
+}
+
+.treeview .hitarea {
+	height: 25px;
+	width: 16px;
+	float: left;
+	cursor: pointer;
+}
+.treeview .open-hitarea {background: url(../images/arrow_c.png) 5px 16px no-repeat;}
+
+/* fix for IE6 */
+* html .hitarea {display: inline;float:none;}
+
+.treeview li {
+	margin: 0;
+	line-height: 40px;
+	border-top: 1px solid #e6e6e6;
+	background: url(../images/arrow_c.png) 5px 16px no-repeat;
+	overflow: hidden;
+}
+.treeview li a{font-size:14px;text-decoration:none;}
+.treeview li a.hover{color:#0e9d56;}
+.treeview li a.hover:hover{color:#0e9d56;}
+
+.treeview a.selected {font-weight: bold;}
+.onefast{background: url(../images/arrow_c.png) 5px 16px no-repeat;padding-left:16px;}
+li.treeone{background: url(../images/arrow_c.png) 15px 16px no-repeat;padding-left:25px;}
+li.treetow{background: url(../images/arrow_c.png) 25px 16px no-repeat;padding-left:35px;}
+li.treefour{background: url(../images/arrow_c.png) 35px 16px no-repeat;padding-left:45px;}
+li.treefive{background: url(../images/arrow_c.png) 45px 16px no-repeat;padding-left:55px;}
+li.six{background: url(../images/arrow_c.png) 55px 16px no-repeat;padding-left:65px;}
+
+.treeview li.collapsable, .treeview li.expandable {background-image: none;padding:0px;}
+.treeview .collapsable-hitarea {background: url(../images/arrow_b.png) 5px 16px no-repeat;}
+.treeview .expandable-hitarea {background: url(../images/arrow_a.png) 5px 16px no-repeat;}
+.treeview .-hitarea,.treeview .last-hitarea {background: url(../images/arrow_c.png) 5px 16px  no-repeat;}
+
+.treeone .hitarea{margin-left: 10px;}
+.treetow .hitarea{margin-left: 20px;}
+.treefour .hitarea{margin-left: 30px;}
+.treefive .hitarea{margin-left: 40px;}
+.six .hitarea{margin-left: 50px;}
+

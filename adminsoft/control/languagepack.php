@@ -2,11 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class important extends connector {
@@ -14,14 +13,10 @@ class important extends connector {
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onlanpacklist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
@@ -29,7 +24,7 @@ class important extends connector {
 		}
 		$wheretext = null;
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_where = ' WHERE lng=\'' . $lng . '\'';
 		$typeid = $this->fun->accept('typeid', 'R');
 		if (!empty($typeid)) {
@@ -40,16 +35,12 @@ class important extends connector {
 			if ($lockin == 2) $lockin = 0;
 			$db_where.=' AND lockin=' . $lockin;
 		}
-
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'lpid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'ASC' : $limitclass;
 		$db_table = db_prefix . 'lngpack';
 		if (!empty($countnum)) {
-
 			$countnum = $this->db_numrows($db_table, $db_where);
 			exit($countnum);
 		}
@@ -59,26 +50,23 @@ class important extends connector {
 			$rsList['langstr'] = strip_tags($rsList['langstr']);
 			$array[] = $rsList;
 		}
-
 		$this->fun->setcookie($this->fun->noncefile() . 'pgid', $page_id, 600);
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('admin/admin_lngpack_list');
 	}
-
 	function onlanpackadd() {
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$this->ectemplates->assign('lng', $lng);
 		$this->ectemplates->assign('lantype', $LANPACKTYPE);
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->display('admin/admin_lngpack_add');
 	}
-
 	function onlanpackedit() {
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
@@ -91,7 +79,6 @@ class important extends connector {
 		$this->ectemplates->assign('lantype', $LANPACKTYPE);
 		$this->ectemplates->display('admin/admin_lngpack_edit');
 	}
-
 	function onsave() {
 		parent::start_template();
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -118,7 +105,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onlanpackdel() {
 		$db_table = db_prefix . 'lngpack';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -141,7 +127,6 @@ class important extends connector {
 		$this->writelog($this->lng['languagepack_del_log'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 	function oncodedb() {
 		$codename = $this->fun->accept('codename', 'R');
 		$lng = $this->fun->accept('lng', 'R');
@@ -157,5 +142,3 @@ class important extends connector {
 	}
 
 }
-
-?>

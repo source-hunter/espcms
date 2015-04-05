@@ -2,11 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class important extends connector {
@@ -14,14 +13,10 @@ class important extends connector {
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onlanguagelist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
@@ -33,37 +28,29 @@ class important extends connector {
 			if ($isopen == 2) $isopen = 0;
 			$wheretext.=' AND isopen=' . $isopen;
 		}
-
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'id' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_where = " WHERE id>0" . $wheretext;
 		$db_table = db_prefix . 'lng';
 		if (!empty($countnum)) {
-
 			$countnum = $this->db_numrows($db_table, $db_where);
 			exit($countnum);
 		}
 		$sql = 'SELECT id,pid,lng,lngtitle,lockin,isopen,isuptype,sitename,keyword,description,copyright FROM ' . $db_table . $db_where . ' ORDER BY ' . $limitkey . ' ' . $limitclass . ' LIMIT ' . $MinPageid . ',' . $MaxPerPage;
 		$rs = $this->db->query($sql);
 		while ($rsList = $this->db->fetch_assoc($rs)) {
-
 			$rsList['isalong'] = $this->CON['is_alonelng'] && $this->CON['home_lng'] == $rsList['lng'] ? 1 : !$this->CON['is_alonelng'] ? 1 : 0;
 			$array[] = $rsList;
 		}
-
 		$this->fun->setcookie($this->fun->noncefile() . 'pgid', $page_id, 600);
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('admin/admin_lng_list');
 	}
-
 	function onlngadd() {
 		parent::start_template();
-
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
 		$file_htmldir = admin_ROOT . $this->CON['file_htmldir'];
@@ -71,7 +58,6 @@ class important extends connector {
 		$this->ectemplates->assign('htmldir', $file_htmldir);
 		$this->ectemplates->display('admin/admin_lng_add');
 	}
-
 	function onlngedit() {
 		parent::start_template();
 		$db_table = db_prefix . 'lng';
@@ -82,7 +68,6 @@ class important extends connector {
 		$this->ectemplates->assign('lngread', $lngread);
 		$this->ectemplates->display('admin/admin_lng_edit');
 	}
-
 	function onlngpackcopy() {
 		parent::start_template();
 		$db_table = db_prefix . 'lng';
@@ -110,7 +95,6 @@ class important extends connector {
 		}
 		$this->ectemplates->display($templatefile);
 	}
-
 	function onlngsave() {
 		parent::start_template();
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -147,19 +131,15 @@ class important extends connector {
 
 			$this->writelog($this->lng['language_add_log'], $this->lng['log_extra_ok'] . ' lngtitle=' . $lngtitle);
 			$this->dbcache->clearcache('lng_array', true);
-
 			if (!$this->lanpackcopy('cn', $lng)) {
 				exit('false');
 			}
-
 			if (!$this->templatescopy('cn', $lng)) {
 				exit('false');
 			}
-
 			if (!$this->templatescopy('cn', $lng, 4)) {
 				exit('false');
 			}
-
 			$dirhtmlDir = $ispack ? $this->CON['file_htmldir'] . $packname . '/' : $this->CON['file_htmldir'] . $lng . '/';
 			include admin_ROOT . adminfile . '/include/inc_default.php';
 			$templatecotent = $default_str;
@@ -171,7 +151,7 @@ class important extends connector {
 		} else {
 			$id = $this->fun->accept('id', 'P');
 			$ispackedit = $this->fun->accept('ispackedit', 'P');
-			$ispackedit = empty($ispackedit) ? $ispack : $ispackedit;
+			$ispackedit = empty($ispackedit) ? 0 : $ispackedit;
 			$packnameedit = $this->fun->accept('packnameedit', 'P');
 			$packnameedit = empty($packnameedit) ? $packname : $packnameedit;
 
@@ -189,7 +169,6 @@ class important extends connector {
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
 			$this->dbcache->clearcache('lng_array', true);
 			$this->dbcache->clearcache('lng_view_' . $lng, true);
-
 			$dirhtmlDir = $ispackedit ? $this->CON['file_htmldir'] . $packnameedit . '/' : $this->CON['file_htmldir'] . $lng . '/';
 			include admin_ROOT . adminfile . '/include/inc_default.php';
 			$templatecotent = $default_str;
@@ -201,7 +180,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onlngcreat() {
 		$lng = $this->fun->accept('lng', 'G');
 		if (empty($lng)) {
@@ -215,7 +193,6 @@ class important extends connector {
 			exit('false');
 		}
 	}
-
 	function creatlanfile($lng, $id = 0) {
 		$file_htmldir = admin_ROOT . $this->CON['file_htmldir'];
 		if (!$this->fun->filemode($file_htmldir)) {
@@ -244,7 +221,6 @@ class important extends connector {
 		$this->writelog($this->lng['language_creat_index'], $this->lng['log_extra_ok'] . ' lng=' . $lng . ' id=' . $id);
 		return true;
 	}
-
 	function onpackcopy() {
 		parent::start_template();
 		$id = $this->fun->accept('id', 'P');
@@ -262,7 +238,6 @@ class important extends connector {
 			exit('false');
 		}
 	}
-
 	function ontemplatepackcopy() {
 		parent::start_template();
 		$id = $this->fun->accept('id', 'P');
@@ -288,7 +263,6 @@ class important extends connector {
 			exit('false');
 		}
 	}
-
 	function templatescopy($lng, $tolng, $styleclass = 3) {
 		$db_table = db_prefix . 'templates';
 		if (empty($tolng) || empty($lng)) {
@@ -310,7 +284,6 @@ class important extends connector {
 		}
 		return true;
 	}
-
 	function lanpackcopy($lng, $tolng) {
 		$db_table = db_prefix . 'lngpack';
 		if (empty($tolng) || empty($lng)) {
@@ -331,7 +304,6 @@ class important extends connector {
 		}
 		return true;
 	}
-
 	function ondellng() {
 		$db_table = db_prefix . 'lng';
 		$db_table2 = db_prefix . 'lngpack';
@@ -346,12 +318,9 @@ class important extends connector {
 			$lngread = $this->db->fetch_first('SELECT id,lng FROM ' . $db_table . ' WHERE ' . $db_where);
 			if (!empty($lngread['lng'])) {
 				$db_where2 = "lng='" . $lngread['lng'] . "'";
-
 				$this->db->query('DELETE FROM ' . $db_table2 . ' WHERE ' . $db_where2);
-
 				$this->db->query('DELETE FROM ' . $db_table3 . ' WHERE ' . $db_where2);
 			}
-
 			$this->db->query('DELETE FROM ' . $db_table . ' WHERE ' . $db_where);
 		}
 		$this->dbcache->clearcache('lng_array', true);
@@ -359,7 +328,6 @@ class important extends connector {
 		$this->writelog($this->lng['language_del_log'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 	function onlngsort() {
 		$db_table = db_prefix . 'lng';
 		$id = $this->fun->accept('infoid', 'P');
@@ -378,7 +346,6 @@ class important extends connector {
 		$this->writelog($this->lng['language_log_sort'], $this->lng['log_extra_ok']);
 		exit('true');
 	}
-
 	function ongetlngdir() {
 		$lng = $this->fun->accept('lng', 'R');
 		if (empty($lng)) {
@@ -387,15 +354,12 @@ class important extends connector {
 		$lngdir = $this->get_lng_dirpack($lng);
 		exit($lngdir);
 	}
-
 	function onsetting() {
 		$db_table = db_prefix . 'lng';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
 		$selectinfoid = $selectinfoid . '0';
 		if (empty($selectinfoid)) exit('false');
-
 		$value = $this->fun->accept('value', 'P');
-
 		$dbname = $this->fun->accept('dbname', 'P');
 		$db_set = "$dbname=$value";
 		$db_where = "id IN ( $selectinfoid )";
@@ -405,7 +369,6 @@ class important extends connector {
 		$this->writelog($this->lng['language_log_isopen'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 	function oncodedb() {
 		$file_htmldir = admin_ROOT . $this->CON['file_htmldir'];
 		$packname = $this->fun->accept('packname', 'R');
@@ -434,5 +397,3 @@ class important extends connector {
 	}
 
 }
-
-?>

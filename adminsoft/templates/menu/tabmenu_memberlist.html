@@ -1,0 +1,60 @@
+[%#%]会员列表[%#%]
+[%if $menutype == 'memberlist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('member','memberadd')==true %]
+	<li class="menumain"><a id="addinfo" class="addinfo" onclick="javascript:parent.onbotton('[%$ST.botton_add_memberadd|addslashes('hc')%]','index.php?archive=membermain&action=memberadd&mlid=[%$tabarray.mlid%]&tab=true&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'addinfo',self.frameElement.getAttribute('name'));"  href="#body" title="[%$ST.botton_add_memberadd%]" hidefocus="true">[%$ST.botton_add_memberadd%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	<li class="menumain"><a id="bolt" href="#body" hidefocus="true" hidefocus="true">[%$ST.bolt_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.membertype_botton%]</span>
+				<ul id="modeltablist">
+					<li><a class="menunoclick" id="mcid0" href="#body" onclick="javascript:dbfilter('mcid','mcid',0,0,[%$pubnum%],'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					[%forlist from=$memberpuvlist key=ii%]
+					<li><a class="menuclick" id="mcid[%key=>ii%]" href="#body" onclick="javascript:dbfilter('mcid','mcid','[%$memberpuvlist[ii].mcid%]',[%key=>ii%],[%$pubnum%],'selectform','selectall','check_all')" title="[%$memberpuvlist[ii].rankname%]" hidefocus="true">[%$memberpuvlist[ii].rankname%]</a></li>
+					[%/forlist%]
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.membermain_text_typeclass%]</span>
+				<ul>
+					<li><a class="menunoclick" id="memisclass0" href="#body" onclick="javascript:dbfilter('memisclass','isclass',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="memisclass1" href="#body" onclick="javascript:dbfilter('memisclass','isclass',1,1,3,'selectform','selectall','check_all')" title="[%$ST.membermain_text_class1%]" hidefocus="true">[%$ST.membermain_text_class1%]</a></li>
+					<li><a class="menuclick" id="memisclass2" href="#body" onclick="javascript:dbfilter('memisclass','isclass',2,2,3,'selectform','selectall','check_all')" title="[%$ST.membermain_text_class2%]" hidefocus="true">[%$ST.membermain_text_class2%]</a></li>
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.ismoblie_title%]</span>
+				<ul>
+					<li><a class="menunoclick" id="memismoblie0" href="#body" onclick="javascript:dbfilter('memismoblie','ismoblie',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="memismoblie1" href="#body" onclick="javascript:dbfilter('memismoblie','ismoblie',1,1,3,'selectform','selectall','check_all')" title="[%$ST.ismoblie_title_ok%]" hidefocus="true">[%$ST.ismoblie_title_ok%]</a></li>
+					<li><a class="menuclick" id="memismoblie2" href="#body" onclick="javascript:dbfilter('memismoblie','ismoblie',2,2,3,'selectform','selectall','check_all')" title="[%$ST.ismoblie_title_no%]" hidefocus="true">[%$ST.ismoblie_title_no%]</a></li>
+				</ul>
+			</li>
+			<li><a class="menuclick" id="articleisorder0" href="#body" onclick="javascript:refreshurl('selectform')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.getalllist_botton%]</a></li>
+		</ul>
+	</li>
+	<li class="menumain"><a id="search" href="javascript:parent.windowsdig('[%$ST.membermain_search_botton%]','iframe:index.php?archive=membermain&action=search&iframename='+self.frameElement.getAttribute('name'),'580px','300px','iframe',true);" title="[%$ST.membermain_search_botton%]" hidefocus="true">[%$ST.search_botton%]</a></li>
+	[%if @this->powercheck('member','memberdel')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:callrun('index.php?archive=membermain&action=memberdel','memberselectinfoid',false,null,null,'index.php?archive=management&action=load','[%$ST.del_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+	[%if @this->powercheck('member','memberedit')==true %]
+	<li class="menumain"><a id="setbotton" href="#body" hidefocus="true" title="[%$ST.set_botton%]">[%$ST.set_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.membermain_text_set_typeclass%]</span>
+				<ul>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=membermain&action=setting','memberselectinfoid',true,'isclass',1,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.membermain_text_class1%]" hidefocus="true">[%$ST.membermain_text_class1%]</a></li>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=membermain&action=setting','memberselectinfoid',true,'isclass',0,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.membermain_text_class2%]" hidefocus="true">[%$ST.membermain_text_class2%]</a></li>
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.membertypeset_botton%]</span>
+				<ul>
+					[%forlist from=$memberpuvlist key=ii%]
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=membermain&action=setting','memberselectinfoid',true,'mcid',[%$memberpuvlist[ii].mcid%],'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$memberpuvlist[ii].rankname%]" hidefocus="true">[%$memberpuvlist[ii].rankname%]</a></li>
+					[%/forlist%]
+				</ul>
+			</li>
+		</ul>
+	</li>
+	[%/if%]
+</ul>
+[%/if%]      

@@ -180,3 +180,19 @@ h2{
 	border-left-width: 1px;
 	background-color: #FFFFFF;
 }
+
+.applist{
+	width: 500px;
+	list-style: none;
+	margin: 0 auto;
+	padding: 0;
+}
+.applist li {
+	float: left;
+	width:150px;
+	line-height: 30px;
+	padding-left: 0px;
+	text-align: left;
+	overflow: hidden;
+}
+.setupdes{padding:0px 0px 10px 10px;color:#31942E;font-weight: bold;}

@@ -1,0 +1,105 @@
+<!--js-->
+<script type="text/javascript">
+	var username_len = "{%$lngpack.username_err%}";
+	var email_err = "{%$lngpack.email_err%}";
+	var password_len = "{%$lngpack.password_err%}";
+	var password_len2 = "{%$lngpack.password_len2%}";
+	var password2_empty = "{%$lngpack.password2_err%}";
+	var password_disaffinity = "{%$lngpack.password_equal%}";
+	var agree_empty = "{%$lngpack.agree_empty%}";
+	var seccode_empty = "{%$lngpack.seescodeerr%}";
+</script>
+<!--end_js-->
+<form name="memberreg" id="memberreg" method="post" action="{%$mlink.regsave%}" onsubmit="return memberdbreg('{%$mem_regisseccode%}')">
+<input type="hidden" name="tokenkey" value="{%$tokenkey.token_key%}"/>
+<div class="espcms_member_login_center espcms_formwidth_c">
+	<div class="title mb20"><div class="messageicon"></div><div class="messtitle">Create an Account</div></div>
+	<div class="espcms_form_group">
+		<label for="title" class="control_label16">ID</label>
+		<div class="control_required20">
+			<input type="text" name="username" id="username" class="col5 infoInput" value="" size="20" maxlength="15" onblur="checktypename('username',this.value,'{%$mlink.checkusername%}','usermsg','{%$lngpack.mem_reg_ok%}','{%$lngpack.mem_reg_no%}','regsubmit');"/>
+			<span id="usermsg" class="form_message"></span>
+		</div>
+	</div>
+	<div class="espcms_form_group">
+		<label for="title" class="control_label16">Email Address</label>
+		<div class="control_required20">
+			<input type="text" name="email" id="email" class="col5 infoInput"  size="40" maxlength="100" onblur="checktypename('email',this.value,'{%$mlink.checkusername%}','mailmsg','{%$lngpack.mem_regemail_ok%}','{%$lngpack.mem_regemail_no%}','regsubmit');"/>
+			<span id="mailmsg" class="form_message"></span>
+		</div>
+	</div>
+	<div class="espcms_form_group">
+		<label for="title" class="control_label16">Password</label>
+		<div class="control_required20">
+			<input type="password" name="password" id="password"  class="col4 infoInput" size="18" maxlength="15"/>
+		</div>
+	</div>
+	<div class="espcms_form_group">
+		<label for="title" class="control_label16">Reenter password</label>
+		<div class="control_required20">
+			<input type="password" name="password2" id="password2" class="col4 infoInput" size="18" maxlength="15"/>
+		</div>
+	</div>
+	{%if count($modelatt) > 0%}
+		{%forlist from=$modelatt key=list%}
+		<div class="espcms_form_group">
+			<label for="title" class="control_label16">{%$modelatt[list].typename%}</label>
+			<div class="control_required20">
+				{%if $modelatt[list].inputtype=='string' || $modelatt[list].inputtype=='int' || $modelatt[list].inputtype=='float' || $modelatt[list].inputtype=='decimal'%}
+				<input type="text" name="{%$modelatt[list].attrname%}" size="{%$modelatt[list].attrsize%}" id="{%$modelatt[list].attrname%}" value="{%$modelatt[list].attrvalue%}" maxlength="{%$modelatt[list].attrlenther%}" class="infoInput"/>
+				{%elseif ($modelatt[list].inputtype=='text' || $modelatt[list].inputtype=='editor')%}
+				<textarea name="{%$modelatt[list].attrname%}" id="{%$modelatt[list].attrname%}"  style="width:99%;height:{%$modelatt[list].attrrow%}px;" class="infoInput">{%$modelatt[list].attrvalue%}</textarea>
+				{%elseif ($modelatt[list].inputtype=='htmltext')%}
+				<textarea name="{%$modelatt[list].attrname%}" id="{%$modelatt[list].attrname%}"  style="width:99%;height:{%$modelatt[list].attrrow%}px;" class="infoInput">{%$modelatt[list].attrvalue|Html2Text('0')%}</textarea>
+				{%elseif ($modelatt[list].inputtype=='selectinput')%}
+				<input type="text" name="{%$modelatt[list].attrname%}" size="{%$modelatt[list].attrsize%}" id="{%$modelatt[list].attrname%}" value="{%$modelatt[list].attrvalue%}" maxlength="{%$modelatt[list].attrlenther%}" class="infoInput"/>
+				<select size="1" name="{%$modelatt[list].attrname%}selectinputvalue" onchange="javascript:$('#{%$modelatt[list].attrname%}').val(this.value)">
+					<option value="">{%$ST.botton_select_name%}{%$modelatt[list].typename%}</option>
+					{%forlist from=$modelatt[list].selectinputvalue key=ii%}
+					<option value="{%$modelatt[list].selectinputvalue[ii].name%}">{%$modelatt[list].selectinputvalue[ii].name%}</option>
+					{%/forlist%}
+				</select>
+				{%elseif ($modelatt[list].inputtype=='datetime')%}
+				<input type="text" name="{%$modelatt[list].attrname%}" size="{%$modelatt[list].attrsize%}" id="{%$modelatt[list].attrname%}"  onclick="WdatePicker({el:'{%$modelatt[list].attrname%}',readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  value="{%$modelatt[list].attrvalue|timeformat(3)%}" maxlength="{%$modelatt[list].attrlenther%}" class="infoInput"/>
+				{%elseif ($modelatt[list].inputtype=='select')%}
+				<select size="1" name="{%$modelatt[list].attrname%}" id="{%$modelatt[list].attrname%}">
+					<option value="">{%$ST.botton_select_name%}{%$modelatt[list].typename%}</option>
+					{%forlist from=$modelatt[list].attrvalue key=ii%}
+					<option {%$modelatt[list].attrvalue[ii].selected%} value="{%$modelatt[list].attrvalue[ii].name%}">{%$modelatt[list].attrvalue[ii].name%}</option>
+					{%/forlist%}
+				</select>
+				{%elseif ($modelatt[list].inputtype=='radio')%}
+					{%forlist from=$modelatt[list].attrvalue key=ii%}
+					<input type="radio" value="{%$modelatt[list].attrvalue[ii].name%}" name="{%$modelatt[list].attrname%}" {%if $modelatt[list].attrvalue[ii].selected=='selected'%}checked="checked"{%/if%}/> {%$modelatt[list].attrvalue[ii].name%}&nbsp;
+					{%/forlist%}
+				{%elseif ($modelatt[list].inputtype=='checkbox')%}
+					{%forlist from=$modelatt[list].attrvalue key=ii%}
+					<input type="checkbox" value="{%$modelatt[list].attrvalue[ii].name%}" name="{%$modelatt[list].attrname%}[]" {%if $modelatt[list].attrvalue[ii].selected=='selected'%}checked="checked"{%/if%}/> {%$modelatt[list].attrvalue[ii].name%}&nbsp;
+					{%/forlist%}
+				{%/if%}
+				{%if $modelatt[list].typeremark!=''%}<span class="form_message">{%$modelatt[list].typeremark%}</span>{%/if%}
+			</div>
+		</div>
+		{%/forlist%}
+	{%/if%}
+	{%if $mem_regisseccode==1%}
+	<div class="espcms_form_group">
+		<label for="username" class="control_label">Security code</label>
+		<div class="control_required">
+			<input type="text" id="seccode" name="seccode" class="infoInput" maxlength="4" size="5" style="text-transform: uppercase;"/>
+			<img title="Enter code shown in image" id="memberseccodesrc" onclick="sessionimg('memberseccodesrc','{%$rootdir%}')" src="{%$seccodelink%}" style="cursor: pointer;height:28px;margin-left:5px;" align="absmiddle"/>
+		</div>
+	</div>
+	{%/if%}
+	<div class="espcms_form_group">
+		<label class="control_label16"> </label>
+		<div class="control_required20"><input type="checkbox" name="agree" id="agree" value="1" /> <a target="_blank" href="{%$reglink%}">Agree to the terms of service (see clause first?)</a></div>
+	</div>
+	<div class="espcms_form_group">
+		<label class="control_label16"> </label>
+		<div class="control_required20">
+			<input type="submit" id="submit" class="button blue2" value="Reg"/>
+		</div>
+	</div>
+</div>
+</form>

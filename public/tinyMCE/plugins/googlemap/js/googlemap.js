@@ -12,4 +12,4 @@ function  Save_Button_onclick() {
 function Cancel_Button_onclick(){
 	tinyMCEPopup.close();
 	return false;
-}
+}      

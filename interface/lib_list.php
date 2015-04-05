@@ -2,11 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2010 ECISP.CN
-  声明：这不是一个免费的软件，请在许可范围内使用
-
-  作者：Bili E-mail:huangqyun@163.com  QQ:6326420
-  http://www.ecisp.cn	http://www.easysitepm.com
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class lib_list extends connector {
@@ -14,7 +13,6 @@ class lib_list extends connector {
 	function lib_list() {
 		$this->softbase();
 		parent::start_pagetemplate();
-
 		$this->pagetemplate->libfile = true;
 	}
 
@@ -23,20 +21,13 @@ class lib_list extends connector {
 		$lngpack = $lng ? $lng : $this->CON['is_lancode'];
 		$lng = ($lng == 'big5') ? $this->CON['is_lancode'] : $lng;
 		include admin_ROOT . 'datacache/' . $lng . '_pack.php';
-
 		$mid = intval($para['mid']);
-
 		$limit = empty($para['max']) ? 20 : intval($para['max']);
-
 		$recommend = intval($para['dlid']);
-
 		$tid = intval($para['tid']);
-
 		$sid = intval($para['sid']);
-
 		$rank = intval($para['rank']);
 		$rank = $rank == 2 ? 'ASC' : 'DESC';
-
 		$sort = intval($para['sort']);
 		$sort = empty($sort) ? 1 : $sort;
 		switch ($sort) {
@@ -56,27 +47,21 @@ class lib_list extends connector {
 				$ordertype = 'addtime ' . $rank;
 				break;
 		}
-
 		$linkdid = $para['linkdid'];
 		if (!empty($linkdid)) {
-
 			$str_linkid = $this->fun->format_array_text($linkdid, '/');
 			if (is_array($str_linkid)) {
 				$linkdid = implode(',', $str_linkid);
 			}
 		}
-
 		$db_table = db_prefix . 'document';
 		$db_where = ' WHERE isclass=1';
-
 		if (!empty($mid)) {
 			$db_where.=" AND mid=$mid";
 		}
-
 		if (!empty($linkdid)) {
 			$db_where.=" AND did IN ($linkdid)";
 		}
-
 		if (!empty($recommend) && empty($linkdid)) {
 			$db_where.=" AND FIND_IN_SET('$recommend',recommend)";
 		}
@@ -89,7 +74,6 @@ class lib_list extends connector {
 		if (!empty($lng) && (empty($tid) && empty($sid) && empty($linkdid))) {
 			$db_where.=" AND lng='$lng'";
 		}
-
 		$timekey = time();
 		$sql = "SELECT * FROM $db_table $db_where ORDER BY $ordertype LIMIT 0,$limit";
 		$rs = $this->db->query($sql);
@@ -98,16 +82,12 @@ class lib_list extends connector {
 			$typeread = $this->get_type($rsList['tid']);
 			$rsList['typename'] = $typeread['typename'];
 			$rsList['typelink'] = $this->get_link('type', $typeread, $lngpack);
-
 			$rsList['pageclass'] = $typeread['pageclass'];
 			$rsList['buylink'] = $this->get_link('buylink', $rsList, $lngpack);
 			$rsList['enqlink'] = $this->get_link('enqlink', $rsList, $lngpack);
 			$rsList['link'] = $this->get_link('doc', $rsList, $lngpack);
-
 			$nowtimekey = $timekey - $rsList['addtime'];
-
 			$rsList['timekey'] = $nowtimekey < 86400 ? 1 : 0;
-
 			$attr = $this->get_document_attr($rsList['did']);
 			$array[] = is_array($attr) ? array_merge($attr, $rsList) : $rsList;
 		}
@@ -123,5 +103,3 @@ class lib_list extends connector {
 	}
 
 }
-
-?>

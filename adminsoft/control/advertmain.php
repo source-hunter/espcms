@@ -1,38 +1,27 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onadvertlist() {
 		parent::start_template();
-
 		$MinPageid = intval($this->fun->accept('MinPageid', 'R'));
-
 		$page_id = intval($this->fun->accept('page_id', 'R'));
-
 		$countnum = intval($this->fun->accept('countnum', 'R'));
-
 		$MaxPerPage = intval($this->fun->accept('MaxPerPage', 'R'));
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
 		}
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$db_where = ' WHERE lng=\'' . $lng . '\'';
-
 		$isclass = intval($this->fun->accept('isclass', 'R'));
 		if (!empty($isclass)) {
 			if ($isclass == 2) $isclass = 0;
@@ -51,11 +40,8 @@ class important extends connector {
 			if ($istime == 2) $istime = 0;
 			$db_where.=' AND istime=' . $istime;
 		}
-
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'adid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_table = db_prefix . 'advert';
@@ -74,22 +60,17 @@ class important extends connector {
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->display('advert/advert_list');
 	}
-
 	function onadvertadd() {
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'R');
 		$tab = empty($tab) ? 'true' : $tab;
-
 		$atid = intval($this->fun->accept('atid', 'R'));
 		$atid = empty($atid) ? 0 : $atid;
-
 		$lng = $this->sitelng;
-		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
-
+		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
 		$advert_typearray = $this->get_advert_type_array($atid, $lng);
 		$this->ectemplates->assign('typelist', $advert_typearray['list']);
-
 		$input_default = $this->CON;
 		$this->ectemplates->assign('defaultinput', $input_default);
 		$this->ectemplates->assign('lng', $lng);
@@ -99,20 +80,16 @@ class important extends connector {
 		$this->ectemplates->assign('atid', $atid);
 		$this->ectemplates->display('advert/advert_add');
 	}
-
 	function onadvertedit() {
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'R');
 		$tab = empty($tab) ? 'true' : $tab;
-
 		$type = $this->fun->accept('type', 'R');
 		$type = empty($type) ? 'edit' : $type;
-
 		$adid = intval($this->fun->accept('adid', 'R'));
 		if (empty($adid)) exit('false');
 		$read = $this->get_advert($adid);
-
 		$advert_typearray = $this->get_advert_type_array($read['atid'], $read['lng']);
 		$this->ectemplates->assign('typelist', $advert_typearray['list']);
 		$input_default = $this->CON;
@@ -125,7 +102,6 @@ class important extends connector {
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->display('advert/advert_edit');
 	}
-
 	function oninfosave() {
 		$inputclass = $this->fun->accept('inputclass', 'P');
 		$lng = $this->fun->accept('lng', 'P');
@@ -144,17 +120,14 @@ class important extends connector {
 		$endtime = empty($endtime) ? 0 : strtotime($endtime);
 		$istime = intval($this->fun->accept('istime', 'P'));
 		$istime = empty($istime) ? 0 : $istime;
-
 		$isclass = $this->esp_inputclassid;
 		$isclass = empty($isclass) ? 0 : $isclass;
 		$content = $this->fun->accept('content', 'P');
 		$content = $this->fun->Text2Html($content);
-
 		$islink = intval($this->fun->accept('islink', 'P'));
 		$islink = empty($islink) ? 1 : $islink;
 		$gotoid = $this->fun->accept('gotoid', 'P');
 		$gotoid = empty($gotoid) ? 0 : $gotoid;
-
 		$db_table = db_prefix . 'advert';
 		if ($inputclass == 'add') {
 			$db_field = 'pid,atid,lng,title,filename,url,adtype,click,starttime,endtime,addtime,isclass,istime,content,islink,gotoid';
@@ -175,7 +148,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onadvertdel() {
 		$db_table = db_prefix . 'advert';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -192,7 +164,6 @@ class important extends connector {
 		$this->writelog($this->lng['advertmain_del_log'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 	function onsort() {
 		$db_table = db_prefix . 'advert';
 		$id = $this->fun->accept('infoid', 'P');
@@ -210,7 +181,6 @@ class important extends connector {
 		$this->writelog($this->lng['advertmain_sort_log'], $this->lng['log_extra_ok']);
 		exit('true');
 	}
-
 	function onsetting() {
 		$db_table = db_prefix . 'advert';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -225,7 +195,4 @@ class important extends connector {
 		$this->writelog($this->lng['advertmain_setting_log'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 }
-
-?>

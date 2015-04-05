@@ -63,6 +63,9 @@ function initJcrop(){
 	});
 }
 
+
+
+
 function formverify(formData, jqForm, options) {
 	var queryString = $.param(formData);
 	var get=urlarray(queryString);
@@ -152,13 +155,13 @@ function saveResponse(options){
 	<div id="subbotton">
 		<table border="0" style="margin: 0 auto;">
 			<tr id="bottonsubmit">
-				<td ><input type="submit" name="Submit" id="submitbotton" value="[%$ST.filemanage_file_submit_botton%]" class="buttonface" title="[%$ST.filemanage_file_submit_botton%]"/></td>
-				<td class="padding-left5"><input type="reset" name="reset" id="release" value="[%$ST.filemanage_file_res_botton%]" class="buttonface"  title="[%$ST.filemanage_file_res_botton%]" /></td>
-				<td class="padding-left5"><input type="button" name="cancel" onClick="javascript:closewindow();" value="[%$ST.botton_edit_reset%]" class="buttonface" /></td>
+				<td ><input type="submit" name="Submit" id="submitbotton" value="[%$ST.filemanage_file_submit_botton%]" class="button orange" title="[%$ST.filemanage_file_submit_botton%]"/></td>
+				<td class="padding-left5"><input type="reset" name="reset" id="release" value="[%$ST.filemanage_file_res_botton%]" class="button orange"  title="[%$ST.filemanage_file_res_botton%]" /></td>
+				<td class="padding-left5"><input type="button" name="cancel" onClick="javascript:closewindow();" value="[%$ST.botton_edit_reset%]" class="button orange" /></td>
 			</tr>
 		</table>
 	</div>
 </div>
 </form>
 </body>
-</html>
+</html>      

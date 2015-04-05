@@ -1,0 +1,100 @@
+<script type="text/javascript" src="{%$rootdir%}js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+	var seccode_empty = "{%$lngpack.seescodeerr%}";
+	function {%$form.formcode%}form(seccodetype) {
+		{%forlist from=$array key=i%}
+			{%if $array[i].isvalidate==1%}
+				{%if $array[i].validatetext!=''%}
+					if(document.{%$form.formcode%}.{%$array[i].attrname%}.value.match({%$array[i].validatetext%}ig)==null) {
+				{%else%}
+					if(document.{%$form.formcode%}.{%$array[i].attrname%}.value==''){
+				{%/if%}
+				document.{%$form.formcode%}.{%$array[i].attrname%}.focus();
+				alert('{%$array[i].typename%} Input error, please return to enter again');
+				return false;
+			}
+			{%/if%}
+		{%/forlist%}
+
+		if(seccodetype=='1' && document.{%$form.formcode%}.seccode.value.match(/^[A-Z]{4}$/ig)==null) {
+			document.{%$form.formcode%}.seccode.focus();
+			alert(seccode_empty);
+			return false;
+		}
+	}
+</script>
+<form name="{%$form.formcode%}" id="{%$form.formcode%}" method="post" action="{%$form.action%}"  onSubmit="return {%$form.formcode%}form('{%$form.isseccode%}')">
+<input type="hidden" name="linkurl" value="add"/>
+<input type="hidden" name="fgid" id="fgid" value="{%$form.fgid%}"/>
+<input type="hidden" name="formcode" id="formcode" value="{%$form.formcode%}"/>
+<input type="hidden" name="did" id="did" value="{%$did%}"/>
+<input type="hidden" name="tokenkey" value="{%$tokenkey.token_key%}"/>
+<div class="espcms_bbs_form pt20">
+	<b class="b1"></b><b class="b2"></b><b class="b3"></b><b class="b4"></b>
+	<div class="title"><div class="messageicon"></div><div class="messtitle">{%$form.formgroupname%}</div>{%$form.content|htmlcode('1')%}</div>
+	<div class="content">
+		{%forlist from=$array key=i%}
+		<div class="espcms_form_group">
+			<label for="username" class="control_label">{%if $array[i].isvalidate==1%}* {%/if%}{%$array[i].typename%}</label>
+			<div class="control_required">
+				{%if $array[i].inputtype=='string' || $array[i].inputtype=='int' || $array[i].inputtype=='float' || $array[i].inputtype=='decimal'%}<input type="text" name="{%$array[i].attrname%}" size="{%$array[i].attrsize%}" maxlength="{%$array[i].attrlenther%}" value="{%$array[i].attrvalue%}" class="infoInput"/>{%/if%}
+				{%if $array[i].inputtype=='datetime'%}
+					 <input type="text" name="{%$array[i].attrname%}" size="{%$array[i].attrsize%}" id="{%$array[i].attrname%}" onclick="WdatePicker({el:'{%$array[i].attrname%}',readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" maxlength="{%$array[i].attrlenther%}" class="infoInput"/>
+				{%/if%}
+				{%if $array[i].inputtype=='selectinput'%}
+				<input type="text" name="{%$array[i].attrname%}" size="{%$array[i].attrsize%}" id="{%$array[i].attrname%}" value="" maxlength="{%$array[i].attrlenther%}" class="infoInput"/>
+				<select size="1" name="{%$array[i].attrname%}selectinputvalue" onchange="javascript:$('#{%$array[i].attrname%}').val(this.value)">
+					<option value="">{%$array[i].typename%}</option>
+					{%forlist from=$array[i].selectinputvalue key=ii%}
+					<option value="{%$array[i].selectinputvalue[ii].name%}">{%$array[i].selectinputvalue[ii].name%}</option>
+					{%/forlist%}
+				</select>
+				{%/if%}
+				{%if $array[i].inputtype=='img'%}
+					<input type="text" name="{%$array[i].attrname%}" size="{%$array[i].attrsize%}" value="{%$array[i].attrvalue%}" class="infoInput"/>
+				{%/if%}
+				{%if $array[i].inputtype=='addon'%}
+					<input type="text" name="{%$array[i].attrname%}" size="{%$array[i].attrsize%}" value="{%$array[i].attrvalue%}" class="infoInput"/>
+				{%/if%}
+				{%if $array[i].inputtype=='text'%}<textarea name="{%$array[i].attrname%}" cols="{%$array[i].attrsize%}" rows="{%$array[i].attrrow%}"  class="col11 infoInput">{%$array[i].attrvalue%}</textarea>{%/if%}
+				{%if $array[i].inputtype=='htmltext'%}<textarea name="{%$array[i].attrname%}" cols="{%$array[i].attrsize%}" rows="{%$array[i].attrrow%}"  class="col11 infoInput">{%$array[i].attrvalue%}</textarea>{%/if%}
+				{%if $array[i].inputtype=='editor'%}<textarea name="{%$array[i].attrname%}" cols="{%$array[i].attrsize%}" rows="{%$array[i].attrrow%}"  class="col11 infoInput">{%$array[i].attrvalue%}</textarea>{%/if%}
+				{%if $array[i].inputtype=='select'%}
+					<select size="1" name="{%$array[i].attrname%}">
+					{%forlist from=$array[i].attrvalue key=ii%}
+						<option {%if $array[i].attrvalue[ii].selected=='selected'%}selected="selected" {%/if%}value="{%$array[i].attrvalue[ii].name%}">{%$array[i].attrvalue[ii].name%}</option>
+					{%/forlist%}
+					</select>
+				{%/if%}
+				{%if $array[i].inputtype=='radio'%}
+					{%forlist from=$array[i].attrvalue key=ii%}
+						<input {%if $array[i].attrvalue[ii].selected=='selected'%}checked="checked" {%/if%}name="{%$array[i].attrname%}" type="radio" value="{%$array[i].attrvalue[ii].name%}" /> {%$array[i].attrvalue[ii].name%}
+					{%/forlist%}
+				{%/if%}
+				{%if $array[i].inputtype=='checkbox'%}
+					{%forlist from=$array[i].attrvalue key=ii%}
+						<input {%if $array[i].attrvalue[ii].selected=='selected'%}checked="checked" {%/if%}name="{%$array[i].attrname%}[]" type="checkbox" value="{%$array[i].attrvalue[ii].name%}" /> {%$array[i].attrvalue[ii].name%}
+					{%/forlist%}
+				{%/if%}
+				{%if $array[i].typeremark!=''%}<span class="form_message">{%$array[i].typeremark%}</span>{%/if%}
+			</div>
+		</div>
+		{%/forlist%}
+		{%if $form.isseccode==1%}
+		<div class="espcms_form_group">
+			<label for="username" class="control_label">Security code</label>
+			<div class="control_required">
+				<input type="text" id="seccode" name="seccode" class=" infoInput" maxlength="4" size="5" style="text-transform: uppercase;"/>
+				<img title="Enter code shown in image" id="{%$form.formcode%}seccodesrc" onclick="sessionimg('{%$form.formcode%}seccodesrc','{%$rootdir%}')" src="{%$seccodelink%}" style="cursor: pointer;height:28px;margin-left:5px;" align="absmiddle"/>
+			</div>
+		</div>
+		{%/if%}
+		<div class="espcms_form_group">
+			<label class="control_label"> </label>
+			<div class="control_required"><input type="submit" id="{%$form.formcode%}botton" class="button blue2" value="Submit"> </div>
+		</div>
+
+	</div>
+	<b class="b5"></b><b class="b6"></b><b class="b7"></b><b class="b8"></b>
+</div>
+</form>

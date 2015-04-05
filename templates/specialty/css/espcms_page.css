@@ -1,0 +1,9 @@
+#pagelist,#espcms_bbs_pagelist{color:#818181}
+.pagination {font-family: '微软雅黑','Microsoft YaHei UI','Microsoft YaHei',arial, helvetica, sans-serif;overflow: hidden;padding:10px 0px;font-size:12px;margin: 0px;}
+/*按钮色彩样式*/
+.pagination a {border: #c2e2e7 1px solid;color: #95b1b5;text-decoration: none;overflow: hidden;padding:5px 5px;margin: 0px 0px 0px 5px;}
+.pagination a:visited {text-decoration: none;overflow: hidden;}
+.pagination a:active {text-decoration: none;overflow: hidden;}
+.pagination a:hover {color: #fff;background-color: #c2e2e7;overflow: hidden;}
+.pagination span.current {border: #c2e2e7 1px solid;color: #fff;overflow: hidden;padding:5px 5px;margin: 0px 0px 0px 5px;}
+.pagination span.disabled {background-color: #a6c3dd;}

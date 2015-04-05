@@ -6,7 +6,7 @@
 			<td width="5%"><input type="checkbox" name="selectinfoid" value="[%$array[list].osid%]"></td>
 			<td width="8%">
 				<input type="hidden" name="infoid" id="infoid" value="[%$array[list].osid%]">
-				<input type="text" name="pid" size="3" value="[%$array[list].pid%]" class="infoInput" onclick="if(this.value=='[%$array[list].pid%]'){this.value = '';}else {this.select();}" onblur="if(this.value ==''){this.value ='[%$array[list].pid%]';}">
+				<input type="text" name="pid" size="3" value="[%$array[list].pid%]" class="infoInput">
 			</td>
 			<td width="10%">[%$array[list].osid%]</td>
 			<td width="25%">[%$array[list].title%]</td>
@@ -53,4 +53,4 @@
 	</tr>
 </table>
 </div>
-[%/if%]
+[%/if%]      

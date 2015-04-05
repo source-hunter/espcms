@@ -169,6 +169,15 @@
 							<a class="filecheck" href="#body" onclick="javascript:parent.windowsdig('[%$ST.selecttempfile_botton%]','iframe:index.php?archive=templatemain&action=listwindow&inputtext=addformtemplate&typeclass=form&skindir=&filedir=form&fileclass=&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),'750px','400px','iframe');">[%$ST.selecttempfile_botton%]</a>
 						</td>
 					</tr>
+					<tr class="trstyle2">
+						<td class="trtitle01">[%$ST.formmain_add_pic%]</td>
+						<td class="trtitle02" id="strhtml">
+							<ul class="addpiclist">
+								<li id="addsrlipic"><a title="[%$ST.selectfile_botton%]" onclick="javascript:parent.windowsdig('[%$ST.filemanage_select_title%]','iframe:index.php?archive=filemanage&action=filewindow&listfunction=filelist&filetype=img&checkfrom=picshow&getbyid=addsrlipic&fileinputid=pic&maxselect=1&iframename='+self.frameElement.getAttribute('name'),'900px','480px','iframe')" href="#body"><p><img id="addsrcpic" src="templates/images/pic.png"></p></a></li>
+							</ul>
+							<input type="hidden" name="pic" id="pic" size="50" maxlength="50" class="infoInput"/>
+						</td>
+					</tr>
 					<tr class="trstyle3">
 						<td class="trtitle01">[%$ST.formmain_add_content%]</td>
 						<td class="trtitle02"><textarea name="content" id="content" style="width:98%;height:100px;"></textarea></td>
@@ -187,6 +196,13 @@
 					</tr>
 					<tr>
 						<td  class="trtitle03" colspan="2">[%$ST.typemanage_type_add_templatesurl%]</td>
+					</tr>
+					<tr class="trstyle2">
+						<td class="trtitle01">[%$ST.forumtype_add_titlestyle%]</td>
+						<td class="trtitle02">
+							<input type="text" name="titlestyle" size="30" maxlength="30" value="{typename}-{sitename}" class="infoInput"/>
+							<span class="cautiontitle">[%$ST.forumtype_add_titlestyle_mess%]</span>
+						</td>
 					</tr>
 					<tr class="trstyle2">
 						<td class="trtitle01">[%$ST.formmain_add_ismenu%]</td>
@@ -272,6 +288,17 @@
 							</select>
 						</td>
 					</tr>
+					<tr class="trstyle2">
+						<td class="trtitle03" colspan="2">[%$ST.iswap_message%]</td>
+					</tr>
+					<tr class="trstyle2">
+						<td class="trtitle01">[%$ST.iswap_title%]</td>
+						<td class="trtitle02">
+							<input type="radio" value="1" name="iswap" checked="checked"/> [%$ST.open_botton_title%]&nbsp;
+							<input type="radio" value="0" name="iswap"/> [%$ST.close_botton_title%]
+							<span class="cautiontitle">[%$ST.iswap_title_mess%]</span>
+						</td>
+					</tr>
 				</table>
 			</div>
 		</div>
@@ -281,8 +308,8 @@
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr>
-				<td id="right"><input type="submit" id="submitbotton" name="Submit" value="[%$ST.botton_add%]" class="buttonface" /></td>
-				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_add_reset%]" class="buttonface" /></td>
+				<td id="right"><input type="submit" id="submitbotton" name="Submit" value="[%$ST.botton_add%]" class="button orange" /></td>
+				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_add_reset%]" class="button orange" /></td>
 			</tr>
 		</table>
 	</div>

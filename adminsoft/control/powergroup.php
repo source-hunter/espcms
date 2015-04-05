@@ -2,11 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class important extends connector {
@@ -14,14 +13,10 @@ class important extends connector {
 	function important() {
 		$this->softbase(true);
 	}
-
 	function ongrouplist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
@@ -36,7 +31,6 @@ class important extends connector {
 		$db_where = " WHERE id>0" . $wheretext;
 		$db_table = db_prefix . 'admin_powergroup';
 		if (!empty($countnum)) {
-
 			$countnum = $this->db_numrows($db_table, $db_where);
 			exit($countnum);
 		}
@@ -45,16 +39,13 @@ class important extends connector {
 		while ($rsList = $this->db->fetch_assoc($rs)) {
 			$array[] = $rsList;
 		}
-
 		$this->fun->setcookie($this->fun->noncefile() . 'pgid', $page_id, 600);
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('admin/admin_group_list');
 	}
-
 	function ongroupadd() {
 		parent::start_template();
-
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
 		$powermenulist = $this->get_powermenulist();
@@ -62,7 +53,6 @@ class important extends connector {
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->display('admin/admin_group_add');
 	}
-
 	function ongroupedit() {
 		parent::start_template();
 		$db_table = db_prefix . 'admin_powergroup';
@@ -77,7 +67,6 @@ class important extends connector {
 		$this->ectemplates->assign('powerlist', $powerlist);
 		$this->ectemplates->display('admin/admin_group_edit');
 	}
-
 	function onpowerlistsava() {
 		$db_table = db_prefix . 'admin_powergroup';
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -104,7 +93,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function ondelgroup() {
 		$db_table = db_prefix . 'admin_powergroup';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -123,5 +111,3 @@ class important extends connector {
 	}
 
 }
-
-?>

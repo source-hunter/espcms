@@ -1,0 +1,41 @@
+[%#%]模型字段列表[%#%]
+[%if $menutype == 'modelattlist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('article','modelattradd')==true %]
+	<li class="menumain"><a class="addinfo" onclick="javascript:parent.onbotton('[%$ST.modelmanage_attr_add|addslashes('hc')%]','index.php?archive=modelmanage&action=modelattradd&mid=[%$mid%]&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'addattr[%$mid%]',self.frameElement.getAttribute('name'));" id="addattr[%$mid%]" href="#body" title="[%$ST.modelmanage_attr_add%]" hidefocus="true">[%$ST.modelmanage_attr_add%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	<li class="menumain"><a id="bolt" href="#body" hidefocus="true" hidefocus="true">[%$ST.bolt_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.user_type_botton%]</span>
+				<ul>
+					<li><a class="menunoclick" id="attrisclass0" href="#body" onclick="javascript:dbfilter('attrisclass','isclass',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="attrisclass1" href="#body" onclick="javascript:dbfilter('attrisclass','isclass',1,1,3,'selectform','selectall','check_all')" title="[%$ST.open_botton_title%]" hidefocus="true">[%$ST.open_botton_title%]</a></li>
+					<li><a class="menuclick" id="attrisclass2" href="#body" onclick="javascript:dbfilter('attrisclass','isclass',2,2,3,'selectform','selectall','check_all')" title="[%$ST.close_botton_title%]" hidefocus="true">[%$ST.close_botton_title%]</a></li>
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.modelmanage_attr_isvalidate_botton%]</span>
+				<ul>
+					<li><a class="menunoclick" id="isvalidate0" href="#body" onclick="javascript:dbfilter('isvalidate','isvalidate',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="isvalidate1" href="#body" onclick="javascript:dbfilter('isvalidate','isvalidate',1,1,3,'selectform','selectall','check_all')" title="[%$ST.open_botton_title%]" hidefocus="true">[%$ST.open_botton_title%]</a></li>
+					<li><a class="menuclick" id="isvalidate2" href="#body" onclick="javascript:dbfilter('isvalidate','isvalidate',2,2,3,'selectform','selectall','check_all')" title="[%$ST.close_botton_title%]" hidefocus="true">[%$ST.close_botton_title%]</a></li>
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.modelmanage_attr_issearch_botton%]</span>
+				<ul>
+					<li><a class="menunoclick" id="issearch0" href="#body" onclick="javascript:dbfilter('issearch','issearch',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="issearch1" href="#body" onclick="javascript:dbfilter('issearch','issearch',1,1,3,'selectform','selectall','check_all')" title="[%$ST.open_botton_title%]" hidefocus="true">[%$ST.open_botton_title%]</a></li>
+					<li><a class="menuclick" id="issearch2" href="#body" onclick="javascript:dbfilter('issearch','issearch',2,2,3,'selectform','selectall','check_all')" title="[%$ST.close_botton_title%]" hidefocus="true">[%$ST.close_botton_title%]</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	[%if @this->powercheck('article','delattr')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:callrun('index.php?archive=modelmanage&action=delattr','selectinfoid',false,null,null,'index.php?archive=management&action=load','[%$ST.del_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	[%if @this->powercheck('article','modelattredit')==true %]
+	<li class="menumain"><a id="sortall" onclick="javascript:sortinput('index.php?archive=modelmanage&action=attrsort&mid=[%$mid%]','index.php?archive=management&action=load','[%$ST.sort_messok%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.pid_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+</ul>
+[%/if%]      

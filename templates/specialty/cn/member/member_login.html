@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>{%$lngpack.sitename%}</title>
+<meta name="keywords" content="{%$lngpack.keyword%}" />
+<meta name="description" content="{%$lngpack.description%}" />
+<script type="text/javascript" src="{%$rootdir%}js/jquery.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/basicrun.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/jquery.Slide.js"></script>
+<link href="{%$rootpath%}css/espcms_public.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_v5div.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_page.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+	var loing_input_err = "{%$lngpack.loing_input_err%}";
+	var seccode_empty = "{%$lngpack.seescodeerr%}";
+	$(window).load(function() {
+		$("#clickmenubotton li span").hover(function() {
+			$(this).addClass("menuhover");
+			$(this).parent().find("ul.subnav").slideDown('fast').show();
+			$(this).parent().hover(function() {
+			}, function() {
+				$(this).parent().find("ul.subnav").fadeOut('fast');
+				$(this).parent().find("span").removeClass("menuhover");
+			});
+		});
+	});
+</script>
+</head>
+
+<body>
+{%link file="cn/public/head.html"%}
+<div class="espcms_page_bannpic"><img src="{%$rootpath%}images/bann/type_pic.jpg"/></div>
+
+<div class="espcms_page">
+	<form name="mainform" method="post" action="{%$mlink.logindb%}" onSubmit="return memberlogin('{%$mem_isseccode%}')">
+	<input type="hidden" name="tokenkey" value="{%$tokenkey.token_key%}"/>
+	<div class="espcms_member_login_center espcms_formwidth_a">
+		<div class="title mb20"><div class="messageicon"></div><div class="messtitle">会员登陆</div></div>
+		<div class="espcms_form_group">
+			<label for="title" class="control_label16">用户名</label>
+			<div class="control_required20">
+				<input type="text" name="username" id="username" class="col7 infoInput"/>
+			</div>
+		</div>
+		<div class="espcms_form_group">
+			<label for="username" class="control_label16">密码</label>
+			<div class="control_required20"><input type="password" name="password" id="password" class="col7 infoInput"/></div>
+		</div>
+		{%if $mem_isseccode==1%}
+		<div class="espcms_form_group">
+			<label for="email" class="control_label16">验证码</label>
+			<div class="control_required20">
+				<input type="text" id="seccode" name="seccode" class="infoInput" maxlength="4" size="5" style="text-transform: uppercase;"/>
+				<img title="点击更换验证码" id="memberseccodesrc" onclick="sessionimg('memberseccodesrc','{%$rootdir%}')" src="{%$seccodelink%}" style="cursor: pointer;height:28px;margin-left:5px;" align="absmiddle"/>
+			</div>
+		</div>
+		{%/if%}
+		<div class="espcms_form_group">
+			<label class="control_label16"> </label>
+			<div class="control_required20">
+				<input type="submit" id="submit" class="button blue2" value="登陆"/>
+				<a class="button red" href="{%$mlink.reg%}">注册</a>
+				<a class="button blue2" href="{%$mlink.lostpasswd%}">找回密码</a>
+			</div>
+		</div>
+	</div>
+	</form>
+</div>
+
+{%link file="cn/public/footer.html"%}
+</body>
+</html>

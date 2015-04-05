@@ -1,0 +1,18 @@
+[%#%]数据库[%#%]
+[%if $menutype == 'sqllist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('system','export')==true %]
+	<li class="menumain"><a id="dbbak" onclick="javascript:parent.onbotton('[%$ST.sql_bak_botton_title%]','index.php?archive=sqlmanage&action=export&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),true,true);" href="#body" title="[%$ST.sql_bak_botton_title%]" hidefocus="true">[%$ST.sql_bak_botton%]</a></li>
+	[%/if%]
+	[%if @this->powercheck('system','bakfilelist')==true %]
+	<li class="menumain"><a id="restore" onclick="javascript:parent.onbotton('[%$ST.sql_restore_botton_title%]','index.php?archive=sqlmanage&action=bakfilelist&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),true,true);" href="#body" title="[%$ST.sql_restore_botton_title%]" hidefocus="true">[%$ST.sql_restore_botton%]</a></li>
+	[%/if%]
+	[%if @this->powercheck('system','sqldel')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:parent.onbotton('[%$ST.sql_del_botton_title%]','index.php?archive=sqlmanage&action=bakfilelist&listtype=del&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),true,true);" href="#body" title="[%$ST.sql_del_botton_title%]" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	[%if @this->powercheck('system','optimize')==true %]
+	<li class="menumain"><a id="optimize" onclick="javascript:submiturl('index.php?archive=sqlmanage&action=optimize','index.php?archive=management&action=load','[%$ST.run_ok%]','[%$ST.run_no%]',false,'','selectform','selectall','check_all')" href="#body" title="[%$ST.sql_optimize_botton_title%]" hidefocus="true">[%$ST.sql_optimize_botton_title%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+</ul>
+[%/if%]      

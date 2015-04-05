@@ -57,6 +57,9 @@ a.tabclicklink{font-size:12px;color:#F45810;cursor:pointer;text-decoration:none;
 a:visited.tabclicklink{font-size:12px;color:#F45810;cursor:pointer;text-decoration:none;font-weight: bold}
 a:hover.tabclicklink{color:#277DEC;font-size:12px;cursor:pointer;text-decoration:none;font-weight: bold}
 
+a.volcheck{font-size:14px;color:#fff;cursor:pointer;text-decoration:underline;font-weight: bold}
+a:visited.volcheck{font-size:14px;color:#fff;cursor:pointer;text-decoration:underline;font-weight: bold}
+a:hover.volcheck{color:#F1CC74;font-size:14px;cursor:pointer;text-decoration:none;font-weight: bold}
 
 /*from*/
 input.smallInput{font-size:9pt;height:15px;clip:rect;border-color:black #CAD9EA #CAD9EA black;border-top-width:1px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;background-color:#FFFFFF;}
@@ -241,3 +244,38 @@ a.keyselect{display:inline-block;height:16px;line-height:16px;padding:0 0 0 18px
 .cancelButton{
 	color: #E60000;
 }
+/*按钮样式*/
+/*按钮*/
+html .button{ display: inline-block; zoom: 1; *display: inline; vertical-align: baseline; margin: 0 2px; outline: none; cursor: pointer;
+	      text-align: center; text-decoration: none; font-size:14px; line-height:100%; padding: .4em 1.5em .55em; border:none; border-radius: 2px; color: #fff; background: #A7A9AA;}
+.button:hover { text-decoration: none; background: #9a9c9d; }
+.button:active { position: relative; top: 1px;color: #fff; }
+/*圆角*/
+.button.bigrounded { -webkit-border-radius: 2em; -moz-border-radius: 2em; border-radius: 2em; }
+/*中号*/
+.button.medium { font-size: 12px; padding: .4em 1.5em .42em; }
+/*小号*/
+.button.small { font-size: 11px; padding: .2em 1em .275em; }
+/* black */
+.button.black { color: #d7d7d7; background: #333; } .button.black:hover { background: #000; } .button.black:active { color: #666; }
+/* gray */
+.button.gray { color: #e9e9e9; background: #6e6e6e; } .button.gray:hover { background: #616161; } .button.gray:active { color: #afafaf; }
+/* orange */
+.button.orange { color: #fef4e9; background: #f78d1d; } .button.orange:hover { background: #f47c20; } .button.orange:active { color: #fcd3a5; }
+/* red */
+.button.red { color: #faddde; background: #d81b21; } .button.red:hover { background: #b61318; } .button.red:active { color: #de898c; }
+/* blue */
+.button.blue { color: #d9eef7; background: #007ead; } .button.blue:hover { background: #00CCFF; } .button.blue:active { color: #80bed6; }
+.button.blue2 { color: #d9eef7; background: #3375b9; } .button.blue2:hover { background: #15a0d4; } .button.blue2:active { color: #15a0d4; }
+/* rosy */
+.button.rosy { color: #fae7e9; background: #da5867; } .button.rosy:hover { background: #ba4b58; } .button.rosy:active { color: #dca4ab; }
+/* green */
+.button.green { color: #e8f0de; background: #64991e; } .button.green:hover { background: #538018; } .button.green:active { color: #a9c08c; }
+/* pink */
+.button.pink { color: #feeef5; background: #f895c2; } .button.pink:hover { background: #d57ea5; } .button.pink:active { color: #f3c3d9; }
+/* 黄色 */
+.button.yellow { color: #fff; background: #BB6512; } .button.yellow:hover { background: #fd9c2c; } .button.yellow:active { color: #fff; }
+/*淡灰色*/
+.button.dahui { color: #cd0c39; background: #efefef; } .button.dahui:hover { background: #c2c2c2;color:#efefef } .button.dahui:active { color: #fff; }
+/*绿色*/
+.button.three { color: #fff; background: #50a93b; } .button.three:hover { background: #42B937;color:#fff } .button.three:active {background: #42B937;color: #fff; }

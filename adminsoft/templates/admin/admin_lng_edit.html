@@ -139,14 +139,14 @@
 					<tr class="trstyle2">
 						<td class="trtitle01">[%$ST.language_add_ispack_edit%]</td>
 						<td class="trtitle02">
-							<input type="radio" value="1" name="ispackedit" onclick="ondisplay('validatetextdiv','trstyle2 displaytrue')"/> [%$ST.open_botton_title%]&nbsp;
-							<input type="radio" value="0" name="ispackedit" checked="checked" onclick="ondisplay('validatetextdiv','trstyle2 displaynone')"/> [%$ST.close_botton_title%]
+							<input type="radio" value="1" name="ispackedit" [%if $lngread.ispack==1%]checked="checked" [%/if%]onclick="ondisplay('validatetextdiv','trstyle2 displaytrue')"/> [%$ST.open_botton_title%]&nbsp;
+							<input type="radio" value="0" name="ispackedit" [%if $lngread.ispack==0%]checked="checked" [%/if%]onclick="ondisplay('validatetextdiv','trstyle2 displaynone')"/> [%$ST.close_botton_title%]
 							<span class="cautiontitle">[%$ST.language_add_ispack_edit_mess%]</span>
 						</td>
 					</tr>
-					<tr class="trstyle2 displaynone" id="validatetextdiv">
+					<tr class="trstyle2 [%if $lngread.ispack==0%]displaynone[%/if%]" id="validatetextdiv">
 						<td class="trtitle011">[%$ST.language_add_packname%]</td>
-						<td  class="trtitle02"><input type="text" name="packnameedit" id="packname" size="25" maxlength="40" class="infoInput" onblur="checkcode('packname');"/> <span id="packnameerr" class="cautiontitle">[%$ST.language_add_packname_mess%]</span></td>
+						<td  class="trtitle02"><input type="text" name="packnameedit" id="packname" size="25" value="[%$lngread.packname%]" maxlength="40" class="infoInput" onblur="checkcode('packname');"/> <span id="packnameerr" class="cautiontitle">[%$ST.language_add_packname_mess%]</span></td>
 					</tr>
 					<tr class="trstyle2">
 						<td class="trtitle011">[%$ST.language_add_lngtitle%]</td>
@@ -173,8 +173,8 @@
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr>
-				<td id="right"><input type="submit" name="Submit" value="[%$ST.botton_edit%]" class="buttonface" /></td>
-				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_edit_reset%]" class="buttonface" /></td>
+				<td id="right"><input type="submit" name="Submit" value="[%$ST.botton_edit%]" class="button orange" /></td>
+				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_edit_reset%]" class="button orange" /></td>
 			</tr>
 		</table>
 	</div>

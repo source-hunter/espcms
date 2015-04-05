@@ -1,10 +1,12 @@
 <?php
+
 /*
   PHP version 5
   Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
   警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
+
  */
 $CONLIST = array(
     'loglist' => array(
@@ -41,6 +43,10 @@ $CONLIST = array(
 	'tabloadurl' => 'index.php?archive=management&action=syssetting&listfunction=syssetting&groupid=' . $groupid,
 	'tabloadtitle' => '系统设置',
     ),
+    'modulesetup' => array(
+	'tabloadurl' => 'index.php?archive=modenmain&action=modenlist',
+	'tabloadtitle' => '网站组件管理',
+    ),
     'sitelist' => array(
 	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=sitelist',
 	'tabloadtitle' => '语言站群管理',
@@ -61,7 +67,7 @@ $CONLIST = array(
     ),
     'callinglist' => array(
 	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=callinglist',
-	'tabloadtitle' => '即时通客服管理',
+	'tabloadtitle' => '在线客服管理',
 	'loadurl' => 'index.php?archive=callmain&action=callinglist&isclass=&limitkey=&limitclass=',
 	'pagecoock' => 'callinglistpgid'
     ),
@@ -181,7 +187,7 @@ $CONLIST = array(
     ),
     'formlist' => array(
 	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=formlist',
-	'tabloadtitle' => '表单列表',
+	'tabloadtitle' => '自助表单列表',
 	'loadurl' => 'index.php?archive=formmain&action=formlist&isclass=&ismenu=&isseccode=&iscount=&purview=&isinputtime=&ismail=&limitkey=&limitclass=',
 	'pagecoock' => 'formlistpgid'
     ),
@@ -231,6 +237,7 @@ $CONLIST = array(
     'createsubject' => array('tabloadurl' => 'index.php?archive=createmain&action=createsubject&tab=false', 'tabloadtitle' => '专题HTML生成', 'loadurl' => '', 'pagecoock' => ''),
     'batcreate' => array('tabloadurl' => 'index.php?archive=createmain&action=batcreate&tab=false', 'tabloadtitle' => '一键更新网站', 'loadurl' => '', 'pagecoock' => ''),
     'seocreate' => array('tabloadurl' => 'index.php?archive=createseomain&action=createseo&tab=false', 'tabloadtitle' => 'Google地图生成', 'loadurl' => '', 'pagecoock' => ''),
+    'baiducreate' => array('tabloadurl' => 'index.php?archive=createseomain&action=baiducreate&tab=false', 'tabloadtitle' => '百度/搜狗优化生成', 'loadurl' => '', 'pagecoock' => ''),
     'createrss' => array('tabloadurl' => 'index.php?archive=createseomain&action=createrss&tab=false', 'tabloadtitle' => 'RSS文档生成', 'loadurl' => '', 'pagecoock' => ''),
     'advertlist' => array(
 	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=advertlist&atid=' . $atid,
@@ -240,13 +247,13 @@ $CONLIST = array(
     ),
     'adverttypelist' => array(
 	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=adverttypelist',
-	'tabloadtitle' => '广告位管理',
+	'tabloadtitle' => '广告管理',
 	'loadurl' => 'index.php?archive=adverttypemain&action=adverttypelist&isclass=&iscode=&limitkey=&limitclass=',
 	'pagecoock' => 'adverttypelistpgid'
     ),
     'bbstypelist' => array(
 	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=bbstypelist',
-	'tabloadtitle' => '版块列表',
+	'tabloadtitle' => '留言论坛管理',
 	'loadurl' => 'index.php?archive=bbstypemain&action=bbstypelist&purview=&isclass=&limitkey=&limitclass=',
 	'pagecoock' => 'bbstypelistpgid'
     ),
@@ -264,21 +271,21 @@ $CONLIST = array(
 	'pagecoock' => 'filelistpgid'
     ),
     'fileadminlist' => array(
-	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=fileadminlist&pagetype=admin_tab_list_page',
+	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=fileadminlist',
 	'tabloadtitle' => '文件管理',
 	'loadurl' => 'index.php?archive=filemain&action=fileadminlist',
 	'pagecoock' => 'fileadminlistpgid'
     ),
     'albumadminlist' => array(
 	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=albumadminlist',
-	'tabloadtitle' => '相册管理',
+	'tabloadtitle' => '图片相册管理',
 	'loadurl' => 'index.php?archive=albummain&action=albumadminlist&isclass=&istop=&limitkey=&limitclass=',
 	'pagecoock' => 'albumadminlistpgid'
     ),
     'albumfilelist' => array(
 	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=albumfilelist&amid=' . $amid,
 	'tabloadtitle' => '相册文件管理',
-	'loadurl' => 'index.php?archive=albummain&action=albumfilelist&amid=' . $amid . '&limitkey=&limitclass=',
+	'loadurl' => 'index.php?archive=albummain&action=albumfilelist&amid=' . $amid . '&isrecomm=&limitkey=&limitclass=',
 	'pagecoock' => 'albumfilelistpgid'
     ),
     'mailinvitelist' => array(
@@ -323,5 +330,22 @@ $CONLIST = array(
 	'loadurl' => 'index.php?archive=smsmain&action=smssendlist&isclass=&limitkey=&limitclass=',
 	'pagecoock' => 'smssendlistpgid'
     ),
+    'weixinlist' => array(
+	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=weixinlist',
+	'tabloadtitle' => '微信公众号管理',
+	'loadurl' => 'index.php?archive=weixinmain&action=weixinlist&isclass=&limitkey=&limitclass=',
+	'pagecoock' => 'weixinlistpgid'
+    ),
+    'wxmenulist' => array(
+	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=wxmenulist&isclass=1&pagetype=admin_tab_list_page',
+	'tabloadtitle' => '微信菜单管理',
+	'loadurl' => 'index.php?archive=weixinmain&action=wxmenulist&wxid=' . $wxid . '&isclass=&limitkey=&limitclass=',
+	'pagecoock' => 'wxmenulistpgid'
+    ),
+    'wxkeywordlist' => array(
+	'tabloadurl' => 'index.php?archive=management&action=list&listfunction=wxkeywordlist',
+	'tabloadtitle' => '关键字管理',
+	'loadurl' => 'index.php?archive=weixinmain&action=wxkeywordlist&wxid=' . $wxid . '&limitkey=&limitclass=',
+	'pagecoock' => 'wxkeywordlistpgid'
+    ),
 );
-?>

@@ -8,4 +8,4 @@ numlist_desc:"\u7F16\u53F7\u5217\u8868",
 undo_desc:"\u8FD8\u539F (Ctrl+Z)",
 redo_desc:"\u91CD\u505A (Ctrl+Y)",
 cleanup_desc:"\u6E05\u9664\u591A\u4F59\u4EE3\u7801"
-});
+});      

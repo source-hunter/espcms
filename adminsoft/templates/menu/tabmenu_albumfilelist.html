@@ -1,0 +1,43 @@
+[%#%]相册文件列表[%#%]
+[%if $menutype == 'albumfilelist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('communicate','albumfileedit')==true %]
+	<li class="menumain"><a class="addinfo" onclick="javascript:parent.onbotton('[%$ST.albummain_add_log2|addslashes('hc')%]','index.php?archive=albummain&action=albumfileadd&amid=[%$tabarray.amid%]&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'addphoto[%$tabarray.amid%]',self.frameElement.getAttribute('name'));" id="addphoto[%$tabarray.amid%]"  href="#body" title="[%$ST.albummain_add_log2%]" hidefocus="true">[%$ST.albummain_add_log2%]</a></li>
+	[%/if%]
+	[%if @this->powercheck('communicate','albumfileedit')==true %]
+	<li class="menumain"><a id="refreshfile" class="dbupdatefile" onclick="javascript:sortinput('index.php?archive=albummain&action=refreshphoto&amid=[%$tabarray.amid%]', 'index.php?archive=management&action=load', '[%$ST.update_photomessok%]', true, '[%$ST.run_ok%]', '[%$ST.run_no%]', 'selectform', 'selectall', 'check_all', 'selectinfoid', 'selectinfoid');" href="#body" title="[%$ST.albummain_botton_refreshphoth%]" hidefocus="true">[%$ST.albummain_botton_refreshphoth%]</a></li>
+	<li class="menumain"><a id="upfiledir" class="dbupfilebotton" onclick="javascript:parent.windowsdig('[%$ST.imgupload_botton%]', 'iframe:index.php?archive=filemanage&action=filewindow&listfunction=filelist&filetype=img&isgetback=2&checkfrom=list&amid=[%$tabarray.amid%]&iframename=' + self.frameElement.getAttribute('name'), '900px', '480px', 'iframe')" href="#body" title="[%$ST.imgupload_botton%]" hidefocus="true">[%$ST.imgupload_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	<li class="menumain"><a id="bolt" href="#body" hidefocus="true" hidefocus="true">[%$ST.bolt_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.seomanage_text_class%]</span>
+				<ul>
+					<li><a class="menunoclick" id="isrecomm0" href="#body" onclick="javascript:dbfilter('isrecomm','isrecomm',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="isrecomm1" href="#body" onclick="javascript:dbfilter('isrecomm','isrecomm',1,1,3,'selectform','selectall','check_all')" title="[%$ST.seomanage_audit_ok%]" hidefocus="true">[%$ST.seomanage_audit_ok%]</a></li>
+					<li><a class="menuclick" id="isrecomm2" href="#body" onclick="javascript:dbfilter('isrecomm','isrecomm',2,2,3,'selectform','selectall','check_all')" title="[%$ST.seomanage_audit_no%]" hidefocus="true">[%$ST.seomanage_audit_no%]</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	[%if @this->powercheck('communicate','albumfiledel')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:callrun('index.php?archive=albummain&action=albumfiledel','selectinfoid',false,null,null,'index.php?archive=management&action=load','[%$ST.del_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	[%if @this->powercheck('communicate','albumfileedit')==true %]
+	<li class="menumain"><a id="sortall" onclick="javascript:sortinput('index.php?archive=albummain&action=sort','index.php?archive=management&action=load','[%$ST.sort_messok%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all','infoid','infopid');" href="#body" title="[%$ST.article_log_sort%]" hidefocus="true">[%$ST.pid_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+	[%if @this->powercheck('communicate','albumfileedit')==true %]
+	<li class="menumain"><a id="setbotton" href="#body" hidefocus="true" title="[%$ST.set_botton%]">[%$ST.set_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.seomanage_text_class%]</span>
+				<ul>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=albummain&action=filesetting','selectinfoid',true,'isrecomm',1,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.seomanage_audit_ok%]" hidefocus="true">[%$ST.seomanage_audit_ok%]</a></li>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=albummain&action=filesetting','selectinfoid',true,'isrecomm',0,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.seomanage_audit_no%]" hidefocus="true">[%$ST.seomanage_audit_no%]</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	[%/if%]
+</ul>
+[%/if%]      

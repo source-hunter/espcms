@@ -2,11 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class important extends connector {
@@ -14,16 +13,11 @@ class important extends connector {
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onpaylist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
@@ -34,13 +28,10 @@ class important extends connector {
 			if ($isclass == 2) $isclass = 0;
 			$db_where.=' AND isclass=' . $isclass;
 		}
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'opid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
-
 		$db_table = db_prefix . 'order_pay';
 		if (!empty($countnum)) {
 			$countnum = $this->db_numrows($db_table, $db_where);
@@ -56,16 +47,13 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('order/order_paylist');
 	}
-
 	function onpayplugadd() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
 		$plugcode = $this->fun->accept('plugcode', 'R');
-
 		$pluglist = $this->fun->readplug(admin_ROOT . 'public/plug/payment');
 		$plugcode = empty($plugcode) ? $pluglist[0]['code'] : $plugcode;
-
 		$modulesid = true;
 		$modules = array();
 		require admin_ROOT . 'public/plug/payment/' . $plugcode . '.php';
@@ -74,11 +62,9 @@ class important extends connector {
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->assign('pluglist', $pluglist);
 		$this->ectemplates->assign('paylist', $paylist);
-
 		$this->ectemplates->assign('paylist_config', $paylist['config']);
 		$this->ectemplates->display('order/order_payplugadd');
 	}
-
 	function onpayplugedit() {
 		parent::start_template();
 		$opid = $this->fun->accept('opid', 'G');
@@ -91,9 +77,7 @@ class important extends connector {
 		$this->ectemplates->assign('paylist_config', $paylist);
 		$this->ectemplates->display('order/order_payplugedit');
 	}
-
 	function onpaysave() {
-
 		$inputclass = $this->fun->accept('inputclass', 'P');
 		$payname = $this->fun->accept('payname', 'P');
 		$paycontent = $this->fun->accept('paycontent', 'P');
@@ -101,14 +85,12 @@ class important extends connector {
 		$plugcode = $this->fun->accept('plugcode', 'P');
 		$version = $this->fun->accept('version', 'P');
 		$inputvalue = $this->fun->accept('inputvalue', 'P');
-
 		$inputname = $this->fun->accept('inputname', 'P');
 		$inputtype = $this->fun->accept('inputtype', 'P');
 		$inputvalue = $this->fun->accept('inputvalue', 'P');
 		$botname = $this->fun->accept('botname', 'P');
 		$bakcontent = $this->fun->accept('bakcontent', 'P');
 		$sevaluearray = $this->fun->accept('sevalue', 'P');
-
 		$payconfig = array();
 		if (is_array($inputvalue) && isset($inputvalue)) {
 			for ($i = 0; $i < count($inputvalue); $i++) {
@@ -144,11 +126,8 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onattrindex() {
-
 		$plugcode = $this->fun->accept('code', 'G');
-
 		$modulesid = true;
 		$modules = array();
 		require admin_ROOT . 'public/plug/payment/' . $plugcode . '.php';
@@ -216,7 +195,6 @@ class important extends connector {
 		$attrlist.='</table>';
 		exit($attrlist);
 	}
-
 	function onsort() {
 		$db_table = db_prefix . 'order_pay';
 		$id = $this->fun->accept('infoid', 'P');
@@ -235,7 +213,6 @@ class important extends connector {
 		$this->dbcache->clearcache('orderpay_array', true);
 		exit('true');
 	}
-
 	function onsetting() {
 		$db_table = db_prefix . 'order_pay';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -250,7 +227,6 @@ class important extends connector {
 		$this->dbcache->clearcache('orderpay_array', true);
 		exit('true');
 	}
-
 	function onpayplugdel() {
 		$db_table = db_prefix . 'order_pay';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -269,5 +245,3 @@ class important extends connector {
 	}
 
 }
-
-?>

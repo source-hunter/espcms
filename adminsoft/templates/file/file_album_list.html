@@ -5,7 +5,7 @@
 		<tr>
 			<td width="5%"><input type="checkbox" name="selectinfoid" value="[%$array[list].amid%]"></td>
 			<td width="10%">[%$array[list].amid%]</td>
-			<td width="40%">[%$array[list].title%]</td>
+			<td width="30%">[%$array[list].title%]</td>
 			<td width="15%">[%$array[list].addtime|timeformat(3)%]</td>
 			<td width="10%" id="infotype">
 				<table>
@@ -14,7 +14,7 @@
 					</tr>
 				</table>
 			</td>
-			<td width="20%" id="infotype">
+			<td width="30%" id="infotype">
 				[%if @this->powercheck('communicate','albumedit')==true %]
 				<table border="0" style="border-collapse:collapse" bordercolor="#FFFFFF">
 					<tr>
@@ -36,4 +36,4 @@
 		</tr>
 	</table>
 </div>
-[%/if%]
+[%/if%]      

@@ -1,0 +1,40 @@
+[%#%]表单列表[%#%]
+[%if $menutype == 'formlist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('communicate','formadd')==true %]
+	<li class="menumain"><a id="addinfo" class="addinfo" onclick="javascript:parent.onbotton('[%$ST.botton_add_formadd|addslashes('hc')%]','index.php?archive=formmain&action=formadd&tab=true&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'addinfo',self.frameElement.getAttribute('name'));"  href="#body" title="[%$ST.botton_add_formadd%]" hidefocus="true">[%$ST.botton_add_formadd%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	<li class="menumain"><a id="bolt" href="#body" hidefocus="true" hidefocus="true">[%$ST.bolt_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.user_type_botton%]</span>
+				<ul>
+					<li><a class="menunoclick" id="isclass0" href="#body" onclick="javascript:dbfilter('isclass','isclass',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="isclass1" href="#body" onclick="javascript:dbfilter('isclass','isclass',1,1,3,'selectform','selectall','check_all')" title="[%$ST.open_botton_title%]" hidefocus="true">[%$ST.open_botton_title%]</a></li>
+					<li><a class="menuclick" id="isclass2" href="#body" onclick="javascript:dbfilter('isclass','isclass',2,2,3,'selectform','selectall','check_all')" title="[%$ST.close_botton_title%]" hidefocus="true">[%$ST.close_botton_title%]</a></li>
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.formmain_isseccode_botton%]</span>
+				<ul>
+					<li><a class="menunoclick" id="isseccode0" href="#body" onclick="javascript:dbfilter('isseccode','isseccode',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="isseccode1" href="#body" onclick="javascript:dbfilter('isseccode','isseccode',1,1,3,'selectform','selectall','check_all')" title="[%$ST.formmain_isseccode_ok%]" hidefocus="true">[%$ST.formmain_isseccode_ok%]</a></li>
+					<li><a class="menuclick" id="isseccode2" href="#body" onclick="javascript:dbfilter('isseccode','isseccode',2,2,3,'selectform','selectall','check_all')" title="[%$ST.formmain_isseccode_no%]" hidefocus="true">[%$ST.formmain_isseccode_no%]</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+	[%if @this->powercheck('communicate','formedit')==true %]
+	<li class="menumain"><a id="setbotton" href="#body" hidefocus="true" title="[%$ST.set_botton%]">[%$ST.set_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.user_type_set_botton%]</span>
+				<ul>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=formmain&action=formsetting','selectinfoid',true,'isclass',1,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.open_botton_title%]" hidefocus="true">[%$ST.open_botton_title%]</a></li>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=formmain&action=formsetting','selectinfoid',true,'isclass',0,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.close_botton_title%]" hidefocus="true">[%$ST.close_botton_title%]</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	[%/if%]
+</ul>
+[%/if%]      

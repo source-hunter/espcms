@@ -4,9 +4,8 @@
   PHP version 5
   Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
   警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
-
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class important extends connector {
@@ -17,13 +16,9 @@ class important extends connector {
 
 	function onmemberlist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
@@ -65,13 +60,10 @@ class important extends connector {
 		if (!empty($serchekey)) {
 			$db_where.=" AND $keyname like '%$serchekey%'";
 		}
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'userid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
-
 		$db_table = db_prefix . 'member';
 		if (!empty($countnum)) {
 			$countnum = $this->db_numrows($db_table, $db_where);
@@ -94,7 +86,6 @@ class important extends connector {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'R');
 		$tab = empty($tab) ? 'true' : $tab;
-
 		$memberpuv = $this->get_member_purview_array();
 		$this->ectemplates->assign('memberpuvlist', $memberpuv['list']);
 		$this->ectemplates->display("member/member_search");
@@ -105,16 +96,12 @@ class important extends connector {
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
 		$this->ectemplates->assign('tab', $tab);
-
 		$lng = $this->sitelng;
 		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
-
 		$attrread = $this->get_memberatt_array($lng);
 		$this->ectemplates->assign('modelatt', $attrread);
-
 		$memberpuv = $this->get_member_purview_array();
 		$this->ectemplates->assign('memberpuvlist', $memberpuv['list']);
-
 		$this->ectemplates->assign('defaultinput', $this->CON);
 		$this->ectemplates->assign('lng', $lng);
 		$this->ectemplates->display('member/member_add');
@@ -124,17 +111,13 @@ class important extends connector {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
-
 		$isclose = $this->fun->accept('isclose', 'G');
 		$isclose = empty($isclose) ? 0 : $isclose;
-
 		$lng = $this->sitelng;
 		$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
-
 		$userid = $this->fun->accept('userid', 'R');
 		if (empty($userid)) exit('false');
 		$rsList = $this->get_member_attvalue($userid);
-
 		$modelatt = $this->get_memberatt_array($lng, false);
 		if (is_array($modelatt)) {
 			foreach ($modelatt as $key => $value) {
@@ -157,10 +140,8 @@ class important extends connector {
 			}
 		}
 		$this->ectemplates->assign('modelatt', $modelatt);
-
 		$memberpuv = $this->get_member_purview_array($rsList['mcid']);
 		$this->ectemplates->assign('memberpuvlist', $memberpuv['list']);
-
 		$this->ectemplates->assign('defaultinput', $this->CON);
 		$this->ectemplates->assign('memread', $rsList);
 		$this->ectemplates->assign('lng', $lng);
@@ -209,34 +190,23 @@ class important extends connector {
 		if (!preg_match("/^[^!@~`\'\"#\$\%\^&\*\(\)\+\-\{\}\[\]\|\\/\?\<\>\,\.\:\;]{2,16}$/i", $username)) {
 			exit('false');
 		}
-
 		$isclass = $this->CON['mem_isclass'] ? 0 : 1;
-
 		$modelatt = $this->get_memberatt_array($lng);
-
 		$modelarray = array();
-
 		$modelsysarray = array();
 		if (is_array($modelatt)) {
 			foreach ($modelatt as $key => $value) {
-
 				if ($value['inputtype'] == 'htmltext') {
-
 					$value['accept'] = 'html';
 				} elseif ($value['inputtype'] == 'checkbox') {
-
 					$value['accept'] = 'checkbox';
 				} elseif ($value['inputtype'] == 'string' || $value['inputtype'] == 'img' || $value['inputtype'] == 'addon' || $value['inputtype'] == 'video' || $value['inputtype'] == 'select' || $value['inputtype'] == 'radio' || $value['inputtype'] == 'selectinput') {
-
 					$value['accept'] = 'text';
 				} elseif ($value['inputtype'] == 'editor' || $value['inputtype'] == 'text') {
-
 					$value['accept'] = 'editor';
 				} elseif ($value['inputtype'] == 'int' || $value['inputtype'] == 'float' || $value['inputtype'] == 'decimal') {
-
 					$value['accept'] = 'int';
 				} elseif ($value['inputtype'] == 'datetime') {
-
 					$value['accept'] = 'data';
 				}
 				if (!$value['lockin'] && !$value['issys']) {
@@ -245,10 +215,7 @@ class important extends connector {
 					$modelsysarray[] = $value;
 				}
 			}
-
-
 			$userinstall = null;
-
 			$userinstalldb = null;
 			foreach ($modelarray as $key => $value) {
 				$userinstall.=$value['attrname'] . ',';
@@ -279,25 +246,21 @@ class important extends connector {
 				}
 			}
 		}
-
 		$db_table = db_prefix . 'member';
 		$db_table2 = db_prefix . 'member_value';
 		$date = time();
 		if ($inputclass == 'add') {
 			$password = md5($this->fun->accept('password', 'P'));
 			$password2 = $this->fun->accept('password', 'P');
-
 			$db_field = 'username,password,email,question,answer,sex,birthday,country,province,city,district,alias,address,zipcode,tel,mobile,qq,msn,integral,visitcount,lastip,addtime,lasttime,mcid,isclass';
 			$db_values = "'$username','$password','$email','$question','$answer',$sex,$birthday,$country,$province,$city,$district,'$alias','$address',$zipcode,'$tel','$mobile',$qq,'$msn',$integral,0,0,$date,$date,$mcid,$isclass";
 			$this->db->query('INSERT INTO ' . $db_table . ' (' . $db_field . ') VALUES (' . $db_values . ')');
 			$insert_id = $this->db->insert_id();
-
 			if (!empty($userinstalldb) && !empty($userinstall)) {
 				$db_field = $userinstall . 'userid';
 				$db_values = $userinstalldb . $insert_id;
 				$this->db->query('INSERT INTO ' . $db_table2 . ' (' . $db_field . ') VALUES (' . $db_values . ')');
 			}
-
 			if ($this->CON['mem_isucenter']) {
 				$uid = uc_user_register($username, $password2, $email);
 			}
@@ -313,9 +276,7 @@ class important extends connector {
 			$db_where = 'userid=' . $userid;
 			$db_set = "password='$password',email='$email',question='$question',answer='$answer',sex=$sex,birthday=$birthday,country=$country,province=$province,city=$city,district=$district,alias='$alias',address='$address',zipcode=$zipcode,tel='$tel',mobile='$mobile',qq=$qq,msn='$msn',mcid=$mcid,integral=$integral";
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
-
 			if ($userinstalldb) {
-
 				if ($mvid) {
 					$db_where = 'userid=' . $userid . ' AND mvid=' . $mvid;
 					$db_values = substr($userupdatedb, 0, strlen($userupdatedb) - 1);
@@ -352,7 +313,6 @@ class important extends connector {
 		$db_where = "id=$id";
 		$newpassword = md5(888888);
 		$db_set = "password='$newpassword'";
-
 		if ($MEM['ucmemberclass']) {
 			$datalist = uc_get_user($username);
 			if ($datalist) {
@@ -361,7 +321,7 @@ class important extends connector {
 			}
 		}
 		$this->dbuser->db_update($db_table, $db_set, $db_where);
-		$this->writelog($ST['TITLE_PASSWORD_LOGTITLE'], $ST['TITLE_LOG_OK'] . ' id=' . $id);
+		$this->writelog($this->lng['TITLE_PASSWORD_LOGTITLE'], $this->lng['TITLE_LOG_OK'] . ' id=' . $id);
 		exit('true');
 	}
 
@@ -378,11 +338,9 @@ class important extends connector {
 		if ($count <= 0) exit('false');
 		for ($i = 0; $i < $count; $i++) {
 			$db_where = "userid=$infoarray[$i]";
-
 			if ($this->CON['mem_isucenter']) {
 				$username = $this->get_member(null, $infoarray[$i], 'username');
 				$data = uc_get_user($username);
-
 				if ($data) {
 					$delid = uc_user_delete($data[0]);
 				}
@@ -448,7 +406,6 @@ class important extends connector {
 		if (!is_array($info)) {
 			exit('{"postvlue":"false"}');
 		}
-
 		$str = '{';
 		$str.= '"postvlue":"true","alias":"' . $info['alias'] . '",';
 		$str.= '"userid":"' . $info['userid'] . '",';
@@ -466,5 +423,3 @@ class important extends connector {
 	}
 
 }
-
-?>

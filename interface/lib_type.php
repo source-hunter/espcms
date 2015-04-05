@@ -2,11 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2010 ECISP.CN
-  声明：这不是一个免费的软件，请在许可范围内使用
-
-  作者：Bili E-mail:huangqyun@163.com  QQ:6326420
-  http://www.ecisp.cn	http://www.easysitepm.com
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class lib_type extends connector {
@@ -14,15 +13,9 @@ class lib_type extends connector {
 	function lib_type() {
 		$this->softbase();
 		parent::start_pagetemplate();
-
 		$this->pagetemplate->libfile = true;
 	}
-
-
-
-
-
-	function call_type($lng, $para, $filename='typelist', $outHTML=null) {
+	function call_type($lng, $para, $filename = 'typelist', $outHTML = null) {
 		$para = $this->fun->array_getvalue($para);
 		$lngpack = $lng ? $lng : $this->CON['is_lancode'];
 		$lng = ($lng == 'big5') ? $this->CON['is_lancode'] : $lng;
@@ -30,7 +23,6 @@ class lib_type extends connector {
 		$tid = intval($para[1]);
 		$now_tid = intval($para[2]);
 		if (empty($tid)) {
-
 			$tid = !empty($now_tid) ? $now_tid : $tid;
 			if (empty($tid)) {
 				return false;
@@ -56,15 +48,10 @@ class lib_type extends connector {
 		}
 		return $outsput;
 	}
-
-
-
-
 	function field_type($tid, $returnname = 'typename', $lng = '') {
 		if (empty($tid)) return false;
 		$lngpack = $lng ? $lng : $this->CON['is_lancode'];
 		$lng = ($lng == 'big5') ? $this->CON['is_lancode'] : $lng;
-
 		$returnname = empty($returnname) ? 'typename' : $returnname;
 		$typeread = $this->get_type($tid);
 		$typeread['link'] = $this->get_link('type', $typeread, $lngpack);
@@ -72,5 +59,3 @@ class lib_type extends connector {
 	}
 
 }
-
-?>

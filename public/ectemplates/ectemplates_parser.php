@@ -2,10 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2010 ECISP.CN
-  声明：这不是一个免费的软件，请在许可范围内使用
-  作者：Bili E-mail:huangqyun@163.com  QQ:6326420
-  http://www.ecisp.cn	http://www.easysitepm.com
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class EctemplatesParser {
@@ -23,50 +23,28 @@ class EctemplatesParser {
 		$this->cache_dir = $cache_dir;
 		$this->templatesDIR = $templatesDIR;
 		$this->cache_time = $cache_time;
-
 		$this->echash = $echash;
-
 		$this->includeechash = "826870a379354a6b252b0af7b0331b7f";
-
 		$this->linkechash = "885BA145EFC8431D34F5CC06D142F143";
 		$this->caching = $caching;
-
 		$this->left_delimiter = preg_quote($left_delimiter);
-
 		$this->right_delimiter = preg_quote($right_delimiter);
-
 		$this->set_file($file_name);
-
 		$this->_parse_common();
-
 		$this->_parse_var();
-
 		$this->_parse_dblist();
-
 		$this->_parse_for();
-
 		$this->_parse_if();
-
 		$this->_parse_fun();
-
 		$this->_parse_link();
-
 		$this->_parse_include();
-
 		$this->_parse_find();
-
 		$this->_parse_beark();
-
 		$this->_parse_class();
-
 		$this->_parse_get();
-
 		$this->_parse_list();
-
 		$this->_parse_echo();
-
 		$tpl_c_file = $this->tpl_c_dir . md5($file_name) . '.php';
-
 		$fp = fopen($tpl_c_file, 'w');
 		fwrite($fp, $this->template);
 		fclose($fp);
@@ -81,7 +59,6 @@ class EctemplatesParser {
 		$fp = fopen($file, 'r');
 		if (!$fp) exit('错误：(' . $errfile . ')不能打开文件');
 		if (filesize($file)) {
-
 			$this->template = fread($fp, filesize($file));
 		} else {
 			exit('错误：(' . $errfile . ')模板文件大小为零');
@@ -100,10 +77,8 @@ class EctemplatesParser {
 
 	private function _parse_var() {
 		if (preg_match('/' . $this->left_delimiter . '\s*\\$[a-zA-Z0-9_]{1,}|$[a-zA-Z0-9_]{1,}\s*\|\s*([a-zA-Z_]+)\[([^]]+)\]\s*' . $this->right_delimiter . '/', $this->template)) {
-
 			$patten = '/\$([A-Za-z]+[\w]+)/';
 			$this->template = preg_replace($patten, "\$this->_tpl_vars['$1']", $this->template);
-
 			$patten = '/(\$this->_tpl_vars\[\'[\w]+\'\])\.([\w]+)/';
 			$this->template = preg_replace($patten, "\$1['$2']", $this->template);
 		}
@@ -158,16 +133,13 @@ class EctemplatesParser {
 			preg_match_all('/' . $this->left_delimiter . '\s*get[^\f]*?\/get' . $this->right_delimiter . '/', $this->template, $getarray);
 			foreach ($getarray[0] as $key => $variable) {
 				$bearkarray = array();
-				preg_match_all('/' . $this->left_delimiter . '\s*get\s*name\s*=\s*([0-9a-zA-Z_]+)\s*(class=\s*([^%]+)|)*\s*' . $this->right_delimiter . '/', $variable, $bearkarray);
+				preg_match_all('/' . $this->left_delimiter . '\s*get\s*name\s*=\s*([0-9a-zA-Z_]+)\s*(iscache=\s*([0-9]{1})|)\s*(cachefile=\s*([^\s]+)|)\s*(class=\s*([^%]+)|)*\s*' . $this->right_delimiter . '/', $variable, $bearkarray);
 				$newbearkText = $this->_parse_array__get($bearkarray, $this->left_delimiter, $this->right_delimiter);
-
 				$getout = str_replace($bearkarray[0][0], $newbearkText, $variable);
-
-				$value_strget = '/' . $this->left_delimiter . '\s*get\s*name\s*=\s*([0-9a-zA-Z_]+)\s*(class=\s*([^%]+)|)' . $this->right_delimiter . '/';
+				$value_strget = '/' . $this->left_delimiter . '\s*get\s*name\s*=\s*([0-9a-zA-Z_]+)\s*(iscache=\s*([0-9]{1})|)\s*(cachefile=\s*([0-9a-zA-Z_,<\?\>\=\$\[\]\'\s-]+)|)\s*(class=\s*([^%]+)|)' . $this->right_delimiter . '/';
 				$value_endget = '/' . $this->left_delimiter . '\s*\/get\s*' . $this->right_delimiter . '/';
-				$getout = preg_replace($value_strget, $this->gethash . '$1|$3|' . $this->gethashtable, $getout);
+				$getout = preg_replace($value_strget, $this->gethash . '$1|$7|$3|$5|' . $this->gethashtable, $getout);
 				$getout = preg_replace($value_endget, $this->gethash, $getout);
-
 				$rec_book = '/' . preg_quote($bearkarray[0][0]) . '[^\f]*?' . $this->left_delimiter . '\s*\/get\s*' . $this->right_delimiter . '/';
 				$this->template = preg_replace($rec_book, $getout, $this->template);
 			}
@@ -179,43 +151,37 @@ class EctemplatesParser {
 			$this->template = preg_replace('/<meta\shttp-equiv=["|\']Content-Type["|\']\scontent=["|\']text\/html;\scharset=(?:.*?)["|\']>\r?\n?/i', '', $this->template);
 		}
 		if (preg_match('/' . $this->left_delimiter . '\s*list\s*name\s*=\s*[0-9a-zA-Z_]+/', $this->template)) {
-			preg_match_all('/' . $this->left_delimiter . '\s*list\s*name\s*=\s*([0-9a-zA-Z_]+)\s*(file=\s*([0-9a-zA-Z_,]+)|)\s*(class=\s*([^%]+)|)' . $this->right_delimiter . '/', $this->template, $bearkarray);
+			preg_match_all('/' . $this->left_delimiter . '\s*list\s*name\s*=\s*([0-9a-zA-Z_]+)\s*(file=\s*([0-9a-zA-Z_,]+)|)\s*(iscache=\s*([0-9]{1})|)\s*(cachefile=\s*([^\s]+)|)\s*(class=\s*([^%]+)|)' . $this->right_delimiter . '/', $this->template, $bearkarray);
 			foreach ($bearkarray[0] as $key => $variable) {
-				if (!empty($bearkarray[5][$key])) {
-					$textarray = array($bearkarray[0][$key], $bearkarray[1][$key], $bearkarray[2][$key], $bearkarray[3][$key], $bearkarray[4][$key], $bearkarray[5][$key]);
+				if (!empty($bearkarray[9][$key])) {
+					$textarray = array($bearkarray[0][$key], $bearkarray[1][$key], $bearkarray[2][$key], $bearkarray[3][$key], $bearkarray[4][$key], $bearkarray[5][$key], $bearkarray[6][$key], $bearkarray[7][$key], $bearkarray[8][$key], $bearkarray[9][$key]);
 					$newbearkText = $this->_parse_array__list($textarray, $this->left_delimiter, $this->right_delimiter);
 					$this->template = str_replace($variable, $newbearkText, $this->template);
 				}
 			}
-			$value_beark = '/' . $this->left_delimiter . '\s*list\s*name\s*=\s*([0-9a-zA-Z_]+)\s*(file=\s*([0-9a-zA-Z_,]+)|)\s*(class=\s*([^%]+)|)' . $this->right_delimiter . '/';
-			$this->template = preg_replace($value_beark, $this->_listechash . '$1|$5|$3|' . $this->_listechash, $this->template);
+			$value_beark = '/' . $this->left_delimiter . '\s*list\s*name\s*=\s*([0-9a-zA-Z_]+)\s*(file=\s*([0-9a-zA-Z_,]+)|)\s*(iscache=\s*([0-9]{1})|)\s*(cachefile=\s*([0-9a-zA-Z_,<\?\>\=\$\[\]\'\s-]+)|)\s*(class=\s*([^%]+)|)' . $this->right_delimiter . '/';
+			$this->template = preg_replace($value_beark, $this->_listechash . '$1|$9|$3|$5|$7|' . $this->_listechash, $this->template);
 		}
 	}
 
 	private function _parse_for() {
 		if (preg_match('/' . $this->left_delimiter . '\s*forlist[^\n]+' . $this->right_delimiter . '/', $this->template)) {
 			if (preg_match('/' . $this->left_delimiter . '\s*\/forlist\s*' . $this->right_delimiter . '/', $this->template)) {
-
-
 				preg_match_all('/\$this->_tpl_vars\[[\w\']+\]\[[\w]+\]\.[\w\[\]\.\\(\)\']+/', $this->template, $valueAt);
 				foreach ($valueAt[0] as $key => $variable) {
 					$arraylistNew = $this->_parse_value_preg($variable);
 					$this->template = preg_replace('/' . preg_quote($variable) . '/', $arraylistNew, $this->template, 1);
 				}
-
 				preg_match_all('/' . $this->left_delimiter . '\s*forlist\s*([$\w-\>\=.\s\[\]\']+)\s*' . $this->right_delimiter . '/', $this->template, $forlistarray);
 				for ($i = 0; $i < count($forlistarray[0]); $i++) {
 					$tag_args = $forlistarray[0][$i];
 					$attrs = $this->_parse_array_tag($tag_args);
 					if (empty($attrs['key'])) trigger_error('错误：FORLIST语句未设置key参数', E_USER_ERROR);
 					if (empty($attrs['from'])) trigger_error('错误：FORLIST语句未设置FROM参数', E_USER_ERROR);
-
 					$value_forlist = '/key=>([\w]*)/';
 					$this->template = preg_replace($value_forlist, "$$1+1", $this->template);
-
 					$value_forlist = '/list=>([\w]*)/';
 					$this->template = preg_replace($value_forlist, "$$1", $this->template);
-
 					$value_forlist = '/' . $this->left_delimiter . '\s*div=>([\w]+)=([\w]+)\s*' . $this->right_delimiter . '/';
 					if (preg_match($value_forlist, $this->template)) {
 						if (preg_match('/' . $this->left_delimiter . '\s*\/div=>([\w]+)\s*' . $this->right_delimiter . '/', $this->template)) {
@@ -226,16 +192,13 @@ class EctemplatesParser {
 							trigger_error('错误：div语句没有封闭', E_USER_ERROR);
 						}
 					}
-
 					$value_forlist = '/(\$this->_tpl_vars[^=]+)=>([\w]+)/';
 					$this->template = preg_replace($value_forlist, "$1[$$2]", $this->template);
-
 					$forlist_max = !empty($attrs['max']) ? $attrs['max'] : "count(" . $attrs['from'] . ")";
 					$patten_forlist = $attrs['from'];
 					$patten_forlist = '/' . $this->left_delimiter . '\s*forlist\s*' . preg_quote($forlistarray[1][$i]) . '\s*' . $this->right_delimiter . '/';
 					$this->template = preg_replace($patten_forlist, "<?php if (count(" . $attrs['from'] . ")>0){\$divid_" . $attrs['key'] . "=1;for(\$" . $attrs['key'] . "=0;\$" . $attrs['key'] . "<" . $forlist_max . "; \$" . $attrs['key'] . "++){?>", $this->template);
 				}
-
 				$end_forlist = '/' . $this->left_delimiter . '\s*\/forlist\s*' . $this->right_delimiter . '/';
 				$this->template = preg_replace($end_forlist, '<?php }} ?>', $this->template);
 			} else {
@@ -250,7 +213,6 @@ class EctemplatesParser {
 			$include_patten = '/' . $this->left_delimiter . '\s*include file=[\'|\"]([^%]+)[\'|\"]\s*' . $this->right_delimiter . '/';
 			$this->template = preg_replace($include_patten, $this->includeechash . '$1|' . $this->includeechash, $this->template);
 		}
-
 		return true;
 	}
 
@@ -269,7 +231,6 @@ class EctemplatesParser {
 			foreach ($getarray[0] as $key => $variable) {
 				$bearkarray = array();
 				preg_match_all('/' . $this->left_delimiter . '\s*find:([0-9a-zA-Z_]+)\s*class=([^\s]+)\s*out=([^%]+)\s*' . $this->right_delimiter . '/', $variable, $bearkarray);
-
 				$this->_parse_array__find($bearkarray);
 			}
 		}
@@ -342,7 +303,6 @@ class EctemplatesParser {
 			$fun_patten = '/(["|\']\s*[^"\']+\s*["|\'])\|([\w]*)\(([^\)]*)\)/';
 			$this->template = preg_replace($fun_patten, "\$this->$2($1,$3)", $this->template);
 		}
-
 		if (preg_match('/(@this->[a-zA-z0-9]+)(\([^\)]*\))/', $this->template)) {
 			$fun_patten = '/@(this->[a-zA-z0-9]+)(\([^\)]*\))/';
 			$this->template = preg_replace($fun_patten, "$$1$2", $this->template);
@@ -357,7 +317,7 @@ class EctemplatesParser {
 	}
 
 	private function _parse_array__list($bearkarray, $left_delimiter, $right_delimiter) {
-		$classvar = explode(',', $bearkarray[5]);
+		$classvar = explode(',', $bearkarray[9]);
 		$newarray = array();
 		foreach ($classvar as $key => $variable) {
 			if (strstr($variable, '$this->_tpl_vars')) {
@@ -367,13 +327,18 @@ class EctemplatesParser {
 				$newarray[$key] = $variable;
 			}
 		}
-		$bearkarray[5] = implode(',', $newarray);
+		if (strstr($bearkarray[7], '$this->_tpl_vars')) {
+			$bearkarray[7] = preg_replace('/(\$this->[^\,]+])/', "<?php echo $1 ?>", $bearkarray[7]);
+		}
+		$bearkarray[9] = implode(',', $newarray);
 		$left_delimiter = str_replace("\\", "", $left_delimiter);
 		$right_delimiter = str_replace("\\", "", $right_delimiter);
-		if ($bearkarray[5]) {
-			$newText = $left_delimiter . "list name=" . $bearkarray[1] . " " . $bearkarray[2] . " class=" . $bearkarray[5] . $right_delimiter;
+		$iscachestr = !empty($bearkarray[5]) ? " iscache=" . $bearkarray[5] : '';
+		$cachefile = !empty($bearkarray[7]) ? " cachefile=" . $bearkarray[7] : '';
+		if ($bearkarray[9]) {
+			$newText = $left_delimiter . "list name=" . $bearkarray[1] . " " . $bearkarray[2] . $iscachestr . $cachefile . " class=" . $bearkarray[9] . $right_delimiter;
 		} else {
-			$newText = $left_delimiter . "list name=" . $bearkarray[1] . " " . $bearkarray[2] . $right_delimiter;
+			$newText = $left_delimiter . "list name=" . $bearkarray[1] . " " . $bearkarray[2] . $iscachestr . $cachefile . $right_delimiter;
 		}
 		return $newText;
 	}
@@ -396,7 +361,7 @@ class EctemplatesParser {
 	}
 
 	private function _parse_array__get($bearkarray, $left_delimiter, $right_delimiter) {
-		$classvar = explode(',', $bearkarray[3][0]);
+		$classvar = explode(',', $bearkarray[7][0]);
 		$newarray = array();
 		foreach ($classvar as $key => $variable) {
 			if (strstr($variable, '$this->_tpl_vars')) {
@@ -406,13 +371,19 @@ class EctemplatesParser {
 				$newarray[$key] = $variable;
 			}
 		}
-		$bearkarray[3][0] = implode(',', $newarray);
+		if (strstr($bearkarray[5][0], '$this->_tpl_vars')) {
+			$echo_patten = '/(\$this->[^\,]+])/';
+			$bearkarray[5][0] = preg_replace($echo_patten, "<?php echo $1 ?>", $bearkarray[5][0]);
+		}
+		$bearkarray[7][0] = implode(',', $newarray);
 		$left_delimiter = str_replace("\\", "", $left_delimiter);
 		$right_delimiter = str_replace("\\", "", $right_delimiter);
-		if ($bearkarray[3][0]) {
-			$newText = $left_delimiter . "get name=" . $bearkarray[1][0] . " class=" . $bearkarray[3][0] . $right_delimiter;
+		$iscachestr = !empty($bearkarray[3][0]) ? " iscache=" . $bearkarray[3][0] : '';
+		$cachefile = !empty($bearkarray[5][0]) ? " cachefile=" . $bearkarray[5][0] : '';
+		if ($bearkarray[7][0]) {
+			$newText = $left_delimiter . "get name=" . $bearkarray[1][0] . $iscachestr . $cachefile . " class=" . $bearkarray[7][0] . $right_delimiter;
 		} else {
-			$newText = $left_delimiter . "get name=" . $bearkarray[1][0] . $right_delimiter;
+			$newText = $left_delimiter . "get name=" . $bearkarray[1][0] . $iscachestr . $cachefile . $right_delimiter;
 		}
 		return $newText;
 	}
@@ -426,8 +397,6 @@ class EctemplatesParser {
 	}
 
 	private function _parse_value_preg($value) {
-
-
 		$arraylist = preg_split("/(\])\./", $value);
 		$arraycount = count($arraylist);
 		foreach ($arraylist as $key => $variable) {
@@ -442,7 +411,6 @@ class EctemplatesParser {
 					$arraylistNew.="['$variableText'][$$variableFind]";
 				}
 			} else {
-
 				$variableFun = strrchr($variable, '|');
 				$variableText = str_replace($variableFun, '', $variable);
 				$arraylistNew.="['$variableText']$variableFun";
@@ -452,5 +420,3 @@ class EctemplatesParser {
 	}
 
 }
-
-?>

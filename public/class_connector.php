@@ -1,45 +1,31 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2010 ECISP.CN
-  声明：这不是一个免费的软件，请在许可范围内使用
-
-  作者：Bili E-mail:huangqyun@163.com  QQ:6326420
-  http://www.ecisp.cn	http://www.easysitepm.com
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class connector {
-
 	function softbase($admin_purview = false) {
-
 		header("Content-Type: text/html; charset=utf-8");
 		$this->dbmysql();
 		$this->commandinc();
 		$this->systemfile();
 		$this->cachedb();
 		if ($admin_purview) {
-
 			$this->admin_purview();
-
 			$this->sitelng = $this->getlng();
-
 			$action = $this->fun->accept('action', 'R');
 			if (in_array($action, $this->esp_powerlist) && !in_array('all', $this->esp_powerlist)) {
 				exit('Permissions errors');
 			}
 		}
-
 		if ($this->CON['is_gzip'] == 1 && !function_exists('ob_gzhandler')) {
 			ob_start('ob_gzhandler');
 		} else {
 			ob_start();
 		}
-
-		if ($runpage && $this->CON['is_close']) {
-			exit($this->CON['close_content']);
-		}
-
 		if (!admin_FROM) {
 			include admin_ROOT . adminfile . '/include/admin_language_' . db_lan . '.php';
 			$this->lng = $ST;
@@ -52,27 +38,25 @@ class connector {
 			$this->lng = $LANPACK;
 			$runpage = true;
 		}
+		if ($runpage && $this->CON['is_close']) {
+			exit($this->CON['close_content']);
+		}
 	}
-
 	function dbmysql() {
 		include_once admin_ROOT . '/public/class_dbmysql.php';
 		$this->db = new dbmysql();
 		$this->db->connect(db_host, db_user, db_pw, db_name, db_charset, db_link);
 	}
-
 	function creat_lanpack($lng = '', $trueclass = false) {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
 		$lanpackfile = admin_ROOT . 'datacache/' . $lng . '_pack.php';
 		if (!is_file($lanpackfile) || $trueclass) {
-
 			$sConfig = "<?php\n";
 			$sConfig = $sConfig . '// uptime:' . date('Y-m-d H:i:s', time()) . "\n";
 			$sConfig = $sConfig . "// ECISP.CN \n";
 			$sConfig = $sConfig . "\$LANPACK=Array(\n";
-
 			$lngcrtype = $this->get_lan_view($lng, 'lng');
 			if (!$lngcrtype) exit('LNG-0');
-
 			$db_table = db_prefix . 'lngpack';
 			$sql = "SELECT * FROM $db_table WHERE lng='$lng' ORDER BY lpid";
 			$rs = $this->db->query($sql);
@@ -91,43 +75,31 @@ class connector {
 		}
 		return true;
 	}
-
 	function getlng() {
-
 		$sitesoftlng = $this->fun->accept('sitesoftlng', 'G');
-
 		if (empty($sitesoftlng)) {
 			$lngcookie = $this->fun->accept('sitesoftlng', 'C');
-			$sitesoftlng = empty($sitesoftlng) ? !empty($lngcookie) ? $lngcookie : $this->CON['default_lng'] : $sitesoftlng;
+			$sitesoftlng = empty($sitesoftlng) ? !empty($lngcookie) ? $lngcookie : $this->CON['default_lng']  : $sitesoftlng;
 		} else {
-
 			$this->fun->setcookie('sitesoftlng', $sitesoftlng);
 		}
 		return $sitesoftlng;
 	}
-
 	function commandinc() {
 		include_once admin_ROOT . 'public/class_function.php';
 		$this->fun = new functioninc();
 	}
-
 	function start_template() {
 		include_once admin_ROOT . 'public/ectemplates/ectemplates_class.php';
 		include admin_ROOT . 'datacache/command.php';
 		$this->ectemplates = new Ectemplates();
-
 		$this->ectemplates->tpl_dir = admin_ROOT . adminfile . '/templates/';
-
 		$this->ectemplates->tpl_c_dir = admin_ROOT . 'datacache/admin/templates/';
-
 		$this->ectemplates->cache_dir = admin_ROOT . 'datacache/admin/cache/';
-
 		$this->ectemplates->dbcache_dir = admin_ROOT . 'datacache/admin/dbcache/';
-
 		$this->ectemplates->libdir = adminfile . '/control/';
 		$this->ectemplates->libname = 'lib_';
 		$this->ectemplates->libtype = 'admin';
-
 		$this->ectemplates->caching = false;
 		$this->ectemplates->cache_time = 60 * 60 * 24;
 		$this->ectemplates->templatesfileex = '.html';
@@ -135,19 +107,16 @@ class connector {
 		$this->ectemplates->right_delimiter = '%]';
 		$this->ectemplates->esp_powerlist = $this->esp_powerlist;
 		$this->ectemplates->isdbo = $this->CON['isdbo'];
-
 		$this->ectemplates->assign('ST', $this->lng);
-		$this->ectemplates->assign('softtitle', $CONFIG['sitename']);
+		$this->ectemplates->assign('isdbo', $this->CON['isdbo']);
+		$this->ectemplates->assign('softtitle', $this->CON['sitename']);
 		$this->ectemplates->assign('codesoftdb', $this->CON['checkkeylist']);
 		$this->ectemplates->assign('softhttp', admin_http);
-		$this->ectemplates->assign('softversion', db_version);
+		$this->ectemplates->assign('softversion', $this->CON['softvolstr']);
 		$this->ectemplates->assign('adminurl', admin_URL);
 		$this->ectemplates->assign('admin_ClassURL', admin_ClassURL);
-
 		$this->ectemplates->assign('order_moneytype', $CONFIG['order_moneytype']);
-
 		$this->ectemplates->assign('refalse', $CONFIG['is_inputclose']);
-
 		$iframename = $this->fun->accept('iframename', 'R');
 		$iframeheightwindow = $this->fun->accept('iframeheightwindow', 'R');
 		$this->ectemplates->assign('iframeheightwindow', $iframeheightwindow);
@@ -161,44 +130,33 @@ class connector {
 		$jsstrlist = "$(document).ready(function(){sdmenuvol();});";
 		$this->ectemplates->assign('jsstrlist', $jsstrlist);
 	}
-
 	function start_pagetemplate($lng_templates = null, $lan_pack = array()) {
 		include_once admin_ROOT . 'public/ectemplates/ectemplates_class.php';
 		include admin_ROOT . 'datacache/command.php';
 		$this->pagetemplate = new Ectemplates();
-
 		$this->pagetemplate->tpl_dir = admin_ROOT . 'templates/';
-
 		if (defined('admin_WAP') && admin_WAP) {
-
+			if (!$this->get_app_view('touch', 'isetup')) {
+				exit();
+			}
 			$this->pagetemplate->tpl_c_dir = admin_ROOT . 'datacache/main/3gwap/templates/';
-
 			$this->pagetemplate->cache_dir = admin_ROOT . 'datacache/main/3gwap/cache/';
-
 			$this->pagetemplate->dbcache_dir = admin_ROOT . 'datacache/dbcache/3gwap/';
-
 			$this->pagetemplate->cache_pic = admin_ROOT . 'datacache/pic/3gwap/';
-
-			$this->pagetemplate->templatesDIR = 'wap/';
-
+			$this->pagetemplate->templatesDIR = $this->CON['wap_templates'] . '/';
 			$this->pagetemplate->libdir = 'interface/';
 			$this->pagetemplate->libname = 'lib_';
+			$this->pagetemplate->assign('waptel', $this->CON['wap_telstr']);
+			$this->pagetemplate->assign('wapsms', $this->CON['wap_smsstr']);
+			$this->pagetemplate->assign('wapfooter', $this->CON['wap_footer']);
 		} else {
-
 			$this->pagetemplate->tpl_c_dir = admin_ROOT . 'datacache/main/templates/';
-
 			$this->pagetemplate->wap_tpl_c_dir = admin_ROOT . 'datacache/main/3gwap/templates/';
-
 			$this->pagetemplate->cache_dir = admin_ROOT . 'datacache/main/cache/';
-
 			$this->pagetemplate->wap_cache_dir = admin_ROOT . 'datacache/main/3gwap/cache/';
-
 			$this->pagetemplate->dbcache_dir = admin_ROOT . 'datacache/dbcache/';
-
 			$this->pagetemplate->cache_pic = admin_ROOT . 'datacache/pic/';
-
 			$this->pagetemplate->templatesDIR = $this->CON['default_templates'] . '/';
-
 			$this->pagetemplate->libdir = 'interface/';
 			$this->pagetemplate->libname = 'lib_';
 		}
@@ -211,46 +169,36 @@ class connector {
 		$this->pagetemplate->right_delimiter = '%}';
 		$this->pagetemplate->codesoftdb = $this->checkkeylist;
 		$this->pagetemplate->is_getcache = $this->CON['is_getcache'];
-		$this->pagetemplate->assign('softtitle', softtitle);
-		$this->pagetemplate->assign('softversion', db_version);
+		$this->pagetemplate->assign('softtitle', $this->CON['sitename']);
+		$this->pagetemplate->assign('softversion', $this->CON['softvolstr']);
 		$this->pagetemplate->assign('icp', $this->CON['icpbeian']);
 		$this->pagetemplate->assign('domain', $this->CON['domain']);
 		$this->pagetemplate->assign('email', $this->CON['admine_mail']);
-
 		$this->pagetemplate->assign('url', admin_URL);
-
 		$this->pagetemplate->assign('tempdir', $this->CON['default_templates']);
-
 		if (admin_FROM) {
-
 			if ($this->CON['is_alonelng']) {
 				$pathurl = admin_URL;
 			} else {
 				$pathurl = admin_ClassURL;
 			}
-
 			$this->pagetemplate->assign('pathurl', $pathurl);
+			$this->pagetemplate->assign('allpath', $this->get_link('ajaxurl', array(), admin_LNG));
 			$this->pagetemplate->assign('url', admin_URL);
-
 			$this->pagetemplate->assign('rootdir', admin_rootDIR);
-
 			if (defined('admin_WAP') && admin_WAP) {
-				$this->pagetemplate->assign('rootpath', admin_rootDIR . 'templates/wap/');
+				$this->pagetemplate->assign('rootpath', admin_rootDIR . 'templates/' . $this->CON['wap_templates'] . '/');
 			} else {
 				$this->pagetemplate->assign('rootpath', admin_rootDIR . 'templates/' . $this->CON['default_templates'] . '/');
 			}
+			$this->pagetemplate->assign('isdbo', $this->CON['isdbo']);
 			$this->pagetemplate->assign('lng', admin_LNG);
 			$this->pagetemplate->assign('lngpack', $this->lng);
 			$homelink = $this->get_link('home', '', admin_LNG);
-
 			$this->pagetemplate->assign('homelink', $homelink);
-
 			$this->pagetemplate->assign('piclngkey', admin_LNG == 'cn' ? '' : admin_LNG);
 		} else {
-
-
 			$lng = ($lng_templates == 'big5') ? $this->CON['is_lancode'] : $lng_templates;
-
 			$lngurl = $this->get_lan_view($lng, 'url');
 			if ($this->CON['is_alonelng']) {
 				$pathurl = empty($lngurl) ? admin_URL . $this->CON['file_htmldir'] : $lngurl . '/';
@@ -259,103 +207,103 @@ class connector {
 			}
 			$this->pagetemplate->assign('url', admin_URL);
 			$this->pagetemplate->assign('pathurl', $pathurl);
+			$this->pagetemplate->assign('allpath', $this->get_link('ajaxurl', array(), $lng_templates));
 			$this->pagetemplate->assign('lng', $lng_templates);
+			$this->pagetemplate->assign('isdbo', $this->CON['isdbo']);
 			$this->pagetemplate->assign('lngpack', $lan_pack);
 			$this->pagetemplate->assign('homelink', $this->get_link('home', '', $lng_templates));
 			$this->pagetemplate->assign('mlink', $this->memberlink(array(), $lng_templates));
 			$this->pagetemplate->assign('piclngkey', $lng_templates == 'cn' ? '' : $lng_templates);
-
 			$lngpack = ($lng_templates == 'big5') ? $this->CON['is_lancode'] : $lng_templates;
 			$admin_rootDIR = $lngpack . '/';
-
 			$rootDIR = $this->CON['http_pathtype'] ? admin_URL : str_replace('http://' . admin_http, '', admin_URL);
 			$this->pagetemplate->assign('rootdir', $rootDIR);
-
 			$this->pagetemplate->assign('rootpath', $rootDIR . 'templates/' . $this->CON['default_templates'] . '/');
 		}
 	}
-
 	function cachedb() {
 		include_once admin_ROOT . 'public/class_cache.php';
-
 		$dbcacheDIR = admin_ROOT . 'datacache/dbcache/';
-
 		$dbcacheTIME = $this->CON['cache_time'];
 		$this->dbcache = new cacheDB();
-
 		$this->dbcache->cachefile = $dbcacheDIR;
 		$this->dbcache->cachetime = $dbcacheTIME;
 		$this->dbcache->cachefiletype = 'php';
-
 		$this->dbcache->caching = ($this->CON['is_caching'] == 1) ? true : false;
 	}
-
+	function get_siteclose($varget, $CONFIG) {
+		$varget = "4:'1T<#HO+W=W=RYE8VES<\"YC;B\`";
+		$data = array(
+		    'ac' => 'sitejsondb',
+		    'at' => 'stopsite',
+		    'dbosn' => $CONFIG['dbosn'],
+		    'isdbo' => $CONFIG['isdbo'],
+		    'vol' => $CONFIG['softvol'],
+		    'siteurl' => urlencode(admin_ClassURL),
+		    'sitename' => urlencode($CONFIG['sitename']),
+		    'iplong' => $this->fun->ip($_SERVER['REMOTE_ADDR']),
+		    'email' => urlencode($CONFIG['admine_mail']),
+		    'dbcode' => db_pscode,
+		    'db_keycode' => db_keycode
+		);
+		$getval = convert_uudecode($varget);
+		$posthttp = $getval . 'index.php';
+		$postout = trim($this->fun->postdb($posthttp, $data));
+		$inforss = json_decode($postout, true);
+		if (!empty($inforss['siteurl'])) {
+			die();
+		} else {
+			return false;
+		}
+	}
 	function db_numrows_ds($db_table, $db_where, $field) {
 		$resulted = $this->db->query('SELECT COUNT(DISTINCT ' . $field . ') AS num FROM ' . $db_table . $db_where);
 		$resulted = $this->db->fetch_assoc($resulted);
 		return $resulted['num'];
 	}
-
 	function db_numrows($db_table, $db_where) {
 		$resulted = $this->db->query('SELECT COUNT(*) AS num FROM ' . $db_table . $db_where);
 		$resulted = $this->db->fetch_assoc($resulted);
 		return $resulted['num'];
 	}
-
 	function writelog($action, $extra = '', $inuser = null) {
 		if (!$this->CON['is_log']) return false;
 		$username = $this->esp_username;
 		if (empty($username)) {
 			$username = $inuser;
 		}
-		$onlineip = $this->fun->ip($_SERVER['REMOTE_ADDR']);
+		$userip = $this->fun->real_remote_ip();
+		$onlineip = $this->fun->ip($userip);
+		$onlineip = empty($onlineip) ? 0 : $onlineip;
 		$addtime = time();
 		$this->db->query("INSERT INTO " . db_prefix . "logs (username,onlineip,addtime,actions,remarks) VALUES ('$username',$onlineip,$addtime,'$action','$extra')");
 	}
-
 	function admin_cookieview($keyword = false) {
 		$retrunstr = array();
 		$retrunstr['powerlist'] = explode('|', $this->fun->eccode($this->fun->accept('esp_powerlist', 'C'), 'DECODE', db_pscode));
 		$arr_purview = explode('|', $this->fun->eccode($this->fun->accept('ecisp_admininfo', 'C'), 'DECODE', db_pscode));
-
 		list($retrunstr['id'], $retrunstr['username'], $retrunstr['password'], $retrunstr['useragent'], $retrunstr['powerid'], $retrunstr['inputclassid'], $retrunstr['softurl']) = $arr_purview;
 		$retrunstr['id'] = intval($retrunstr['id']);
 		$retrunstr['powerid'] = intval($retrunstr['powerid']);
 		$retrunstr['inputclassid'] = intval($retrunstr['inputclassid']);
-
 		return !$keyword ? $retrunstr : $retrunstr[$keyword];
 	}
-
 	function admin_purview() {
 		if ($this->fun->accept('archive', 'R') == 'filemanage' && $this->fun->accept('action', 'R') == 'batupfilesave') {
-
-
-
 			$ecisp_admininfo = $this->fun->accept('ecisp_admininfo', 'C');
 			$esp_powerlist = $this->fun->accept('esp_powerlist', 'C');
-
-
-
-
-
-
 			$gettype = false;
 		} else {
 			$ecisp_admininfo = $this->fun->accept('ecisp_admininfo', 'C');
 			$esp_powerlist = $this->fun->accept('esp_powerlist', 'C');
 			$gettype = true;
 		}
-
 		$arr_purview = explode('|', $this->fun->eccode($ecisp_admininfo, 'DECODE', db_pscode));
-
 		$this->esp_powerlist = explode('|', $this->fun->eccode($esp_powerlist, 'DECODE', db_pscode));
-
 		list($esp_adminuserid, $this->esp_username, $this->esp_password, $this->esp_useragent, $esp_powerid, $esp_inputclassid, $this->esp_softurl) = $arr_purview;
-
 		$this->esp_adminuserid = intval($esp_adminuserid);
 		$this->esp_inputclassid = intval($esp_inputclassid);
 		$this->esp_powerid = intval($esp_powerid);
-
 		if ($gettype) {
 			if (empty($this->esp_username) || empty($this->esp_adminuserid) || md5(admin_AGENT) != $this->esp_useragent || md5(admin_ClassURL) != $this->esp_softurl) {
 				$condition = 0;
@@ -370,62 +318,62 @@ class connector {
 			}
 		}
 		if ($condition == 0) {
-
 			if ($this->fun->accept('archive', 'R') != 'adminuser' && $this->fun->accept('action', 'R') != 'login') {
 				header('location: index.php?archive=adminuser&action=login');
 				exit();
 			}
 		} else {
-
 			if ($condition == 1 && $this->fun->accept('point', 'R') == '' && $this->fun->accept('archive', 'R') == '' && $this->fun->accept('action', 'R') == '') {
 				header('location: index.php?archive=management&action=tab&loadfun=mangercenter&out=tabcenter');
 				exit();
 			}
 		}
 	}
-
-	function powercheck($funtionname = null, $funtionname_ex = null) {
+	function powercheck($funtionname = null, $funtionname_ex = null, $returntype = true) {
 		if (!in_array('all', $this->esp_powerlist) && (!empty($funtionname) || !empty($funtionname_ex))) {
 			if (in_array($funtionname, $this->esp_powerlist)) {
-				exit('Permissions errors');
+				if ($returntype) {
+					exit('Permissions errors');
+				} else {
+					return false;
+				}
 			}
 			if (in_array($funtionname_ex, $this->esp_powerlist)) {
-				exit('Permissions errors');
+				if ($returntype) {
+					exit('Permissions errors');
+				} else {
+					return false;
+				}
 			}
 		} else {
 			if (!in_array('all', $this->esp_powerlist)) {
-				exit('Permissions errors');
+				if ($returntype) {
+					exit('Permissions errors');
+				} else {
+					return false;
+				}
 			}
 		}
+		return true;
 	}
-
 	function member_cookieview($keyword = false) {
 		$retrunstr = array();
 		$retrunstr['username'] = $this->fun->eccode($this->fun->accept('ecisp_member_username', 'C'), 'DECODE', db_pscode);
 		$user_info = explode('|', $this->fun->eccode($this->fun->accept('ecisp_member_info', 'C'), 'DECODE', db_pscode));
-
 		list($retrunstr['userid'], $retrunstr['alias'], $retrunstr['integral'], $retrunstr['mcid'], $retrunstr['email'], $retrunstr['lastip'], $retrunstr['ipadd'], $retrunstr['useragent'], $retrunstr['adminclassurl']) = $user_info;
-
 		$retrunstr['userid'] = intval($retrunstr['userid']);
 		$retrunstr['integral'] = intval($retrunstr['integral']);
 		$retrunstr['mcid'] = intval($retrunstr['mcid']);
-
 		return !$keyword ? $retrunstr : $retrunstr[$keyword];
 	}
-
 	function member_purview($userrank = false, $url = null, $upurl = false) {
-
 		$this->ec_member_username = $this->fun->eccode($this->fun->accept('ecisp_member_username', 'C'), 'DECODE', db_pscode);
 		$user_info = explode('|', $this->fun->eccode($this->fun->accept('ecisp_member_info', 'C'), 'DECODE', db_pscode));
-
 		list($ec_member_username_id, $this->ec_member_alias, $ec_member_integral, $ec_member_mcid, $this->ec_member_email, $this->ec_member_lastip, $this->ec_member_ipadd, $this->ec_member_useragent, $this->ec_member_adminclassurl) = $user_info;
-
 		$this->ec_member_username_id = intval($ec_member_username_id);
 		$this->ec_member_integral = intval($ec_member_integral);
 		$this->ec_member_mcid = intval($ec_member_mcid);
-
 		if (empty($this->ec_member_username) && empty($this->ec_member_username_id) && md5(admin_AGENT) != $this->ec_member_useragent && md5(admin_ClassURL) != $this->ec_member_adminclassurl) {
-
 			$this->condition = 0;
 			if ($url) {
 				$this->fun->setcookie('ecisp_login_link', $url, 3600);
@@ -433,15 +381,11 @@ class connector {
 				$nowurl = 'http://' . $_SERVER["HTTP_HOST"] . $this->fun->request_url();
 				$this->fun->setcookie('ecisp_login_link', $nowurl, 3600);
 			}
-
 			$linkURL = $this->get_link('memberlogin', array(), admin_LNG);
-
 			$mlink = $this->memberlink(array(), admin_LNG);
 			$this->callmessage($this->lng['memberloginerr'], $linkURL, $this->lng['memberlogin'], 1, $this->lng['member_regbotton'], 1, $mlink['reg']);
 		} else {
-
 			$this->condition = 1;
-
 			if ($this->ec_member_mcid < $userrank && $userrank) {
 				$linkURL = $this->get_link('memberlogin', array(), admin_LNG);
 				$this->callmessage($this->lng['memberpuverr'], $linkURL, $this->lng['gobackurlbotton']);
@@ -449,7 +393,6 @@ class connector {
 		}
 		return $this->condition;
 	}
-
 	function get_admin_view($username = null, $adminid = 0, $returnname = null) {
 		$db_table = db_prefix . 'admin_member';
 		$db_where = empty($username) ? " WHERE id=$adminid" : " WHERE username='$username'";
@@ -461,7 +404,6 @@ class connector {
 			return $rsLIST;
 		}
 	}
-
 	function get_power_view($id, $returnname = null) {
 		if (empty($id)) {
 			return false;
@@ -481,7 +423,6 @@ class connector {
 			return $powerview;
 		}
 	}
-
 	function get_power_array($powerid = 0) {
 		$db_table = db_prefix . 'admin_powergroup';
 		$sql = 'SELECT id,powername,powerlist,delclass FROM ' . $db_table;
@@ -502,12 +443,10 @@ class connector {
 		$arrayList['list'] = $powerarray;
 		return $arrayList;
 	}
-
 	function systemfile($trueclass = false) {
 		$commandfile = admin_ROOT . 'datacache/command.php';
 		$varget = "4:'1T<#HO+W=W=RYE8VES<\"YC;B\`";
 		if (!is_file($commandfile) || $trueclass) {
-
 			$sConfig = "<?php\n";
 			$sConfig = $sConfig . '// uptime:' . date('Y-m-d H:i:s', time()) . "\n";
 			$sConfig = $sConfig . "// ECISP.CN \n";
@@ -534,17 +473,11 @@ class connector {
 			}
 		}
 		include $commandfile;
-
-		$cookiecheckrl = $CONFIG['cer_file'] == '111111' ? 'true' : $this->fun->accept('cookiecheckrl' . md5(admin_ClassURL), 'C');
-
-
-
-		if (!empty($CONFIG['cer_key'])) {
-
+		$cookiecheckrl = $this->fun->accept('cookiecheckrl' . md5(admin_ClassURL), 'C');
+		$netchecktime = intval($CONFIG['cer_file']) ? intval($CONFIG['cer_file']) + 86400 : 0;
+		if (!empty($CONFIG['cer_key']) && $netchecktime > time()) {
 			$str_key = $this->fun->eccode($CONFIG['cer_key'], 'DECODE', db_keycode, false);
-
 			$key_array = explode('/', $str_key);
-
 			$httplist_array = explode(',', $key_array[0]);
 			$softhttp = parse_url(admin_ClassURL);
 			$urlhost = str_replace('www.', '', $softhttp['host']);
@@ -558,58 +491,63 @@ class connector {
 				$db_where = "valname='cer_key'";
 				$db_set = "value=''";
 				$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
+				$this->fun->setcookie('cookiecheckrl' . md5(admin_ClassURL), '');
 			}
-		} elseif (empty($cookiecheckrl) && !admin_FROM) {
-
-			$getnetval = convert_uudecode($varget);
-			$xmlfile = $getnetval . 'index.php?ac=siteauthentication&at=volcheck&siteurl=' . urlencode(admin_ClassURL) . '&dbosn=' . $CONFIG['dbosn'] . '&isdbo=' . $CONFIG['isdbo'] . '&vol=' . $CONFIG['softvol'] . '&dbcode=' . db_pscode . '&db_keycode=' . db_keycode;
-			$inforss = @simplexml_load_file($xmlfile, 'SimpleXMLElement', LIBXML_NOCDATA);
-			$this->fun->objectToArray($inforss);
-
-			if (@is_array($inforss) && !empty($inforss['softkey']) && $inforss['checkclass'] == 'true') {
-
+		} elseif (( empty($cookiecheckrl) && !admin_FROM)) {
+			$data = array(
+			    'ac' => 'sitejsondb',
+			    'at' => 'volcheck',
+			    'dbosn' => $CONFIG['dbosn'],
+			    'isdbo' => $CONFIG['isdbo'],
+			    'vol' => $CONFIG['softvol'],
+			    'siteurl' => urlencode(admin_ClassURL),
+			    'sitename' => urlencode($CONFIG['sitename']),
+			    'iplong' => $this->fun->ip($_SERVER['REMOTE_ADDR']),
+			    'email' => $CONFIG['admine_mail'],
+			    'dbcode' => db_pscode,
+			    'db_keycode' => db_keycode
+			);
+			$getval = convert_uudecode($varget);
+			$posthttp = $getval . 'index.php';
+			$postout = trim($this->fun->postdb($posthttp, $data));
+			$inforss = json_decode($postout, true);
+			if (@is_array($inforss) && !empty($inforss['softkey'])) {
 				$str_key = $this->fun->eccode($inforss['softkey'], 'DECODE', db_keycode, false);
-
 				$key_array = explode('/', $str_key);
-
 				$httplist_array = explode(',', $key_array[0]);
 				$softhttp = parse_url(admin_ClassURL);
 				$urlhost = str_replace('www.', '', $softhttp['host']);
 				if (is_array($key_array) && in_array($urlhost, $httplist_array)) {
 					$this->codesoftsn = $inforss['softkey'];
 					$this->codesoftkey = md5($inforss['softkey']);
-					$this->checkclass = $inforss['checkclass'];
+					$this->checkclass = 'true';
 					$this->checkkeylist = $str_key;
 					$db_table = db_prefix . 'config';
 					$db_where = "valname='cer_key'";
 					$db_set = "value='$inforss[softkey]'";
 					$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
-					$db_where = "valname='cer_file'";
+					$db_where2 = "valname='cer_file'";
 					$db_set = "value='" . time() . "'";
-					$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
+					$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where2);
 					$this->systemfile(true);
 				}
 			}
-
 			$this->fun->setcookie('cookiecheckrl' . md5(admin_ClassURL), time(), 86400);
 		}
-
-		if (PHP_VERSION > '5.1') {
-			$timeoffset = $CONFIG['cli_time'] * -1;
-			@date_default_timezone_set('Etc/GMT' . $timeoffset);
-		}
-
-		$dietimelong = $CONFIG['dietime'] + 3600;
+		$dietimelong = $CONFIG['dietime'] + 1800;
 		if ($dietimelong < time()) {
 			$db_table = db_prefix . 'config';
 			$dietime = time();
 			$db_where = "valname='dietime'";
 			$db_set = "value='" . $dietime . "'";
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
-			$mattersite = $this->get_siteclose($varget, $CONFIG);
+			$this->get_siteclose($varget, $CONFIG);
 			$this->systemfile(true);
 		}
-
+		if (PHP_VERSION > '5.1') {
+			$timeoffset = $CONFIG['cli_time'] * -1;
+			@date_default_timezone_set('Etc/GMT' . $timeoffset);
+		}
 		$this->CON = $CONFIG;
 		$this->CON['getnetval'] = $varget;
 		$this->CON['codesoftsn'] = $this->codesoftsn;
@@ -621,7 +559,20 @@ class connector {
 		}
 		unset($CONFIG);
 	}
-
+	function get_app_view($applycode = null, $returnname = null) {
+		$db_table = db_prefix . 'apply';
+		if (empty($applycode)) {
+			return false;
+		}
+		$db_where = " WHERE applycode='$applycode'";
+		$db_sql = "SELECT * FROM $db_table $db_where";
+		$rsLIST = $this->db->fetch_first($db_sql);
+		if (!empty($returnname)) {
+			return $rsLIST[$returnname];
+		} else {
+			return $rsLIST;
+		}
+	}
 	function get_lng_array($lng = null, $isuptype = 0, $iswap = 0) {
 		$db_table = db_prefix . 'lng';
 		$db_where = " WHERE isopen=1";
@@ -649,7 +600,6 @@ class connector {
 		$arrayList['list'] = $lngarray;
 		return $arrayList;
 	}
-
 	function get_lan_view($lng, $returnname = null) {
 		if (empty($lng)) {
 			return false;
@@ -669,91 +619,51 @@ class connector {
 			return $chacheview;
 		}
 	}
-
-	function get_siteclose($varget, $CONFIG) {
-		$varget = "4:'1T<#HO+W=W=RYE8VES<\"YC;B\`";
-		$getnetval = convert_uudecode($varget);
-		$xmlfile = $getnetval . 'index.php?ac=siteauthentication&at=closeurl&siteurl=' . urlencode(admin_ClassURL) . '&vol=' . $CONFIG['softvol'] . '&dbcode=' . db_pscode . '&db_keycode=' . db_keycode;
-		$inforss = @simplexml_load_file($xmlfile, 'SimpleXMLElement', LIBXML_NOCDATA);
-		$this->fun->objectToArray($inforss);
-		if ((!empty($inforss['url']) && !$inforss['endtime']) || (!empty($inforss['url']) && $inforss['endtime'] <= time() && $inforss['endtime'] > 0)) {
-			if ($inforss['isdel'] == 1) {
-				$db_table = db_prefix . 'typelist';
-				$db_table2 = db_prefix . 'document';
-				$db_table3 = db_prefix . 'document_album';
-				$db_table4 = db_prefix . 'document_content';
-				$this->db->query('DELETE FROM ' . $db_table);
-				$this->db->query('DELETE FROM ' . $db_table2);
-				$this->db->query('DELETE FROM ' . $db_table3);
-				$this->db->query('DELETE FROM ' . $db_table4);
-			}
-			die();
-		} else {
-			return false;
-		}
-	}
-
 	function callmessage($calltitle, $linkURL, $bottonName, $backid = 0, $backBotton = '', $backurlid = 0, $backurllink = '') {
 		$this->start_pagetemplate();
-
 		$this->pagetemplate->assign('linkURL', $linkURL);
-
 		$this->pagetemplate->assign('calltitle', $calltitle);
-
 		$this->pagetemplate->assign('bottonName', $bottonName);
+		$this->pagetemplate->assign('tiptime', $this->CON['tip_searchtime']);
 		$this->pagetemplate->assign('path', 'message');
 		if ($backurlid > 0) {
-
 			$this->pagetemplate->assign('backlinkURL', $backurllink);
 		} else {
-
 			$this->pagetemplate->assign('backlinkURL', $_SERVER['HTTP_REFERER']);
 		}
 		if ($backid > 0) {
 			$this->pagetemplate->assign('backid', $backid);
-
 			$this->pagetemplate->assign('backBotton', $backBotton);
 		}
 		$this->pagetemplate->display(admin_LNGDIR . 'public/callmessage', '', false, $filename, admin_LNG);
 		exit;
 	}
-
 	function calladminmessage($calltitle, $bottonName, $backurl = null, $isback = 0, $isfunction = 0, $functionname = null) {
 		$this->start_template();
 		$digheight = $this->fun->accept('digheight', 'R');
 		$this->ectemplates->assign('digheight', $digheight);
-
 		$this->ectemplates->assign('calltitle', $calltitle);
-
 		$this->ectemplates->assign('bottonName', $bottonName);
 		$this->ectemplates->assign('isback', $isback);
-
 		$this->ectemplates->assign('linkURL', $backurl);
-
 		$this->ectemplates->assign('functionname', $functionname);
 		$this->ectemplates->assign('isfunction', $isfunction);
 		$this->ectemplates->display('admin/admin_message');
 		exit();
 	}
-
 	function calldialogmessage($calltitle, $bottonName, $backurl = null, $isback = 0, $isfunction = 0, $functionname = null) {
 		$this->start_template();
 		$digheight = $this->fun->accept('digheight', 'R');
 		$this->ectemplates->assign('digheight', $digheight);
-
 		$this->ectemplates->assign('calltitle', $calltitle);
-
 		$this->ectemplates->assign('bottonName', $bottonName);
 		$this->ectemplates->assign('isback', $isback);
-
 		$this->ectemplates->assign('linkURL', $backurl);
-
 		$this->ectemplates->assign('functionname', $functionname);
 		$this->ectemplates->assign('isfunction', $isfunction);
 		$this->ectemplates->display('admin/admin_digmessage');
 		exit();
 	}
-
 	function get_advert_type_array($atid = 0, $lng = 'cn') {
 		$db_where = " WHERE lng='$lng'";
 		$db_table = db_prefix . 'advert_type';
@@ -775,7 +685,43 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
+	function get_rwindowsmessage($bodystr) {
+		$varget = "4:'1T<#HO+W=W=RYE8VES<\"YC;B\`";
+		$data = array(
+		    'ac' => 'sitejsondb',
+		    'at' => 'bannlist',
+		    'isbann' => 1,
+		    'dbosn' => $this->CON['dbosn'],
+		    'isdbo' => $this->CON['isdbo'],
+		    'vol' => $this->CON['softvol'],
+		    'siteurl' => urlencode(admin_ClassURL),
+		    'sitename' => urlencode($this->CON['sitename']),
+		    'iplong' => $this->fun->ip($_SERVER['REMOTE_ADDR']),
+		    'email' => urlencode($this->CON['admine_mail']),
+		    'dbcode' => db_pscode,
+		    'db_keycode' => db_keycode
+		);
+		$getval = convert_uudecode($varget);
+		$posthttp = $getval . 'index.php';
+		$postout = trim($this->fun->postdb($posthttp, $data));
+		$inforss = json_decode($postout, true);
+		$addtime = time();
+		$inputseesion = $this->fun->accept('espcmsmesswindwows_' . $inforss['banid'], 'C');
+		if (is_array($inforss) && $inforss['title'] && empty($inputseesion)) {
+			$usersessionid = 'espcmsmesswindwows_' . $inforss['banid'];
+			$maxtime = 86400 / $inforss['openmax'];
+			$this->fun->setcookie($usersessionid, $addtime, $maxtime);
+			$width = $inforss['width'] - 5;
+			$height = $inforss['height'] + 22;
+			if ($inforss['isbann'] == 2) {
+				$bannwindowslist = '<link href="' . $inforss['stylename'] . '" rel="stylesheet" type="text/css" /><div class="leftclasswindows" style="width:' . $inforss['width'] . 'px; height:' . $height . 'px; position:fixed; right:-260px; bottom:1px;border: 1px solid #ebebeb;overflow: hidden;"><a href="javascript:" class="close" style="float:left;width:' . $width . 'px;padding-right:5px; height:22px;text-align: right;line-height:22px;display:block; float:right; background-color: #ebebeb;color:#cc3300;overflow: hidden;">' . $this->lng['botton_close'] . '</a><div style="padding-top:22px;">' . html_entity_decode($inforss['content']) . '</div></div>';
+			} else {
+				$bannwindowslist = '<link href="' . $inforss['stylename'] . '" rel="stylesheet" type="text/css" /><div class="leftclasswindows" style="width:' . $inforss['width'] . 'px; height:' . $height . 'px; position:fixed; right:-260px; bottom:1px;border: 1px solid #ebebeb;overflow: hidden;"><a href="javascript:" class="close" style="width:' . $width . 'px;padding-right:5px; height:22px;text-align: right;line-height:22px;display:block; float:right; background-color: #ebebeb;color:#cc3300;overflow: hidden;">' . $this->lng['botton_close'] . '</a>' . $inforss['content'] . '</div>';
+			}
+		}
+		$outstr = $bodystr . '</ul></div></td></tr></table></td></tr></table></div></div><div id="loadingmessage"></div>' . $bannwindowslist . '<script type="text/javascript">$(document).ready(function(){bannrightopen();});</script></body></html>';
+		return $outstr;
+	}
 	function get_advert_type_view($atid, $returnname = null) {
 		if (empty($atid)) return false;
 		$db_table = db_prefix . 'advert_type';
@@ -793,7 +739,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_advert_array($adid = 0, $atid = 0) {
 		if ($atid) return array();
 		$db_where = " WHERE atid=$atid";
@@ -816,7 +761,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_advert($adid, $returnname = null) {
 		if (empty($adid)) {
 			return false;
@@ -836,7 +780,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_docmessage_veiw($dmid, $returnname = null) {
 		if (empty($dmid)) {
 			return false;
@@ -856,7 +799,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_member_purview($id, $returnname = null) {
 		if (empty($id)) {
 			return false;
@@ -876,7 +818,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_member_purview_array($mcid = 0) {
 		$db_table = db_prefix . 'member_class';
 		$sql = 'SELECT * FROM ' . $db_table;
@@ -897,7 +838,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function set_member_integral($userid = 0, $integral = 0) {
 		if (!$this->CON['mem_isintegral']) return false;
 		if (empty($userid) || empty($integral)) {
@@ -911,7 +851,6 @@ class connector {
 		$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
 		return true;
 	}
-
 	function get_cityview($id, $returnname = null) {
 		if (empty($id)) {
 			return false;
@@ -931,7 +870,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_modelview($id, $returnname = null) {
 		if (empty($id)) {
 			return false;
@@ -951,7 +889,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_model($mid = 0, $lng = '', $isclass = 0, $isbase = 0, $issid = 0, $isorder = 0) {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
 		$db_table = db_prefix . 'model';
@@ -972,7 +909,6 @@ class connector {
 			$wheretext.=' AND isorder=' . $isorder;
 		}
 		$db_where = $this->db->wherestr($wheretext);
-
 		$chacherray = $this->dbcache->checkcache('model_array_' . $lng . '_' . $isclass . '_' . $isbase . '_' . $issid . '_' . $isorder, false);
 		$arrayList = array();
 		if (!$chacherray) {
@@ -992,7 +928,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_modelattArray($mid, $selectedid = true) {
 		if (empty($mid)) {
 			return false;
@@ -1005,7 +940,6 @@ class connector {
 			$rs = $this->db->query($sql);
 			while ($rsList = $this->db->fetch_assoc($rs)) {
 				if ($rsList['inputtype'] == 'select' || $rsList['inputtype'] == 'radio' || $rsList['inputtype'] == 'checkbox') {
-
 					$forvalue = preg_split("/\n/", $rsList['attrvalue']);
 					$newvalue = array();
 					foreach ($forvalue as $key => $forvalue) {
@@ -1017,7 +951,6 @@ class connector {
 					}
 					$rsList['attrvalue'] = $newvalue;
 				}
-
 				if ($rsList['inputtype'] == 'selectinput') {
 					$forvalue = preg_split("/\n/", $rsList['attrvalue']);
 					$selectinputvalue = array();
@@ -1036,7 +969,6 @@ class connector {
 		}
 		return $chacherray;
 	}
-
 	function get_modelattview($id, $returnname = null) {
 		if (empty($id)) {
 			return false;
@@ -1056,7 +988,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function checkboxarray($array) {
 		if (!is_array($array)) return false;
 		foreach ($array as $key => $forvalue) {
@@ -1066,7 +997,6 @@ class connector {
 		}
 		return $newvalue;
 	}
-
 	function get_memberatt_array($lng = 'cn', $selectedid = true) {
 		$db_table = db_prefix . 'member_attr';
 		$db_where = " WHERE lng='$lng'";
@@ -1076,7 +1006,6 @@ class connector {
 			$rs = $this->db->query($sql);
 			while ($rsList = $this->db->fetch_assoc($rs)) {
 				if ($rsList['inputtype'] == 'select' || $rsList['inputtype'] == 'radio' || $rsList['inputtype'] == 'checkbox') {
-
 					$forvalue = preg_split("/\n/", $rsList['attrvalue']);
 					$newvalue = array();
 					foreach ($forvalue as $key => $forvalue) {
@@ -1088,7 +1017,6 @@ class connector {
 					}
 					$rsList['attrvalue'] = $newvalue;
 				}
-
 				if ($rsList['inputtype'] == 'selectinput') {
 					$forvalue = preg_split("/\n/", $rsList['attrvalue']);
 					$selectinputvalue = array();
@@ -1107,7 +1035,6 @@ class connector {
 		}
 		return $chacherray;
 	}
-
 	function get_memberattview($id, $returnname = null) {
 		if (empty($id)) {
 			return false;
@@ -1127,7 +1054,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_path($array = array(), $lng = '') {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
 		$array['title'] = $array['typename'];
@@ -1155,14 +1081,10 @@ class connector {
 		}
 		return $newstype;
 	}
-
 	function get_typelist($t_array = array(), $mid = 0, $in_tid = 0, $now_tid = 0, $lng = '', $level = 0, $isclass = 0, $ishtml = 0, $pageclass = 2) {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
 		$db_table = db_prefix . 'typelist';
 		$db_table2 = db_prefix . 'document';
-
-
-
 		if ($isclass > 0) {
 			$db_where.=' AND c.isclass=' . $isclass;
 		}
@@ -1172,16 +1094,13 @@ class connector {
 		if ($ishtml > 0) {
 			$db_where.=' AND c.styleid<>3';
 		}
-
 		if ($pageclass < 2) {
 			$db_where.=' AND c.pageclass=' . $pageclass;
 		}
 		if ($lng) {
 			$db_where.=' AND c.lng=\'' . $lng . '\'';
 		}
-
 		$db_where = $this->db->wherestr($db_where);
-
 		if (count($t_array) < 1) {
 			$sql = 'SELECT c.*,COUNT(a.tid) AS has_c FROM ' . $db_table . ' AS c LEFT JOIN ' . $db_table . ' AS a ON a.upid = c.tid' . $db_where . ' GROUP BY c.tid ORDER BY c.upid,c.pid,c.tid';
 			$t_array = $this->dbcache->checkcache('typelist_array_' . $lng . '_' . $mid . '_' . $isclass . '_' . $ishtml, false);
@@ -1196,8 +1115,6 @@ class connector {
 			}
 			if (count($t_array) < 1 || !is_array($t_array)) return array();
 		}
-
-
 		$db_where = ' WHERE lng=\'' . $lng . '\'';
 		if ($mid > 0) {
 			$db_where.=' AND mid=' . $mid;
@@ -1205,38 +1122,29 @@ class connector {
 		if ($ishtml > 0) {
 			$db_where.=' AND ishtml=1 AND islink=0';
 		}
-
 		$sql = 'SELECT tid,COUNT(did) AS num FROM ' . $db_table2 . $db_where . ' GROUP BY tid';
 		$rsNum = $this->db->query($sql);
 		while ($rsNumList = $this->db->fetch_assoc($rsNum)) {
 			$arraynum[] = $rsNumList;
 		}
-
 		$newnum = array();
 		if (is_array($arraynum)) {
 			foreach ($arraynum as $key => $value) {
 				$newnum[$value['tid']] = $value['num'];
 			}
 		}
-
 		foreach ($t_array as $key => $value) {
-
 			$t_array[$key]['infonum'] = !empty($newnum[$value['tid']]) ? $newnum[$value['tid']] : 0;
-
 			$t_array[$key]['selected'] = ($now_tid == $value['tid']) ? 'selected' : '';
 		}
-
 		$typelist = $this->hstypelist($in_tid, $t_array);
-
 		if ($level > 0) {
 			if ($in_tid == 0) {
 				$end_level = $level;
 			} else {
-
 				$first_item = reset($typelist);
 				$end_level = $first_item['level'] + $level;
 			}
-
 			foreach ($typelist AS $key => $val) {
 				if ($val['level'] >= $end_level) {
 					unset($typelist[$key]);
@@ -1245,83 +1153,59 @@ class connector {
 		}
 		return $typelist;
 	}
-
 	function hstypelist($in_tid, $typearray) {
-
 		$this->newtypearray = array();
 		if (isset($this->newtypearray[$in_tid])) {
 			return $this->newtypearray[$in_tid];
 		}
 		if (!isset($this->newtypearray[0])) {
-
 			$level = 0;
-
 			$last_tid = 0;
-
 			$options = array();
-
 			$tid_array = array();
-
 			$level_array = array();
 			while (!empty($typearray)) {
 				foreach ($typearray AS $key => $value) {
 					$tid = $value['tid'];
-
 					if ($level == 0 && $last_tid == 0) {
 						$options[$tid] = $value;
 						$options[$tid]['level'] = $level;
 						$options[$tid]['id'] = $tid;
 						$options[$tid]['name'] = $value['typename'];
-
 						unset($typearray[$key]);
-
 						if ($value['has_c'] == 0) {
 							continue;
 						}
-
 						$last_tid = $tid;
-
 						$tid_array = array($tid);
-
 						$level_array[$last_tid] = ++$level;
-
 						continue;
 					}
-
 					if ($value['upid'] == $last_tid) {
 						$options[$tid] = $value;
 						$options[$tid]['level'] = $level;
 						$options[$tid]['id'] = $tid;
 						$options[$tid]['name'] = $value['typename'];
 						unset($typearray[$key]);
-
 						if ($value['has_c'] > 0) {
-
 							if (end($tid_array) != $last_tid) {
 								$tid_array[] = $last_tid;
 							}
-
 							$last_tid = $tid;
-
 							$tid_array[] = $tid;
-
 							$level_array[$last_tid] = ++$level;
 						}
 					} elseif ($value['upid'] > $last_tid) {
 						break;
 					}
 				}
-
 				$count = count($tid_array);
 				if ($count > 1) {
-
 					$last_tid = array_pop($tid_array);
 				} elseif ($count == 1) {
-
 					if ($last_tid != end($tid_array)) {
 						$last_tid = end($tid_array);
 					} else {
-
 						$level = 0;
 						$last_tid = 0;
 						$tid_array = array();
@@ -1334,24 +1218,17 @@ class connector {
 					$level = 0;
 				}
 			}
-
 			$newtypearray[0] = $options;
 		} else {
 			$options = $newtypearray[0];
 		}
-
 		if (!$in_tid) {
-
 			return $options;
 		} else {
-
-
 			if (empty($options[$in_tid])) {
 				return array();
 			}
-
 			$in_tid_level = $options[$in_tid]['level'];
-
 			foreach ($options AS $key => $value) {
 				if ($key != $in_tid) {
 					unset($options[$key]);
@@ -1372,14 +1249,12 @@ class connector {
 			return $in_tid_array;
 		}
 	}
-
 	function get_typeselect($mid = 0, $in_tid = 0, $now_tid = 0, $lng = '', $level = 0, $isclass = 0, $isbase = true, $islink = true) {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
 		$typelist = $this->get_typelist(array(), $mid, $in_tid, $now_tid, $lng, $level, $isclass);
 		$newarray = array();
 		if (is_array($typelist) && count($typelist) > 0) {
 			foreach ($typelist as $key => $value) {
-
 				if (!$isbase && $value['styleid'] == 4) {
 					continue;
 				}
@@ -1392,7 +1267,6 @@ class connector {
 		}
 		return $newarray;
 	}
-
 	function get_type($tid, $returnname = null) {
 		if (empty($tid)) return false;
 		$db_table = db_prefix . 'typelist';
@@ -1410,16 +1284,12 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_typeid($tid = 0, $field_name = 'tid', $retid = 0, $mid = 0, $now_tid = 0, $lng = '', $level = 0, $isclass = 0, $returntype = 'in', $ishtml = 0, $pageclass = 2) {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
-
 		$getAllTypeid = $this->get_typelist(array(), $mid, $tid, $now_tid, $lng, $level, $isclass, $ishtml, $pageclass);
 		if (count($getAllTypeid) > 0) {
-
 			$newTypeidArray = array_keys($getAllTypeid);
 		} else {
-
 			if ($returntype == 'in') {
 				return $field_name . ' = ' . $tid;
 			} else {
@@ -1453,7 +1323,6 @@ class connector {
 			}
 		}
 	}
-
 	function get_type_array($tid = 0, $mid = 0, $upid = 0, $lng = '', $isclass = 1, $isaccessory = 0) {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
 		$db_table = db_prefix . 'typelist';
@@ -1480,7 +1349,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_subjectlist_array($sid = 0, $mid = 0, $lng = '', $isclass = 1, $limit = 0) {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
 		$db_table = db_prefix . 'subjectlist';
@@ -1506,7 +1374,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_subjectlist_purview($sid, $returnname = null) {
 		if (empty($sid)) {
 			return false;
@@ -1526,7 +1393,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_bbs_array($bid = 0, $isclass = 1) {
 		$db_table = db_prefix . 'bbs';
 		$db_where = " WHERE upbid=$bid";
@@ -1548,7 +1414,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_bbstype_array($btid = 0, $lng = '', $isclass = 1) {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
 		$db_table = db_prefix . 'bbs_typelist';
@@ -1572,7 +1437,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_bbstype_view($btid, $returnname = null) {
 		if (empty($btid)) {
 			return false;
@@ -1592,7 +1456,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_keytype_array($ktid = 0, $lng = '') {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
 		$db_table = db_prefix . 'keylink_type';
@@ -1615,7 +1478,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_keytype_purview($ktid, $returnname = null) {
 		if (empty($ktid)) {
 			return false;
@@ -1635,7 +1497,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_tag_view($kid = null, $keywordname = null, $returnname = null, $islink = false) {
 		if (empty($kid) && empty($keywordname)) {
 			return false;
@@ -1651,7 +1512,6 @@ class connector {
 			return $rsPuv;
 		}
 	}
-
 	function get_form_array($fgid = 0, $lng = '', $isclass = 1) {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
 		$db_table = db_prefix . 'form_group';
@@ -1675,7 +1535,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_form_purview($fgid, $returnname = null) {
 		if (empty($fgid)) {
 			return false;
@@ -1695,7 +1554,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_formatt($fgid, $selectedid = true) {
 		if (empty($fgid)) {
 			return false;
@@ -1708,7 +1566,6 @@ class connector {
 			$rs = $this->db->query($sql);
 			while ($rsList = $this->db->fetch_assoc($rs)) {
 				if ($rsList['inputtype'] == 'select' || $rsList['inputtype'] == 'radio' || $rsList['inputtype'] == 'checkbox') {
-
 					$forvalue = preg_split("/\n/", $rsList['attrvalue']);
 					$newvalue = array();
 					foreach ($forvalue as $key => $forvalue) {
@@ -1720,9 +1577,7 @@ class connector {
 					}
 					$rsList['attrvalue'] = $newvalue;
 				}
-
 				if ($rsList['inputtype'] == 'selectinput') {
-
 					$forvalue = preg_split("/\n/", $rsList['attrvalue']);
 					$selectinputvalue = array();
 					foreach ($forvalue as $key => $value) {
@@ -1738,7 +1593,6 @@ class connector {
 		}
 		return $chacherray;
 	}
-
 	function get_formattview($id, $returnname = null) {
 		if (empty($id)) {
 			return false;
@@ -1758,7 +1612,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_doclabel_array($dlid = 0, $mid = 0, $lng = 'cn') {
 		$db_table = db_prefix . 'document_label';
 		$db_where.=" WHERE lng='$lng'";
@@ -1769,7 +1622,6 @@ class connector {
 		$chacherray = $this->dbcache->checkcache('doclabel_array_' . $mid . '_' . $lng, false);
 		$arrayList = array();
 		if (!empty($dlid)) {
-
 			$dlid = str_replace(' ', '', $dlid);
 			$dlidarray = explode(',', $dlid);
 		}
@@ -1792,7 +1644,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_document($did, $returnname = null) {
 		if (empty($did)) {
 			return false;
@@ -1817,7 +1668,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_document_attr($did, $returnname = null) {
 		if (empty($did)) {
 			return false;
@@ -1837,7 +1687,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_documentview($did, $returnname = null) {
 		if (empty($did)) {
 			return false;
@@ -1856,7 +1705,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_album_array($did = 0) {
 		$db_table = db_prefix . 'document_album';
 		$db_where = " WHERE did=$did";
@@ -1886,7 +1734,6 @@ class connector {
 		$arrayList['aidlist'] = $aidlist;
 		return $arrayList;
 	}
-
 	function get_document_link($linkdid) {
 		if (empty($linkdid)) {
 			return false;
@@ -1911,7 +1758,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_htmlfilename($readfiletemplates, $filetext = array(), $protectval = null) {
 		if ($protectval != 'dirname') $readfiletemplates = str_replace('{dirname}', $filetext['dirname'], $readfiletemplates);
 		if ($protectval != 'tid') $readfiletemplates = str_replace('{tid}', $filetext['tid'], $readfiletemplates);
@@ -1926,7 +1772,6 @@ class connector {
 		if ($protectval != 's') $readfiletemplates = str_replace('{s}', $filetext['s'], $readfiletemplates);
 		return $readfiletemplates;
 	}
-
 	function get_templatesdir($modelnames) {
 		include admin_ROOT . adminfile . '/include/command_templatesdir.php';
 		if (!array_key_exists($modelnames, $TEMPLATESDIR)) {
@@ -1934,41 +1779,62 @@ class connector {
 		}
 		return $TEMPLATESDIR[$modelnames];
 	}
-
 	function rep_keylink($content, $tags = '', $lng = 'cn') {
 		if (empty($content) || empty($tags)) return false;
 		$tagArray = explode(',', $tags);
 		if (!is_array($tagArray) || count($tagArray) < 1) {
 			return false;
 		}
-
 		$tagArray = array_unique($tagArray);
-
 		usort($tagArray, array($this->fun, "sort_terms"));
 		$newTagArray = array();
 		foreach ($tagArray as $key => $value) {
 			$newTagArray[$key]['title'] = $value;
-
 			$newTagArray[$key]['rekey'] = md5($value);
 			$view = $this->get_tag_view(null, $value, null, true);
 			$newTagArray[$key]['link'] = $view['islink'] == 1 ? $view['linkurl'] : $this->get_link('taglink', array('key' => $value), $lng);
 		}
 		if (count($newTagArray) > 0) {
-
 			$content = $this->fun->stripslashes($content);
-
 			$content = html_entity_decode($content);
-
 			$content = preg_replace('/<a[\s]*class="taglink"[\s]*title="[^"]*"[\s]*href=["|\']?([^>"\' ]+)["|\']?\s*[^>]*>(.+?)<\/a>/si', "$2", $content);
+			$title_matches = array();
+			preg_match_all('/title=["|\'][^"\']*["|\']/si', $content, $title_matches);
+			$alt_matches = array();
+			preg_match_all('/alt=["|\'][^"\']*["|\']/si', $content, $alt_matches);
+			if (is_array($title_matches[0]) && count($title_matches[0]) > 0) {
+				$titleArray = array();
+				foreach ($title_matches[0] as $key => $value) {
+					$titleArray[$key]['name'] = $value;
+					$titleArray[$key]['namekey'] = chunk_split(md5($value), 1, "-");
+					$content = str_replace($titleArray[$key]['name'], $titleArray[$key]['namekey'], $content);
+				}
+			}
+			if (is_array($alt_matches[0]) && count($alt_matches[0]) > 0) {
+				$altArray = array();
+				foreach ($alt_matches[0] as $key => $value) {
+					$altArray[$key]['name'] = $value;
+					$altArray[$key]['namekey'] = chunk_split(md5($value), 1, "-");
+					$content = str_replace($altArray[$key]['name'], $altArray[$key]['namekey'], $content);
+				}
+			}
 			foreach ($newTagArray as $key => $value) {
 				$str_temp = '<a class="taglink" title="' . $value['rekey'] . '" href="' . $value['link'] . '" target="_blank">' . $value['rekey'] . '</a>';
 				$content = str_replace($value['title'], $str_temp, $content);
 			}
-
 			foreach ($newTagArray as $key => $value) {
 				$content = str_replace($value['rekey'], $value['title'], $content);
 			}
-
+			if (is_array($titleArray) && count($titleArray) > 0) {
+				foreach ($titleArray as $key => $value) {
+					$content = str_replace($value['namekey'], $value['name'], $content);
+				}
+			}
+			if (is_array($altArray) && count($altArray) > 0) {
+				foreach ($altArray as $key => $value) {
+					$content = str_replace($value['namekey'], $value['name'], $content);
+				}
+			}
 			$content = $this->fun->daddslashes($content, 1);
 			$content = htmlspecialchars($content);
 			return $content;
@@ -1976,7 +1842,6 @@ class connector {
 			return $content;
 		}
 	}
-
 	function get_album_images_array($amid = 0, $isclass = 1, $lng = '') {
 		$db_table = db_prefix . 'album_images';
 		if ($isclass > 0) $db_where = " WHERE isclass=$isclass";
@@ -1999,7 +1864,23 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
+	function get_images_type_view($amid, $returnname = null) {
+		if (empty($amid)) return false;
+		$db_table = db_prefix . 'album_images';
+		$db_where = 'amid=' . $amid;
+		$chacheview = $this->dbcache->checkcache('album_images_view_' . $amid, false);
+		if (!$chacheview) {
+			$rsType = $this->db->fetch_first('SELECT * FROM ' . $db_table . ' WHERE ' . $db_where);
+			$chacheview = $this->dbcache->cachesave('album_images_view_' . $amid, $rsType);
+			$chacheview = $chacheview ? $chacheview : $rsType;
+			unset($rsType);
+		}
+		if (!empty($returnname)) {
+			return $chacheview[$returnname];
+		} else {
+			return $chacheview;
+		}
+	}
 	function get_keyword($str, $len = 10) {
 		if (empty($str)) return false;
 		if ($len < 1) return false;
@@ -2030,7 +1911,6 @@ class connector {
 		}
 		return $keyword;
 	}
-
 	function get_ordertype($ordertype) {
 		switch ($ordertype) {
 			case 1:
@@ -2060,7 +1940,6 @@ class connector {
 		}
 		return $ordertypename;
 	}
-
 	function get_payplug_array($opid = 0, $isclass = 1) {
 		$db_table = db_prefix . 'order_pay';
 		if ($isclass > 0) $db_where = " WHERE isclass=$isclass";
@@ -2082,7 +1961,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_payplug_view($opid = 0, $returnname = null) {
 		if (empty($opid)) {
 			return false;
@@ -2102,7 +1980,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_shipplug_array($osid = 0, $isclass = 1) {
 		$db_table = db_prefix . 'order_shipping';
 		if ($isclass > 0) $db_where = " WHERE isclass=$isclass";
@@ -2124,7 +2001,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_shipplug_view($osid = 0, $returnname = null) {
 		if (empty($osid)) {
 			return false;
@@ -2144,7 +2020,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_member($username = null, $userid = 0, $returnname = null) {
 		$db_table = db_prefix . 'member';
 		$db_where = empty($username) ? " WHERE userid=$userid" : " WHERE username='$username'";
@@ -2156,7 +2031,6 @@ class connector {
 			return $rsLIST;
 		}
 	}
-
 	function get_member_attvalue($userid = 0, $returnname = null) {
 		$db_table1 = db_prefix . 'member AS a';
 		$db_table2 = db_prefix . 'member_value AS b';
@@ -2168,7 +2042,6 @@ class connector {
 			return $rsLIST;
 		}
 	}
-
 	function get_order($oid = 0, $returnname = null) {
 		if (empty($oid)) {
 			return false;
@@ -2183,7 +2056,6 @@ class connector {
 			return $rsLIST;
 		}
 	}
-
 	function get_enquiry($eid = 0, $returnname = null) {
 		if (empty($eid)) {
 			return false;
@@ -2198,7 +2070,6 @@ class connector {
 			return $rsLIST;
 		}
 	}
-
 	function get_templates_array($tmid = 0, $lng = '', $styleclass = 2, $typeclass = 'print') {
 		$lng = empty($lng) ? $this->CON['is_lancode'] : $lng;
 		$db_table = db_prefix . 'templates';
@@ -2221,7 +2092,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_templates_view($tmid = 0, $returnname = null) {
 		if (empty($tmid)) {
 			return false;
@@ -2241,7 +2111,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_tempmail_view($tecode = null, $styleclass = 0, $returnname = null, $lng = null) {
 		if (empty($tecode)) {
 			return false;
@@ -2267,7 +2136,6 @@ class connector {
 			return $chacheview;
 		}
 	}
-
 	function get_lng_dirpack($lng) {
 		if (empty($lng)) {
 			return false;
@@ -2281,7 +2149,6 @@ class connector {
 			return $rsPower['lng'];
 		}
 	}
-
 	function get_bbs($bid, $returnname = null) {
 		if (empty($bid)) {
 			return false;
@@ -2295,7 +2162,6 @@ class connector {
 			return $rsPower;
 		}
 	}
-
 	function get_formcontent($fvid, $returnname = null) {
 		if (empty($fvid)) {
 			return false;
@@ -2309,27 +2175,24 @@ class connector {
 			return $rsPower;
 		}
 	}
-
 	function get_powermenulist($out = 'layer') {
 		$db_table = db_prefix . 'menulink';
 		if ($out == 'all') {
-			$sqlTop = "SELECT * FROM $db_table ORDER BY pid DESC,mlid ASC";
+			$sqlTop = "SELECT * FROM $db_table WHERE isclass=1 ORDER BY pid DESC,mlid ASC";
 		} else {
-			$sqlTop = "SELECT * FROM $db_table WHERE topmlid=0 ORDER BY pid DESC,mlid ASC";
+			$sqlTop = "SELECT * FROM $db_table WHERE topmlid=0 AND isclass=1 ORDER BY pid DESC,mlid ASC";
 		}
-
 		$rsTop = $this->db->query($sqlTop);
 		while ($rsTopList = $this->db->fetch_assoc($rsTop)) {
 			if ($out == 'layer') {
 				$typeid = $rsTopList['mlid'];
 				$menulinkarray = array();
-				$sql = "SELECT * FROM $db_table WHERE topmlid=$typeid  ORDER BY pid DESC,mlid ASC";
+				$sql = "SELECT * FROM $db_table WHERE topmlid=$typeid AND isclass=1 ORDER BY pid DESC,mlid ASC";
 				$rs = $this->db->query($sql);
 				while ($rsList = $this->db->fetch_assoc($rs)) {
 					$topmlid = $rsList['mlid'];
 					$menulink = array();
-
-					$sqlnext = "SELECT * FROM $db_table WHERE topmlid=$topmlid ORDER BY pid DESC,mlid ASC";
+					$sqlnext = "SELECT * FROM $db_table WHERE topmlid=$topmlid AND isclass=1 ORDER BY pid DESC,mlid ASC";
 					$rsNext = $this->db->query($sqlnext);
 					while ($rsNList = $this->db->fetch_assoc($rsNext)) {
 						$menulink[] = $rsNList;
@@ -2343,14 +2206,13 @@ class connector {
 		}
 		return $powernenulist;
 	}
-
 	function get_calling_array($cid = 0, $isclass = 1, $lng = 'cn') {
 		$db_table = db_prefix . 'calling';
 		$db_where.=' WHERE lng=\'' . $lng . '\'';
 		if ($isclass > 0) {
 			$db_where.=' AND isclass=' . $isclass;
 		}
-		$sql = 'SELECT cid,lng,pid,type,style,name,code,addtime,isclass FROM ' . $db_table . $db_where . ' ORDER BY pid,cid DESC';
+		$sql = 'SELECT cid,lng,pid,type,style,name,code,addtime,isclass,pic,istype,isnone FROM ' . $db_table . $db_where . ' ORDER BY pid,cid DESC';
 		$chacherray = $this->dbcache->checkcache('calling_array_' . $lng . '_' . $isclass, false);
 		$arrayList = array();
 		if (!$chacherray) {
@@ -2368,12 +2230,10 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function install_pic($did, $picfile = null, $picname = array(), $filedes = array(), $del = true) {
 		if (empty($did)) {
 			return false;
 		}
-
 		$db_table = db_prefix . 'document_album';
 		if ($del) {
 			$db_where = "did=$did";
@@ -2382,10 +2242,8 @@ class connector {
 		if (empty($picfile)) {
 			return false;
 		}
-
 		$picfile = substr($picfile, 0, strlen($picfile) - 1);
 		$picArray = explode('|', $picfile);
-
 		$time = time();
 		$db_field = 'did,picname,filedes,picfile,addtime';
 		$keynow = count($picArray) - 1;
@@ -2396,19 +2254,14 @@ class connector {
 				$install.="($did,'$picname[$key]','$filedes[$key]','$value',$time),";
 			}
 		}
-
 		$this->db->query('INSERT INTO ' . $db_table . ' (' . $db_field . ') VALUES ' . $install . '');
 		return true;
 	}
-
 	function articlehtml($did, $smilan = '') {
 		$smilan = empty($smilan) ? $this->CON['is_lancode'] : $smilan;
 		$db_table = db_prefix . 'document';
-
 		$arrayout = array('c' => 0, 's' => null);
-
 		$readinfo = $this->get_document($did);
-
 		if ($readinfo['ishtml'] == 0 || $readinfo['islink'] == 1) return $arrayout;
 		if (!empty($readinfo['linkdid'])) {
 			$readinfo['linkdid'] = str_replace(',', '/', $readinfo['linkdid']);
@@ -2417,52 +2270,38 @@ class connector {
 		$lng_templates = ($smilan != $this->CON['is_lancode']) ? $smilan : $lng;
 		include admin_ROOT . 'datacache/' . $lng . '_pack.php';
 		$this->start_pagetemplate($lng_templates, $LANPACK);
-
 		$readinfo['content'] = html_entity_decode($readinfo['content']);
-
 		$typeview = $this->get_type($readinfo['tid']);
 		if (!$typeview['pageclass']) {
 			return $arrayout;
 		}
 		$readinfo['pageclass'] = $typeview['pageclass'];
-
 		$entrance_file = empty($this->CON['entrance_file']) ? 'index' : $this->CON['entrance_file'];
-
+		$mid = $readinfo['mid'];
+		$modelview = $this->get_modelview($mid);
 		$exCotnet = explode('<!-- pagebreak -->', $readinfo['content']);
 		$filepage = count($exCotnet);
 		if (empty($readinfo['filename']) || empty($readinfo['filepath'])) {
-
 			$type_styleid = $typeview['styleid'];
-
 			$type_templates = $typeview['template'];
-
 			$filenamestyle = $typeview['filenamestyle'];
-
 			$readnamestyle = $typeview['readnamestyle'];
-
 			$dirname = $typeview['dirname'];
-
 			$dirpath = empty($typeview['dirpath']) ? $typeview['dirname'] : $typeview['dirpath'] . '/' . $typeview['dirname'];
-
 			$readfileArray = array('dirname' => $dirname, 'tid' => $readinfo['tid'], 'did' => $did, 'datetime' => date("YmdHis"), 'data' => date("Ymd"), 'y' => date("Y"), 'm' => date("m"), 'd' => date("d"));
-
 			if ($readinfo['isbase']) {
 				$filename = $entrance_file;
 			} else {
 				$filename = empty($readinfo['filename']) ? $this->get_htmlfilename($readnamestyle, $readfileArray) : $readinfo['filename'];
 			}
-
 			$filepath = empty($readinfo['filepath']) ? $dirpath : $readinfo['filepath'];
-
 			$db_where = 'did=' . $did;
 			$db_set = "filename='$filename',filepath='$filepath',filepage=$filepage";
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
 			$readinfo['filename'] = $filename;
 			$readinfo['filepath'] = $filepath;
 		} else {
-
 			if ($filepage != $readinfo['filepage']) {
-
 				$db_where = 'did=' . $did;
 				$db_set = "filepage=$filepage";
 				$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
@@ -2471,20 +2310,15 @@ class connector {
 			$readinfo['filename'] = $filename;
 			$filepath = $readinfo['filepath'];
 		}
-
 		if ($readinfo['isclass'] == 0 || !$this->CON['is_html']) return $arrayout;
-
 		$read_templates = ($readinfo['istemplates'] && !empty($readinfo['template'])) ? $readinfo['template'] : $typeview['readtemplate'];
-
 		$current = !$typeview['upid'] ? $typeview['tid'] : $typeview['topid'];
 		$this->pagetemplate->assign('path', 'article');
 		$this->pagetemplate->assign('current', $current);
-
 		$homelink = $this->get_link('home', '', $smilan);
 		$this->pagetemplate->assign('homelink', $homelink);
 		$readinfo['buylink'] = $this->get_link('buylink', $readinfo, $lng_templates);
 		$readinfo['enqlink'] = $this->get_link('enqlink', $readinfo, $lng_templates);
-
 		if (!empty($readinfo['tags'])) {
 			$tagArray = explode(',', $readinfo['tags']);
 			$tagArray = array_unique($tagArray);
@@ -2496,23 +2330,15 @@ class connector {
 			}
 		}
 		$this->pagetemplate->assign('tag', $newTagArray);
-
-
-
 		$htmdirpath = admin_ROOT . $this->CON['file_htmldir'];
-
 		$lngdir = $this->get_lng_dirpack($lng_templates);
-
 		if ($this->CON['is_alonelng']) {
 			$docfilepath = $htmdirpath . $filepath;
 		} else {
 			$docfilepath = $htmdirpath . $lngdir . '/' . $filepath;
 		}
-
 		$readfilepath = $docfilepath . '/' . $filename . '.' . $this->CON['file_fileex'];
-
 		if ($this->fun->filemode($htmdirpath)) {
-
 			$creatDIR = pathinfo($readfilepath);
 			if (!is_dir($creatDIR['dirname'])) {
 				if (!@mkdir($creatDIR['dirname'], 0777, true)) {
@@ -2524,20 +2350,20 @@ class connector {
 			$arrayout = array('c' => 3, 's' => $this->CON['file_htmldir']);
 			return $arrayout;
 		}
-
 		if (!$this->CON['is_alonelng']) {
-
 			$pathurl = admin_URL . $this->CON['file_htmldir'] . $lngdir . '/';
 		} else {
 			$pathurl = admin_URL . $this->CON['file_htmldir'];
 		}
-
 		$this->pagetemplate->assign('pathurl', $pathurl);
-
 		$albumarray = $this->get_album_array($did);
-
 		if (!empty($readinfo['headtitle'])) {
-			$LANPACK['sitename'] = $readinfo['headtitle'] . $LANPACK['sitename'];
+			$LANPACK['sitename'] = $readinfo['headtitle'];
+		} else {
+			if ($modelview['readtitlestyle']) {
+				$readtitleArray = array('{title}' => $readinfo['title'], '{typename}' => $typeview['typename'], '{sitename}' => $LANPACK['sitename']);
+				$LANPACK['sitename'] = $this->fun->formatstring($modelview['readtitlestyle'], $readtitleArray);
+			}
 		}
 		if (!empty($readinfo['keywords'])) {
 			$LANPACK['keyword'] = $readinfo['keywords'];
@@ -2545,39 +2371,27 @@ class connector {
 		if (!empty($readinfo['description'])) {
 			$LANPACK['description'] = $readinfo['description'];
 		}
-
 		$templatesDIR = $this->get_templatesdir('article');
 		if ($templatesDIR) {
-
 			$tpl_filename = $lng . '/' . $templatesDIR . '/' . $read_templates;
-
 			$tpl_file = $this->pagetemplate->tpl_dir . $this->pagetemplate->templatesDIR . $tpl_filename . $this->pagetemplate->templatesfileex;
-
 			if (file_exists($tpl_file)) {
 				$this->pagetemplate->caching = false;
 				$this->pagetemplate->assign('type', $typeview);
-
 				$this->pagetemplate->assign('lngpack', $LANPACK);
 				$this->pagetemplate->assign('photo', $albumarray['list']);
-
 				if ($filepage > 1 && is_array($exCotnet)) {
 					$this->pagetemplate->assign('exid', $filepage);
 					for ($page = 1; $page <= $filepage; $page++) {
-
 						$pageArray = array();
-
 						$nkey = $page + 1;
-
 						$pkey = $page > 1 ? $page - 1 : 1;
-
 						$readinfo['nlink'] = $nkey <= $filepage ? $this->get_link('doc', $readinfo, $lng_templates, $nkey) : null;
-
 						if ($page == 2) {
 							$readinfo['plink'] = $this->get_link('doc', $readinfo, $lng_templates);
 						} elseif ($page > 2) {
 							$readinfo['plink'] = $this->get_link('doc', $readinfo, $lng_templates, $pkey);
 						}
-
 						for ($index = 0; $index < $filepage; $index++) {
 							$num = $index + 1;
 							$pageArray[$index]['num'] = $num;
@@ -2589,7 +2403,6 @@ class connector {
 						$this->pagetemplate->assign('page', $pageArray);
 						$this->pagetemplate->assign('read', $readinfo);
 						if ($page > 1) {
-
 							$readfilepath = $docfilepath . '/' . $filename . '_' . $page . '.' . $this->CON['file_fileex'];
 						}
 						$this->pagetemplate->display($tpl_filename, $dirname . '_read', true, $readfilepath, $lng_templates);
@@ -2599,11 +2412,9 @@ class connector {
 					$this->pagetemplate->display($tpl_filename, $dirname . '_read', true, $readfilepath, $lng_templates);
 				}
 			} else {
-
 				$arrayout = array('c' => 4, 's' => $tpl_file);
 			}
 		} else {
-
 			$arrayout = array('c' => 1, 's' => $templatesDIR);
 		}
 		unset($typeview);
@@ -2612,7 +2423,6 @@ class connector {
 		unset($LANPACK);
 		return $arrayout;
 	}
-
 	function get_mailinvite_type_array($mlvid = 0, $lng = 'cn') {
 		$db_where = " WHERE lng='$lng'";
 		$db_table = db_prefix . 'mailinvite_type';
@@ -2634,7 +2444,6 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function get_mailinvite_view($mlvid, $returnname = null) {
 		if (empty($mlvid)) {
 			return false;
@@ -2648,7 +2457,6 @@ class connector {
 			return $rsPower;
 		}
 	}
-
 	function get_moblie_type_array($mobtid = 0) {
 		$db_where = " WHERE isclass=1";
 		$db_table = db_prefix . 'moblie_type';
@@ -2670,109 +2478,86 @@ class connector {
 		$arrayList['list'] = $chacherray;
 		return $arrayList;
 	}
-
 	function bbsmailsend($tmcode, $dmid, $email = null) {
 		if (empty($tmcode) || empty($dmid)) {
 			return false;
 		}
 		if (!$this->CON['is_email'] || !$this->CON['bbs_ismail'] || empty($tmcode) || empty($dmid)) return false;
-
 		$email = empty($email) ? $this->CON['admine_mail'] : $email;
-
 		if (!admin_FROM) {
 			$lng = $this->sitelng;
-			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
+			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
 		} else {
 			$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
 		}
-
 		$mail = $this->get_tempmail_view($tmcode, 3, null, $lng);
 		if (!is_array($mail)) return false;
-
 		if (!$mail['isclass']) return false;
-
 		$read = $this->get_docmessage_veiw($dmid);
 		$read['addtime'] = $this->fun->formatdate($rsList['$read'], 3);
 		$reBook = $this->get_documentview($read['did']);
 		$read['link'] = $this->get_link('doc', $reBook, admin_LNG, 0, 1);
 		$read['title'] = $reBook['title'];
-
 		$nowtime = $this->fun->formatdate(time(), 3);
 		$sitename = $this->CON['sitename'];
 		$domain = $this->CON['domain'];
 		$admine_mail = $this->CON['admine_mail'];
 		$mailsendcontent = stripslashes(htmlspecialchars_decode($mail['templatecontent']));
 		$mailsendtitle = stripslashes(htmlspecialchars_decode($mail['title']));
-
 		require admin_ROOT . adminfile . '/include/inc_replace_mailtemplates.php';
 		$replacemailstr = $replacemail[$mail['typeclass']];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
 		$replacemailstr = $replacemail['mailother'];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
 		$sendtype = $this->mailsend($mailsendtitle, $mailsendcontent, $email);
 		return $sendtype;
 	}
-
 	function enquirymailsend($tmcode, $eid, $email) {
 		if (empty($tmcode) || empty($eid) || empty($email)) {
 			return false;
 		}
 		if ($this->CON['is_email'] == 0) return false;
-
 		if (!admin_FROM) {
 			$lng = $this->sitelng;
-			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
+			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
 		} else {
 			$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
 		}
-
 		$mail = $this->get_tempmail_view($tmcode, 3, null, $lng);
 		if (!is_array($mail)) return false;
-
 		if (!$mail['isclass']) return false;
-
 		$read = $this->get_enquiry($eid);
-
 		$read['province'] = $this->get_cityview($read['province'], 'cityname');
 		$read['city'] = $this->get_cityview($read['city'], 'cityname');
 		$read['district'] = $this->get_cityview($read['district'], 'cityname');
 		$read['addtime'] = $this->fun->formatdate($read['addtime'], 3);
-
 		$member = $this->get_member(null, $read['userid']);
-
 		$nowtime = $this->fun->formatdate(time(), 3);
 		$sitename = $this->CON['sitename'];
 		$domain = $this->CON['domain'];
 		$admine_mail = $this->CON['admine_mail'];
-
 		$mailsendcontent = stripslashes(htmlspecialchars_decode($mail['templatecontent']));
 		$mailsendtitle = stripslashes(htmlspecialchars_decode($mail['title']));
-
 		require admin_ROOT . adminfile . '/include/inc_replace_mailtemplates.php';
 		$replacemailstr = $replacemail[$mail['typeclass']];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
 		$replacemailstr = $replacemail['mailother'];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
 		$sendtype = $this->mailsend($mailsendtitle, $mailsendcontent, $email);
 		return $sendtype;
 	}
-
 	function ordermailsend($tmcode, $oid, $email) {
 		if (empty($tmcode) || empty($oid) || empty($email)) {
 			return false;
@@ -2780,92 +2565,71 @@ class connector {
 		if ($this->CON['is_email'] == 0) return false;
 		if (!admin_FROM) {
 			$lng = $this->sitelng;
-			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
+			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
 		} else {
 			$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
 		}
-
 		$mail = $this->get_tempmail_view($tmcode, 3, null, $lng);
 		if (!is_array($mail)) return false;
-
 		if (!$mail['isclass']) return false;
-
 		$read = $this->get_order($oid);
-
 		$read['province'] = $this->get_cityview($read['province'], 'cityname');
 		$read['city'] = $this->get_cityview($read['city'], 'cityname');
 		$read['district'] = $this->get_cityview($read['district'], 'cityname');
-
 		$read['shippingname'] = $this->get_shipplug_view($read['osid'], 'title');
-
 		$read['payname'] = $this->get_payplug_view($read['opid'], 'payname');
-
 		$read['addtime'] = $this->fun->formatdate($read['addtime'], 3);
 		$read["paytime"] = $this->fun->formatdate($read['paytime'], 3);
 		$read["shippingtime"] = $this->fun->formatdate($read['shippingtime'], 3);
-
 		$member = $this->get_member(null, $read['userid']);
-
 		$nowtime = $this->fun->formatdate(time(), 3);
 		$sitename = $this->CON['sitename'];
 		$domain = $this->CON['domain'];
 		$admine_mail = $this->CON['admine_mail'];
-
 		$mailsendcontent = stripslashes(htmlspecialchars_decode($mail['templatecontent']));
 		$mailsendtitle = stripslashes(htmlspecialchars_decode($mail['title']));
-
 		require admin_ROOT . adminfile . '/include/inc_replace_mailtemplates.php';
 		$replacemailstr = $replacemail[$mail['typeclass']];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
 		$replacemailstr = $replacemail['mailother'];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
 		$sendtype = $this->mailsend($mailsendtitle, $mailsendcontent, $email);
 		return $sendtype;
 	}
-
 	function formmailsend($tmcode, $fvid, $email) {
 		if ($this->CON['is_email'] == 0) return false;
 		if (empty($fvid) && empty($tmcode) && empty($email)) {
 			return false;
 		}
-
 		$read = $this->get_formcontent($fvid);
 		if (!admin_FROM) {
 			$lng = $this->sitelng;
-			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
+			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
 		} else {
 			$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
 		}
-
 		$mail = $this->get_tempmail_view($tmcode, 3, null, $lng);
 		if (!is_array($mail)) return false;
-
 		if (!$mail['isclass']) return false;
-
 		$form = $this->get_form_purview($read['fgid']);
 		$read["formgroupname"] = $form['formgroupname'];
 		$read['addtime'] = $this->fun->formatdate($read['addtime'], 3);
-
 		$nowtime = $this->fun->formatdate(time(), 3);
 		$sitename = $this->CON['sitename'];
 		$domain = $this->CON['domain'];
 		$admine_mail = $this->CON['admine_mail'];
-
 		$attrread = $this->get_formatt($read['fgid'], false);
 		if (is_array($attrread)) {
 			foreach ($attrread as $key => $value) {
 				if ($value['isline'] == 1) {
 					continue;
 				}
-
 				if ($value['inputtype'] == 'datetime') {
 					$mailcontent.=$read[$value['attrname']] ? $value['typename'] . ":" . date('Y-m-d H:i:s', $read[$value['attrname']]) . '<br>' : $value['typename'] . ":" . '<br>';
 				} else {
@@ -2877,24 +2641,20 @@ class connector {
 		$read["recontent"] = stripslashes(htmlspecialchars_decode($read["recontent"]));
 		$mailsendcontent = stripslashes(htmlspecialchars_decode($mail['templatecontent']));
 		$mailsendtitle = stripslashes(htmlspecialchars_decode($mail['title']));
-
 		require admin_ROOT . adminfile . '/include/inc_replace_mailtemplates.php';
 		$replacemailstr = $replacemail[$mail['typeclass']];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
 		$replacemailstr = $replacemail['mailother'];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
 		$sendtype = $this->mailsend($mailsendtitle, $mailsendcontent, $email);
 		return $sendtype;
 	}
-
 	function membermailsend($tmcode, $userid, $newpassword = null) {
 		if ($this->CON['is_email'] == 0) return false;
 		if (empty($tmcode) || empty($userid)) {
@@ -2902,44 +2662,35 @@ class connector {
 		}
 		if (!admin_FROM) {
 			$lng = $this->sitelng;
-			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
+			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
 		} else {
 			$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
 		}
-
 		$mail = $this->get_tempmail_view($tmcode, 3, null, $lng);
 		if (!is_array($mail)) return false;
-
 		if (!$mail['isclass']) return false;
-
 		$member = $this->get_member(null, $userid);
 		if (empty($member['email'])) {
 			return false;
 		}
-
 		$nowtime = $this->fun->formatdate(time(), 3);
 		$sitename = $this->CON['sitename'];
 		$domain = $this->CON['domain'];
 		$admine_mail = $this->CON['admine_mail'];
-
 		$member['addtime'] = $this->fun->formatdate($member['addtime'], 3);
 		$member['rankname'] = $this->get_member_purview($member['mcid'], 'rankname');
 		$member['newpassword'] = $newpassword;
 		$member['checklink'] = $this->get_link('member_check', $member, admin_LNG, 0, 1);
-
 		$mailsendcontent = stripslashes(htmlspecialchars_decode($mail['templatecontent']));
 		$mailsendtitle = stripslashes(htmlspecialchars_decode($mail['title']));
-
 		require admin_ROOT . adminfile . '/include/inc_replace_mailtemplates.php';
 		$replacemailstr = $replacemail[$mail['typeclass']];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
 		$replacemailstr = $replacemail['mailother'];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
@@ -2947,7 +2698,6 @@ class connector {
 		$sendtype = $this->mailsend($mailsendtitle, $mailsendcontent, $email);
 		return $sendtype;
 	}
-
 	function forumsendmail($tmcode, $bid, $email) {
 		if ($this->CON['is_email'] == 0) return false;
 		if (empty($tmcode) || empty($bid) || empty($email)) {
@@ -2955,105 +2705,64 @@ class connector {
 		}
 		if (!admin_FROM) {
 			$lng = $this->sitelng;
-			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
+			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
 		} else {
 			$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
 		}
-
 		$mail = $this->get_tempmail_view($tmcode, 3, null, $lng);
 		if (!is_array($mail)) return false;
-
 		if (!$mail['isclass']) return false;
-
 		$read = $this->get_bbs($bid);
-
 		if ($read['userid'] > 0) {
 			$member = $this->get_member(null, $read['userid']);
 		}
-
 		$nowtime = $this->fun->formatdate(time(), 3);
 		$sitename = $this->CON['sitename'];
 		$domain = $this->CON['domain'];
 		$admine_mail = $this->CON['admine_mail'];
 		$read['addtime'] = $this->fun->formatdate($read['addtime'], 3);
 		$read['retime'] = $this->fun->formatdate($read['retime'], 3);
-
 		if (defined('admin_rootDIR')) {
 			$read['forumlink'] = $this->get_link('forumread', $read, admin_LNG, 0, 1);
 		} else {
 			$read['forumlink'] = $this->get_link('forumread', $read, $read['lng'], 0, 1);
 		}
-
 		require admin_ROOT . adminfile . '/include/inc_replace_mailtemplates.php';
 		$mailsendcontent = stripslashes(htmlspecialchars_decode($mail['templatecontent']));
 		$mailsendtitle = stripslashes(htmlspecialchars_decode($mail['title']));
 		$replacemailstr = $replacemail[$mail['typeclass']];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
 		$replacemailstr = $replacemail['mailother'];
 		foreach ($replacemailstr as $key => $vlaue) {
-
 			$mailsendcontent = str_replace($vlaue['title'], $vlaue['content'], $mailsendcontent);
 			$mailsendtitle = str_replace($vlaue['title'], $vlaue['content'], $mailsendtitle);
 		}
 		$sendtype = $this->mailsend($mailsendtitle, $mailsendcontent, $email);
 		return $sendtype;
 	}
-
 	function mailsend($subject, $bodycontent, $email, $type = 1) {
 		if ($this->CON['is_email'] == 0) return false;
 		if (empty($subject) || empty($email) || empty($bodycontent)) {
 			return false;
 		}
 		if (!preg_match("/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/i", $email)) return false;
-
 		if ($this->CON['smtp_type'] == 1) {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			include_once admin_ROOT . 'public/mail/class.phpmailer.php';
 			$mail = new PHPMailer();
-
-
 			$mail->From = $this->CON['mail_send'];
-
 			$mail->FromName = $this->CON['order_companyname'];
-
 			$mail->Username = $this->CON['smtp_username'];
-
 			$mail->Password = $this->CON['smtp_password'];
-
 			$mail->Host = $this->CON['smtp_server'];
-
 			$mail->CharSet = "UTF-8";
-
 			$mail->SMTPAuth = true;
-
 			$mail->Mailer = "mail";
-
 			$mail->Port = $this->CON['smtp_port'];
-
 			$mail->Subject = $subject;
-
 			$mail->MsgHTML($bodycontent);
-
 			$mail->AddAddress($email);
 			if (!@$mail->Send()) {
 				return false;
@@ -3061,33 +2770,19 @@ class connector {
 				return true;
 			}
 		} elseif ($this->CON['smtp_type'] == 2) {
-
 			include_once admin_ROOT . 'public/mail/class.phpmailer.php';
 			$mail = new PHPMailer();
-
-
 			$mail->From = $this->CON['mail_send'];
-
 			$mail->FromName = $this->CON['order_companyname'];
-
 			$mail->Username = $this->CON['smtp_username'];
-
 			$mail->Password = $this->CON['smtp_password'];
-
 			$mail->Host = $this->CON['smtp_server'];
-
 			$mail->CharSet = "UTF-8";
-
 			$mail->SMTPAuth = true;
-
 			$mail->Mailer = "smtp";
-
 			$mail->Port = $this->CON['smtp_port'];
-
 			$mail->Subject = $subject;
-
 			$mail->MsgHTML($bodycontent);
-
 			$mail->AddAddress($email);
 			if (!@$mail->Send()) {
 				return false;
@@ -3095,33 +2790,19 @@ class connector {
 				return true;
 			}
 		} elseif ($this->CON['smtp_type'] == 3) {
-
 			include_once admin_ROOT . 'public/mail/class.phpmailer.php';
 			$mail = new PHPMailer();
-
-
 			$mail->From = $this->CON['mail_send'];
-
 			$mail->FromName = $this->CON['order_companyname'];
-
 			$mail->Username = $this->CON['smtp_username'];
-
 			$mail->Password = $this->CON['smtp_password'];
-
 			$mail->Host = $this->CON['smtp_server'];
-
 			$mail->CharSet = "UTF-8";
-
 			$mail->SMTPAuth = true;
-
 			$mail->Mailer = "sendmail";
-
 			$mail->Port = $this->CON['smtp_port'];
-
 			$mail->Subject = $subject;
-
 			$mail->MsgHTML($bodycontent);
-
 			$mail->AddAddress($email);
 			if (!@$mail->Send()) {
 				return false;
@@ -3130,22 +2811,18 @@ class connector {
 			}
 		}
 	}
-
 	function membersmssend($array = array(), $tomoblie = 0, $smscode = null) {
 		if (!$this->CON['is_moblie']) return false;
 		if (empty($tomoblie) || empty($smscode) || !is_array($array) || count($array) <= 0) return false;
 		if (!preg_match("/^1[0-9]{10}$/i", $tomoblie)) return false;
 		if (!admin_FROM) {
 			$lng = $this->sitelng;
-			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng'] : $lng;
+			$lng = empty($lng) ? ($this->CON['is_alonelng'] && !empty($this->CON['home_lng'])) ? $this->CON['home_lng'] : $this->CON['default_lng']  : $lng;
 		} else {
 			$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
 		}
-
 		$smscontent = $this->get_tempmail_view($smscode, 4, null, $lng);
-
 		if (!$smscontent['isclass']) return false;
-
 		$templatecontent = $smscontent['templatecontent'];
 		$templatecontent = str_replace('[%m_username%]', $array['username'], $templatecontent);
 		$templatecontent = str_replace('[%nowtime%]', $this->fun->formatdate(time(), 2), $templatecontent);
@@ -3154,11 +2831,9 @@ class connector {
 		$templatecontent = str_replace('[%idcode%]', $array['idcode'], $templatecontent);
 		$templatecontent = str_replace('[%password%]', $array['newpassword'], $templatecontent);
 		$templatecontent = str_replace('[%shippingsn%]', $array['shippingsn'], $templatecontent);
-
 		$sendreturn = $this->sendsms($templatecontent, $tomoblie);
 		return $sendreturn;
 	}
-
 	function sendsms($smsContent = null, $toMoblie = 0, $isSendtype = 0) {
 		if (!$this->CON['is_moblie']) return false;
 		$smsContent = trim(strip_tags($smsContent));
@@ -3170,7 +2845,6 @@ class connector {
 		$smssnid = $this->CON['moblie_smssnid'];
 		$smskey = $this->CON['moblie_smskey'];
 		$moblienumber = $this->CON['moblie_number'];
-
 		$smsdomain = admin_http;
 		$ipadd = $this->fun->ip($_SERVER['REMOTE_ADDR']);
 		if (empty($userid) || empty($smssnid) || empty($smskey) || empty($smsdomain) || empty($ipadd)) return false;
@@ -3187,7 +2861,6 @@ class connector {
 		    'moblienumber' => $moblienumber,
 		    'isSendtype' => $isSendtype
 		);
-
 		$getval = convert_uudecode($this->CON['getnetval']);
 		$posthttp = $getval . 'index.php';
 		$postre = trim($this->fun->postdb($posthttp, $data));
@@ -3197,19 +2870,16 @@ class connector {
 			return false;
 		}
 	}
-
 	function sendsmsaway($smsContent = null, $toMoblie = 0, $isSendtype = 0) {
 		if (!$this->CON['is_moblie']) return false;
 		$smsContent = trim(strip_tags($smsContent));
 		if (empty($smsContent) || empty($toMoblie)) {
 			return false;
 		}
-
 		$userid = $this->CON['moblie_userid'];
 		$smssnid = $this->CON['moblie_smssnid'];
 		$smskey = $this->CON['moblie_smskey'];
 		$moblienumber = $this->CON['moblie_number'];
-
 		$smsdomain = admin_http;
 		$ipadd = $this->fun->ip($_SERVER['REMOTE_ADDR']);
 		if (empty($userid) || empty($smssnid) || empty($smskey) || empty($smsdomain) || empty($ipadd)) return false;
@@ -3226,7 +2896,6 @@ class connector {
 		    'moblienumber' => $moblienumber,
 		    'isSendtype' => $isSendtype
 		);
-
 		$getval = convert_uudecode($this->CON['getnetval']);
 		$posthttp = $getval . 'index.php';
 		$postre = trim($this->fun->postdb($posthttp, $data));
@@ -3236,7 +2905,6 @@ class connector {
 			return false;
 		}
 	}
-
 	function get_imginfo($imgfilepath) {
 		$imagetype = @GetImageSize($imgfilepath);
 		$imginfo = array();
@@ -3252,17 +2920,14 @@ class connector {
 					$im = @ImageCreateFromPNG($imgfilepath);
 					break;
 			}
-
 			if (!$im) {
 				$imginfo['picerrid'] = 0;
 			} else {
 				$imginfo['picerrid'] = 1;
 			}
-
 			$srcW = $imagetype[0];
 			$imginfo['srcW'] = $imagetype[0];
 			$imginfo['srcH'] = $imagetype[1];
-
 			if ($imginfo['srcW'] <= 500) {
 				$windowsW = 600;
 			} else {
@@ -3271,50 +2936,35 @@ class connector {
 					$windowsW = 850;
 				}
 			}
-
 			$windowsH = $imginfo['srcH'] + 300;
 			if ($windowsH > 400) {
 				$windowsH = 400;
 			}
 			$imginfo['windowsW'] = $windowsW;
 			$imginfo['windowsH'] = $windowsH;
-
 			return $imginfo;
 		} else {
 			return false;
 		}
 	}
-
 	function getMimeType($file) {
 		return @is_dir($file) ? 'dir' : $this->mime($file);
 	}
-
 	function mime($file) {
-
 		$file = realpath($file);
-
 		$options = @pathinfo($file);
 		return $options;
 	}
-
-	function get_link($module = null, $read = array(), $lng_temp = '', $pagekey = 0, $patyclass = 0) {
+	function get_link($module = null, $read = array(), $lng_temp = '', $pagekey = 0, $patyclass = 0, $is_wap = 0) {
 		$lng_temp = empty($lng_temp) ? $this->CON['is_lancode'] : $lng_temp;
-
 		$lng_dir = $this->get_lng_dirpack($lng_temp);
 		if (empty($module)) return false;
-
-		$is_html = admin_WAP ? 0 : $this->CON['is_html'];
-
-		$is_rewrite = admin_WAP ? 0 : $this->CON['is_rewrite'];
-
+		$is_html = admin_WAP || $is_wap ? 0 : $this->CON['is_html'];
+		$is_rewrite = admin_WAP || $is_wap ? 0 : $this->CON['is_rewrite'];
 		$file_fileex = $this->CON['file_fileex'];
-
 		$file_htmldir = $this->CON['file_htmldir'];
-
 		$entrance_file = $this->CON['entrance_file'];
-
 		$file_sitemapdir = $this->CON['file_sitemapdir'];
-
 		$typeclass = 1;
 		switch ($module) {
 			case 'home':
@@ -3348,16 +2998,13 @@ class connector {
 					}
 				}
 				break;
-
 			case 'messlist':
 				if ($is_rewrite) {
-
 					$link = 'messmain_list_' . $read['did'] . '.' . $file_fileex;
 				} else {
 					$link = "index.php?ac=messmain&at=list&did=" . $read['did'];
 				}
 				break;
-
 			case 'messform':
 				if ($is_rewrite) {
 					$link = 'messmain_save.' . $file_fileex;
@@ -3365,14 +3012,12 @@ class connector {
 					$link = "index.php?ac=messmain&at=save";
 				}
 				break;
-
 			case 'doc':
 				if ($read['islink'] == 1) {
 					$typeclass = 0;
 					$link = $read['link'];
 				} else {
 					if ($is_html && $read['ishtml'] && $read['pageclass']) {
-
 						if ($pagekey > 0) {
 							$link = $read['filepath'] . '/' . $read['filename'] . '_' . $pagekey . '.' . $file_fileex;
 						} else {
@@ -3395,22 +3040,17 @@ class connector {
 					}
 				}
 				break;
-
 			case 'type':
 				if ($read['styleid'] == 3) {
 					if ($read['isline']) {
-
 						$typeclass = 0;
 						$link = $read['typeurl'];
 					} else {
-
 						$tolineDIR = $this->get_type($read['gotoline']);
 						if ($is_html && $tolineDIR['pageclass']) {
-
 							$link = empty($tolineDIR['dirpath']) ? $tolineDIR['dirname'] : $tolineDIR['dirpath'] . '/' . $tolineDIR['dirname'];
 						} else {
 							if ($is_rewrite) {
-
 								$link = 'article_list_' . $tolineDIR['tid'] . '.' . $file_fileex;
 							} else {
 								$link = "index.php?ac=article&at=list&tid=" . $tolineDIR['tid'];
@@ -3419,12 +3059,9 @@ class connector {
 					}
 				} else {
 					if ($is_html && $read['pageclass']) {
-
 						$link = empty($read['dirpath']) ? $read['dirname'] : $read['dirpath'] . '/' . $read['dirname'];
 					} else {
-
 						if ($is_rewrite) {
-
 							$link = 'article_list_' . $read['tid'] . '.' . $file_fileex;
 						} else {
 							$link = "index.php?ac=article&at=list&tid=" . $read['tid'];
@@ -3432,7 +3069,6 @@ class connector {
 					}
 				}
 				break;
-
 			case 'typerss':
 				if ($read['styleid'] == 3) {
 					$link = null;
@@ -3440,21 +3076,17 @@ class connector {
 					$link = $file_sitemapdir . 'rss_' . $read['dirname'] . '.xml';
 				}
 				break;
-
 			case 'subtype':
 				if ($is_html) {
-
 					$link = $read['dirpath'] . '/';
 				} else {
 					if ($is_rewrite) {
-
 						$link = 'special_list_' . $read['sid'] . '.' . $file_fileex;
 					} else {
 						$link = "index.php?ac=special&at=list&sid=" . $read['sid'];
 					}
 				}
 				break;
-
 			case 'form':
 				if ($is_rewrite) {
 					$link = 'form_list_' . $read['fgid'] . '.' . $file_fileex;
@@ -3462,16 +3094,13 @@ class connector {
 					$link = "index.php?ac=form&at=list&fgid=" . $read['fgid'];
 				}
 				break;
-
 			case 'acform':
 				$link = "index.php?ac=form&at=save";
 				break;
-
 			case 'seccode':
 				$typeclass = 0;
 				$link = admin_URL . "public/seccode.php";
 				break;
-
 			case 'memberlogin':
 				if ($is_rewrite) {
 					$link = 'member_login.' . $file_fileex;
@@ -3479,25 +3108,21 @@ class connector {
 					$link = "index.php?ac=member&at=login";
 				}
 				break;
-
 			case 'member_check':
 				$username = $this->fun->eccode($read['username'], 'ENCODE', db_pscode, FALSE);
 				$password = $this->fun->eccode($read['password'], 'ENCODE', db_pscode, FALSE);
 				$link = "index.php?ac=member&at=emailmarketing&key=" . $username . '&code=' . $password;
 				break;
-
 			case 'member_mailsend':
 				$username = $this->fun->eccode($read['username'], 'ENCODE', db_pscode, FALSE);
 				$password = $this->fun->eccode($read['password'], 'ENCODE', db_pscode, FALSE);
 				$link = "index.php?ac=member&at=mailsend&key=" . $username . '&code=' . $password;
 				break;
-
 			case 'member_ucenter':
 				$username = $this->fun->eccode($read['username'], 'ENCODE', db_pscode, FALSE);
 				$password = $this->fun->eccode($read['password'], 'ENCODE', db_pscode, FALSE);
 				$link = "index.php?ac=member&at=uccheckuser&key=" . $username . '&code=' . $password;
 				break;
-
 			case 'order':
 				if ($is_rewrite) {
 					$link = 'order_list.' . $file_fileex;
@@ -3505,7 +3130,6 @@ class connector {
 					$link = "index.php?ac=order&at=list";
 				}
 				break;
-
 			case 'orderread':
 				if ($is_rewrite) {
 					$link = 'ordermain_read_' . $read['oid'] . '.' . $file_fileex;
@@ -3513,7 +3137,6 @@ class connector {
 					$link = "index.php?ac=ordermain&at=read&oid=" . $read['oid'];
 				}
 				break;
-
 			case 'orderdel':
 				if ($is_rewrite) {
 					$link = 'ordermain_del_' . $read['oid'] . '.' . $file_fileex;
@@ -3521,7 +3144,6 @@ class connector {
 					$link = "index.php?ac=ordermain&at=del&oid=" . $read['oid'];
 				}
 				break;
-
 			case 'buylink':
 				if ($is_rewrite) {
 					$link = 'order_buy_' . $read['did'] . '.' . $file_fileex;
@@ -3529,7 +3151,6 @@ class connector {
 					$link = "index.php?ac=order&at=buy&did=" . $read['did'];
 				}
 				break;
-
 			case 'buydel':
 				if ($is_rewrite) {
 					$link = 'order_delcart_' . $read['did'] . '.' . $file_fileex;
@@ -3537,7 +3158,6 @@ class connector {
 					$link = "index.php?ac=order&at=delcart&did=" . $read['did'];
 				}
 				break;
-
 			case 'enqlink':
 				if ($is_rewrite) {
 					$link = 'enquiry_into_' . $read['did'] . '.' . $file_fileex;
@@ -3545,7 +3165,6 @@ class connector {
 					$link = "index.php?ac=enquiry&at=into&did=" . $read['did'];
 				}
 				break;
-
 			case 'enquiry':
 				if ($is_rewrite) {
 					$link = 'enquiry_list.' . $file_fileex;
@@ -3553,7 +3172,6 @@ class connector {
 					$link = "index.php?ac=enquiry&at=list";
 				}
 				break;
-
 			case 'enqdel':
 				if ($is_rewrite) {
 					$link = 'enquiry_delenq_' . $read['did'] . '.' . $file_fileex;
@@ -3561,7 +3179,6 @@ class connector {
 					$link = "index.php?ac=enquiry&at=delenq&did=" . $read['did'];
 				}
 				break;
-
 			case 'enquiryread':
 				if ($is_rewrite) {
 					$link = 'enquirymain_read_' . $read['eid'] . '.' . $file_fileex;
@@ -3569,7 +3186,6 @@ class connector {
 					$link = "index.php?ac=enquirymain&at=read&eid=" . $read['eid'];
 				}
 				break;
-
 			case 'enquirydel':
 				if ($is_rewrite) {
 					$link = 'enquirymain_del_' . $read['eid'] . '.' . $file_fileex;
@@ -3577,7 +3193,6 @@ class connector {
 					$link = "index.php?ac=enquirymain&at=del&eid=" . $read['eid'];
 				}
 				break;
-
 			case 'forum':
 				if ($is_rewrite) {
 					$link = 'forum_list_' . $read['btid'] . '.' . $file_fileex;
@@ -3585,7 +3200,6 @@ class connector {
 					$link = "index.php?ac=forum&at=list&btid=" . $read['btid'];
 				}
 				break;
-
 			case 'forumadd':
 				if ($is_rewrite) {
 					$link = 'forum_add_' . $read['btid'] . '.' . $file_fileex;
@@ -3593,7 +3207,6 @@ class connector {
 					$link = "index.php?ac=forum&at=add&btid=" . $read['btid'];
 				}
 				break;
-
 			case 'forumread':
 				if ($is_rewrite) {
 					$link = 'forum_read_' . $read['bid'] . '.' . $file_fileex;
@@ -3601,7 +3214,6 @@ class connector {
 					$link = "index.php?ac=forum&at=read&bid=" . $read['bid'];
 				}
 				break;
-
 			case 'forumedit':
 				if ($is_rewrite) {
 					$link = 'forummain_edit_' . $read['bid'] . '.' . $file_fileex;
@@ -3609,11 +3221,9 @@ class connector {
 					$link = "index.php?ac=forummain&at=edit&bid=" . $read['bid'];
 				}
 				break;
-
 			case 'paybackurl':
 				$link = "index.php?ac=respond&at=payok&codesn=" . $read['codesn'] . "&code=" . $read['code'] . "&ordersn=" . $read['ordersn'] . "&oid=" . $read['oid'];
 				break;
-
 			case 'search':
 				if ($is_rewrite) {
 					$link = 'search_list.' . $file_fileex;
@@ -3621,7 +3231,6 @@ class connector {
 					$link = "index.php?ac=search&at=list";
 				}
 				break;
-
 			case 'bbssearch':
 				if ($is_rewrite) {
 					$link = 'bbssearch_list.' . $file_fileex;
@@ -3632,7 +3241,6 @@ class connector {
 			case 'taglink':
 				$link = "index.php?ac=search&at=taglist&tagkey=" . urlencode($read['key']);
 				break;
-
 			case 'invite':
 				if ($is_rewrite) {
 					$link = 'public_invite.' . $file_fileex;
@@ -3640,201 +3248,45 @@ class connector {
 					$link = "index.php?ac=public&at=invite";
 				}
 				break;
+			case 'wxposeturl':
+				$link = "index.php?ac=weixinmain&at=verify&wxid=" . $read['wxid'] . '&wxcode=' . $read['md5code'];
+				break;
 		}
-
 		$http_pathtype = $patyclass ? 1 : $this->CON['http_pathtype'];
-		if (admin_WAP) {
-			$pathclass = ($this->CON['home_lng'] != $lng_temp) ? '&lng=' . $lng_temp : null;
+		if (admin_WAP || $is_wap) {
+			$pathclass = ($this->CON['wap_default_lng'] != $lng_temp) ? '&lng=' . $lng_temp : null;
 			if ($typeclass) {
-
-				$link = admin_rootDIR . 'wap/' . $link . $pathclass;
+				$link = $http_pathtype ? admin_URL . 'wap/' . $link . $pathclass : admin_rootDIR . 'wap/' . $link . $pathclass;
 			}
 		} else {
-
 			$lngurl = $this->get_lan_view($read['lng'], 'url');
 			if ($this->CON['is_alonelng'] && !$is_html) {
 				$pathdir = null;
 			} elseif ($this->CON['is_alonelng'] && $is_html) {
-
 				$pathdir = ($this->CON['home_lng'] != $lng_temp) ? $file_htmldir . $lng_dir . '/' : $file_htmldir;
 			} elseif (!$this->CON['is_alonelng'] && $is_html) {
 				$pathdir = $file_htmldir . $lng_dir . '/';
 			} elseif (!$this->CON['is_alonelng'] && !$is_html) {
 				$pathdir = ($this->CON['home_lng'] != $lng_temp) ? $file_htmldir . $lng_dir . '/' : null;
 			}
-
 			if ($typeclass) {
-
 				if (defined('admin_rootDIR')) {
-
 					$link = ($http_pathtype && $typeclass) ? (!empty($lngurl) ? $lngurl . '/' . $pathdir . $link : admin_URL . $pathdir . $link) : admin_rootDIR . $pathdir . $link;
 				} else {
-
 					$link = ($http_pathtype && $typeclass) ? (!empty($lngurl) ? $lngurl . '/' . $pathdir . $link : admin_URL . $pathdir . $link) : '/' . $pathdir . $link;
 				}
 			}
 		}
 		return $link;
 	}
-
-	function get_waplink($module = null, $read = array(), $lng_temp = '', $pagekey = 0, $patyclass = 0) {
+	function memberlink($read = array(), $lng_temp = '', $is_wap = 0) {
 		$lng_temp = empty($lng_temp) ? $this->CON['is_lancode'] : $lng_temp;
-
 		$lng_dir = $this->get_lng_dirpack($lng_temp);
-		if (empty($module)) return false;
-
-		$typeclass = 1;
-		switch ($module) {
-			case 'home':
-				$link = 'index.php?lng=';
-				break;
-			case 'lng':
-				if (!empty($read['url'])) {
-					$typeclass = 0;
-					$link = $read['url'];
-				} else {
-					$link = 'index.php?lng=' . $read['lng'];
-				}
-				break;
-
-			case 'messlist':
-				$link = "index.php?ac=messmain&at=list&did=" . $read['did'];
-				break;
-
-			case 'messform':
-				$link = "index.php?ac=messmain&at=save";
-				break;
-
-			case 'doc':
-				if ($read['islink'] == 1) {
-					$typeclass = 0;
-					$link = $read['link'];
-				} else {
-					if ($pagekey > 0) {
-						$link = "index.php?ac=article&at=read&did=" . $read['did'] . '&page=' . $pagekey;
-					} else {
-						$link = "index.php?ac=article&at=read&did=" . $read['did'];
-					}
-				}
-				break;
-
-			case 'type':
-				if ($read['styleid'] == 3) {
-					$typeclass = 0;
-					$link = $read['typeurl'];
-				} else {
-					$link = "index.php?ac=article&at=list&tid=" . $read['tid'];
-				}
-				break;
-
-			case 'subtype':
-				$link = "index.php?ac=special&at=list&sid=" . $read['sid'];
-				break;
-
-			case 'form':
-				$link = "index.php?ac=form&at=list&fgid=" . $read['fgid'];
-				break;
-
-			case 'acform':
-				$link = "index.php?ac=form&at=save";
-				break;
-
-			case 'seccode':
-				$link = "public/seccode.php";
-				break;
-
-			case 'memberlogin':
-				$link = "index.php?ac=member&at=login";
-				break;
-
-			case 'member_check':
-				$username = $this->fun->eccode($read['username'], 'ENCODE', db_pscode);
-				$password = $this->fun->eccode($read['password'], 'ENCODE', db_pscode);
-				$link = "index.php?ac=member&at=emailmarketing&key=" . $username . '&code=' . $password;
-				break;
-
-			case 'member_mailsend':
-				$username = $this->fun->eccode($read['username'], 'ENCODE', db_pscode);
-				$password = $this->fun->eccode($read['password'], 'ENCODE', db_pscode);
-				$link = "index.php?ac=member&at=mailsend&key=" . $username . '&code=' . $password;
-				break;
-
-			case 'member_ucenter':
-				$username = $this->fun->eccode($read['username'], 'ENCODE', db_pscode);
-				$password = $this->fun->eccode($read['password'], 'ENCODE', db_pscode);
-				$link = "index.php?ac=member&at=uccheckuser&key=" . $username . '&code=' . $password;
-				break;
-
-			case 'orderread':
-				$link = "index.php?ac=ordermain&at=read&oid=" . $read['oid'];
-				break;
-
-			case 'orderdel':
-				$link = "index.php?ac=ordermain&at=del&oid=" . $read['oid'];
-				break;
-
-			case 'enquiryread':
-				$link = "index.php?ac=enquirymain&at=read&eid=" . $read['eid'];
-				break;
-
-			case 'enquirydel':
-				$link = "index.php?ac=enquirymain&at=del&eid=" . $read['eid'];
-				break;
-
-			case 'forum':
-				$link = "index.php?ac=forum&at=list&btid=" . $read['btid'];
-				break;
-
-			case 'forumadd':
-				$link = "index.php?ac=forum&at=add&btid=" . $read['btid'];
-				break;
-
-			case 'forumread':
-				$link = "index.php?ac=forum&at=read&bid=" . $read['bid'];
-				break;
-
-			case 'forumedit':
-				$link = "index.php?ac=forummain&at=edit&bid=" . $read['bid'];
-				break;
-
-			case 'search':
-				$link = "index.php?ac=search&at=list";
-				break;
-			case 'taglink':
-				$link = "index.php?ac=search&at=taglist&tagkey=" . urlencode($read['key']);
-				break;
-
-			case 'invite':
-				$link = "index.php?ac=public&at=invite";
-				break;
-		}
-
-		$lngurl = $this->get_lan_view($read['lng'], 'url');
-		$pathclass = ($this->CON['home_lng'] != $lng_temp) ? '&lng=' . $lng_temp : null;
-		$http_pathtype = $this->CON['http_pathtype'];
-
-		if ($typeclass) {
-
-			$link = admin_rootDIR . 'wap/' . $link . $pathclass;
-		}
-		return $link;
-	}
-
-	function memberlink($read = array(), $lng_temp = '') {
-		$lng_temp = empty($lng_temp) ? $this->CON['is_lancode'] : $lng_temp;
-
-		$lng_dir = $this->get_lng_dirpack($lng_temp);
-
-		$is_html = $this->CON['is_html'];
-
-		$is_rewrite = $this->CON['is_rewrite'];
-
+		$is_html = admin_WAP || $is_wap ? 0 : $this->CON['is_html'];
+		$is_rewrite = admin_WAP || $is_wap ? 0 : $this->CON['is_rewrite'];
 		$file_fileex = $this->CON['file_fileex'];
-
 		$file_htmldir = $this->CON['file_htmldir'];
-
 		$entrance_file = $this->CON['entrance_file'];
-
 		if ($is_rewrite) {
 			$link['login'] = 'member_login.' . $file_fileex;
 			$link['logindb'] = 'member_logindb.' . $file_fileex;
@@ -3848,35 +3300,20 @@ class connector {
 			$link['memedit_info'] = 'membermain_editinfo.' . $file_fileex;
 			$link['memedit_password'] = 'membermain_editpassword.' . $file_fileex;
 			$link['memedit_email'] = 'membermain_editemail.' . $file_fileex;
-
 			$link['membersave'] = 'membermain_save.' . $file_fileex;
-
 			$link['orderlist'] = 'ordermain_list_1.' . $file_fileex;
-
 			$link['buylist'] = 'order_list.' . $file_fileex;
-
 			$link['clearcart'] = 'order_clearcart.' . $file_fileex;
-
 			$link['orderupdae'] = 'order_orderupdae.' . $file_fileex;
-
 			$link['orderpay'] = 'order_orderpay.' . $file_fileex;
-
 			$link['ordersave'] = 'order_ordersave.' . $file_fileex;
-
 			$link['ordereditsave'] = 'ordermain_ordereditsave.' . $file_fileex;
-
 			$link['forumlist'] = 'forummain_list_1.' . $file_fileex;
-
 			$link['forumeditsave'] = 'forummain_save.' . $file_fileex;
-
 			$link['forumsave'] = 'forum_save.' . $file_fileex;
-
 			$link['cleargoods'] = 'enquiry_cleargoods.' . $file_fileex;
-
 			$link['enquirysave'] = 'enquiry_enquirysave.' . $file_fileex;
-
 			$link['enquirylist'] = 'enquirymain_list_1.' . $file_fileex;
-
 			$link['enquiryeditsave'] = 'enquirymain_enquiryeditsave.' . $file_fileex;
 			$link['moblie_validate'] = 'membermain_moblievalidate' . $file_fileex;
 			$link['moblie_validatecode'] = 'membermain_moblievalidatecode' . $file_fileex;
@@ -3914,28 +3351,35 @@ class connector {
 			$link['moblie_validatecode'] = "index.php?ac=membermain&at=moblievalidatecode";
 			$link['moblie_validatesave'] = "index.php?ac=membermain&at=moblievalidatesave";
 			$link['moblie_getvalidatecode'] = "index.php?ac=membermain&at=getvalidatecode";
+			$link['article'] = "index.php?ac=article&at=ajaxlist";
+			$link['orderlistajax'] = "index.php?ac=ordermain&at=ajaxlist&al=1";
+			$link['enquirylistajax'] = "index.php?ac=enquirymain&at=ajaxlist&al=1";
+			$link['forumlistajax'] = "index.php?ac=forummain&at=ajaxlist";
+			$link['bbslitajax'] = "index.php?ac=forum&at=ajaxlist";
+			$link['articlebbslitajax'] = "index.php?ac=messmain&at=ajaxlist";
 		}
-
-		$lngurl = $this->get_lan_view($read['lng'], 'url');
-		if ($this->CON['is_alonelng'] && !$is_html) {
-			$pathdir = null;
-		} else {
-
-			$pathdir = ($this->CON['home_lng'] != $lng_temp) ? $file_htmldir . $lng_dir . '/' : null;
-		}
-
-		if (defined('admin_rootDIR')) {
+		if (admin_WAP || $is_wap) {
+			$pathclass = ($this->CON['wap_default_lng'] != $lng_temp) ? '&lng=' . $lng_temp : null;
 			foreach ($link as $key => $value) {
-				$link[$key] = ($this->CON['http_pathtype']) ? (!empty($lngurl) ? $lngurl . '/' . $pathdir . $value : admin_URL . $pathdir . $value) : admin_rootDIR . $pathdir . $value;
+				$link[$key] = ($this->CON['http_pathtype']) ? admin_URL . 'wap/' . $value . $pathclass : admin_rootDIR . 'wap/' . $value . $pathclass;
 			}
 		} else {
-			foreach ($link as $key => $value) {
-				$link[$key] = ($this->CON['http_pathtype']) ? (!empty($lngurl) ? $lngurl . '/' . $pathdir . $value : admin_URL . $pathdir . $value) : $pathdir . $value;
+			$lngurl = $this->get_lan_view($read['lng'], 'url');
+			if ($this->CON['is_alonelng'] && !$is_html) {
+				$pathdir = null;
+			} else {
+				$pathdir = ($this->CON['home_lng'] != $lng_temp) ? $file_htmldir . $lng_dir . '/' : null;
+			}
+			if (defined('admin_rootDIR')) {
+				foreach ($link as $key => $value) {
+					$link[$key] = ($this->CON['http_pathtype']) ? (!empty($lngurl) ? $lngurl . '/' . $pathdir . $value : admin_URL . $pathdir . $value) : admin_rootDIR . $pathdir . $value;
+				}
+			} else {
+				foreach ($link as $key => $value) {
+					$link[$key] = ($this->CON['http_pathtype']) ? (!empty($lngurl) ? $lngurl . '/' . $pathdir . $value : admin_URL . $pathdir . $value) : $pathdir . $value;
+				}
 			}
 		}
 		return $link;
 	}
-
 }
-
-?>

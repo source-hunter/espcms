@@ -1,0 +1,69 @@
+<div class="footer_page">
+	<div class="footer_talbe">
+		{%get name=typelist%}
+			{%forlist from=$array key=i%}
+			<dl>
+				<dt><a href="{%$array[i].link%}" title="{%$array[i].typename%}">{%$array[i].typename%}</a></dt>
+				{%if count( $array[i].childArray ) > 0 %}
+				{%forlist from=$array[i].childArray key=ii%}
+				<dd><a href="{%$array[i].childArray[ii].link%}" title="{%$array[i].childArray[ii].typename%}">{%$array[i].childArray[ii].typename%}</a></dd>
+				{%/forlist%}
+				{%/if%}
+			</dl>
+			{%/forlist%}
+		{%/get%}
+		<dl class="content">
+			<dd>Address:Great China International Financial Center, Building C, 1801,Futian District, Shenzhen,Guangdong Province，China</dd>
+			<dd>Http://www.ecisp.cn/</dd>
+			<dd>E-mail:admin@espcms.com</dd>
+
+			<dt class="subscription">
+				{%get name=invite class=mlvid:2%}
+				<form name="inviteform" method="post" action="{%$link%}">
+				<input type="hidden" name="mlvid" value="{%$read.mlvid%}">
+				<input type="hidden" name="lng" value="{%$read.lng%}">
+				<table>
+					<tr>
+						<td><input id="email" name="email" type="text" class="infoInput" size="18"/></td>
+						<td><input name="submitsearch" type="submit" class="button blue" value="Bubscription" /></td>
+					</tr>
+				</table>
+				</form>
+				{%/get%}
+			</dt>
+		</dl>
+	</div>
+	<div class="footer_talbe_str">
+		<div class="sitetype">
+			<div class="foot_l">
+				<p>
+					{%get name=typepart class=mid:0%}
+						{%forlist from=$array key=i%}
+							{%if key=>i>1%}<span>|</span>{%/if%}
+							<a title="{%$array[i].typename%}" href="{%$array[i].link%}">{%$array[i].typename%}</a>
+						{%/forlist%}
+					{%/get%}
+					<br/>
+					ESPCMS V6 [ESPCMS] Copyright 2005-2014 All Rights Reserved Powered by ESPCMS V6<br/>
+					Address: Great China International Financial Center, Building C, 1801,Futian District, Shenzhen,Guangdong Province，China
+				</p>
+			</div>
+			<div class="foot_r">
+				<!-- Baidu Button BEGIN -->
+				<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+					<a class="bds_tsina" title="分享到新浪微博" href="#"></a>
+					<a class="bds_tqq" title="分享到腾讯微博" href="#"></a>
+					<a class="bds_douban" title="分享到豆瓣网" href="#"></a>
+					<a class="bds_renren" title="分享到人人网" href="#"></a>
+				</div>
+				<script type="text/javascript" id="bdshare_js" data="type=tools&amp;mini=1&amp;uid=201241" src="http://bdimg.share.baidu.com/static/js/bds_s_v2.js?cdnversion=387712"></script>
+
+				<script type="text/javascript">
+					document.getElementById("bdshare_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date() / 3600000)
+				</script>
+				<!-- Baidu Button END -->
+			</div>
+		</div>
+	</div>
+</div>
+{%list name=im class=wxid:1%}

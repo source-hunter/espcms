@@ -4,9 +4,8 @@
   PHP version 5
   Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
   警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
-
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class functioninc {
@@ -78,14 +77,13 @@ class functioninc {
 	function delfile($file) {
 		if (!is_dir($file)) {
 			if (is_file($file)) {
-
 				if (!@is_writable($file)) @chmod($file, 0777);
 				return unlink($file);
 			}else {
 				return false;
 			}
 		} else {
-			$this->delDir($file);
+			return $this->delDir($file);
 		}
 	}
 
@@ -101,8 +99,38 @@ class functioninc {
 				}
 			}
 			closedir($handle);
-			if (@rmdir($dirName)) return false;
+			if (!@rmdir($dirName)) return false;
 		}
+	}
+
+	function list_dir($dirpath, $extension = array()) {
+		if ($dirpath[strlen($dirpath) - 1] != "/") {
+			$dirpath.="/";
+		}
+		static $result_array = array();
+		if (is_dir($dirpath)) {
+			$handle = opendir($dirpath);
+			while (false !== ( $file = readdir($handle))) {
+				if ($file == "." || $file == "..") {
+					continue;
+				}
+				$filename = $dirpath . $file;
+				if (is_dir($filename)) {
+					array_push($result_array, $filename);
+					$this->list_dir($filename, $extension);
+				} else {
+					if (count($extension) > 0) {
+						$options = @pathinfo($filename);
+						if (!in_array($options['extension'], $extension)) {
+							continue;
+						}
+					}
+					array_push($result_array, $filename);
+				}
+			}
+			closedir($handle);
+		}
+		return $result_array;
 	}
 
 	function random($length = 6, $numeric = 0) {
@@ -130,7 +158,6 @@ class functioninc {
 
 	function setcookie($key, $value, $life = 0) {
 		$this->time = time();
-
 		setcookie($key, $value, ($life ? time() + $life : 0), '/', '', ($_SERVER['SERVER_PORT'] == 443 ? 1 : 0));
 	}
 
@@ -144,28 +171,34 @@ class functioninc {
 	function eccode($string, $operation = 'DECODE', $key = '@LFK24s224%@safS3s%1f%', $mcrype = true) {
 		$result = null;
 		if ($operation == 'ENCODE') {
-
-			for ($i = 0; $i < strlen($string); $i++) {
-				$char = substr($string, $i, 1);
-				$keychar = substr($key, ($i % strlen($key)) - 1, 1);
-				$char = chr(ord($char) + ord($keychar));
-				$result.=$char;
+			if (extension_loaded('mcrypt') && $mcrype) {
+				$result = $this->encryptCookie($string, $key);
+			} else {
+				for ($i = 0; $i < strlen($string); $i++) {
+					$char = substr($string, $i, 1);
+					$keychar = substr($key, ($i % strlen($key)) - 1, 1);
+					$char = chr(ord($char) + ord($keychar));
+					$result.=$char;
+				}
+				$result = base64_encode($result);
+				$result = str_replace(array('+', '/', '='), array('-', '_', ''), $result);
 			}
-			$result = base64_encode($result);
-			$result = str_replace(array('+', '/', '='), array('-', '_', ''), $result);
 		} elseif ($operation == 'DECODE') {
-
-			$data = str_replace(array('-', '_'), array('+', '/'), $string);
-			$mod4 = strlen($data) % 4;
-			if ($mod4) {
-				$data .= substr('====', $mod4);
-			}
-			$string = base64_decode($data);
-			for ($i = 0; $i < strlen($string); $i++) {
-				$char = substr($string, $i, 1);
-				$keychar = substr($key, ($i % strlen($key)) - 1, 1);
-				$char = chr(ord($char) - ord($keychar));
-				$result.=$char;
+			if (extension_loaded('mcrypt') && $mcrype) {
+				$result = $this->decryptCookie($string, $key);
+			} else {
+				$data = str_replace(array('-', '_'), array('+', '/'), $string);
+				$mod4 = strlen($data) % 4;
+				if ($mod4) {
+					$data .= substr('====', $mod4);
+				}
+				$string = base64_decode($data);
+				for ($i = 0; $i < strlen($string); $i++) {
+					$char = substr($string, $i, 1);
+					$keychar = substr($key, ($i % strlen($key)) - 1, 1);
+					$char = chr(ord($char) - ord($keychar));
+					$result.=$char;
+				}
 			}
 		}
 		return $result;
@@ -211,7 +244,6 @@ class functioninc {
 	}
 
 	function stripslashes($string) {
-
 		if (is_array($string)) {
 			foreach ($string as $key => $val) {
 				$string[$key] = $this->stripslashes($val);
@@ -368,7 +400,6 @@ class functioninc {
 				}
 				break;
 		}
-
 		$putvalue = isset($var[$k]) ? $this->daddslashes($var[$k], 0) : NULL;
 		return $htmlcode ? ($rehtml ? $this->preg_htmldecode($putvalue) : $this->htmldecode($putvalue)) : $putvalue;
 	}
@@ -449,7 +480,6 @@ class functioninc {
 	}
 
 	function formatdate($time, $type = 3) {
-
 		$time = empty($time) ? time() : ((strstr($time, ':') || strstr($time, '-')) ? strtotime($time) : $time);
 		switch ($type) {
 			case 1:
@@ -480,9 +510,7 @@ class functioninc {
 	}
 
 	function cache_id() {
-
 		$SELF = 'http://' . $_SERVER[HTTP_HOST] . $this->request_url();
-
 		$cache_id = md5($SELF);
 		return $cache_id;
 	}
@@ -509,10 +537,8 @@ class functioninc {
 			}
 		}
 		@closedir($dir);
-
 		unset($modulesid);
 		foreach ($modules as $key => $value) {
-
 			ksort($modules[$key]);
 		}
 		ksort($modules);
@@ -520,70 +546,39 @@ class functioninc {
 	}
 
 	function filemode($file, $checktype = 'w') {
-
 		if (!file_exists($file)) {
 			return false;
 		}
-		if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-
-			$testfile = $file . 'writetest.txt';
-
-			if (is_dir($file)) {
-
-				$dir = @opendir($file);
-
-				if ($dir === false) {
-					return false;
-				}
-
-				if ($checktype == 'r') {
-					$mode = (@readdir($dir) != false) ? true : false;
-					@closedir($dir);
-					return $mode;
-				}
-
-				if ($checktype == 'w') {
-					$fp = @fopen($testfile, 'wb');
-					if ($fp != false) {
-						$wp = @fwrite($fp, 'demo');
-						$mode = ($wp != false) ? true : false;
-						@fclose($fp);
-						@unlink($testfile);
-						return $mode;
-					} else {
-						return false;
-					}
-				}
-			} elseif (is_file($file)) {
-
-				if ($checktype == 'r') {
-					$fp = @fopen($file, 'rb');
+		$file = realpath($file);
+		if (is_dir($file)) {
+			$testfile = $file . '/isfwrite.text';
+			$dir = @opendir($file);
+			if (!$dir) {
+				return false;
+			}
+			if ($checktype == 'r') {
+				$mode = (@readdir($dir) != false) ? true : false;
+				@closedir($dir);
+				return $mode;
+			}
+			if ($checktype == 'w') {
+				$fp = @fopen($testfile, 'wb');
+				if ($fp != false) {
+					$wp = @fwrite($fp, " ");
+					$mode = ($wp != false) ? true : false;
 					@fclose($fp);
-					$mode = ($fp != false) ? true : false;
+					@unlink($testfile);
 					return $mode;
-				}
-
-				if ($checktype == 'w') {
-					$fp = @fopen($file, 'ab+');
-					if ($fp != false) {
-						$wp = @fwrite($fp, " ");
-						$mode = ($wp != false) ? true : false;
-						@fclose($fp);
-						return $mode;
-					} else {
-
-						return false;
-					}
+				} else {
+					return false;
 				}
 			}
 		} else {
-
 			if ($checktype == 'r') {
 				$fp = @is_readable($file);
 				$mode = ($fp) ? true : false;
 				return $mode;
 			}
-
 			if ($checktype == 'w') {
 				$fp = @is_writable($file);
 				$mode = ($fp) ? true : false;
@@ -636,7 +631,6 @@ class functioninc {
 	function num_bitunit($num) {
 		$bitunit = array(' B', ' KB', ' MB', ' GB');
 		for ($key = 0, $count = count($bitunit); $key < $count; $key++) {
-
 			if ($num >= pow(2, 10 * $key) - 1) {
 				$num_bitunit_str = (ceil($num / pow(2, 10 * $key) * 100) / 100) . " $bitunit[$key]";
 			}
@@ -694,12 +688,10 @@ class functioninc {
 		if (empty($body)) return false;
 		if ($len < 1) return false;
 		$body = $this->stripslashes($body);
-
 		$body = html_entity_decode($body);
 		$body = trim(strip_tags($body));
 		$str = substr($body, 0, $len);
 		if ($isfont) {
-
 			$str = preg_replace("/[\r\n]{1,}/isU", "", $str);
 			$str = ltrim($str);
 			$str = rtrim($str);
@@ -735,25 +727,42 @@ class functioninc {
 		return $str;
 	}
 
+	function getTree($typearray, $tid = 'tid', $upid = 'upid', $child = 'childArray', $root = 0) {
+		$treeArray = array();
+		if (is_array($typearray)) {
+			$array = array();
+			foreach ($typearray as $key => $item) {
+				$array[$item[$tid]] = & $typearray[$key];
+			}
+			foreach ($typearray as $key => $item) {
+				$parentId = $item[$upid];
+				if ($root == $parentId) {
+					$treeArray[] = &$typearray[$key];
+				} else {
+					if (isset($array[$parentId])) {
+						$parent = &$array[$parentId];
+						$parent[$child][] = &$typearray[$key];
+					}
+				}
+			}
+		}
+		return $treeArray;
+	}
+
 	function array_merge($array1 = array(), $array2 = array()) {
 		if (empty($array1) || count($array1) < 1) return array();
-
-
 		foreach ($array1 as $key => $value) {
-
 			if (!is_array($value['attrvalue'])) {
 				$array1[$key]['attrvalue'] = stripslashes($array2[$value['attrname']]);
 			} else {
 				$valuename = $array2[$value['attrname']];
 				if (!is_array($valuename)) {
-
 					foreach ($value['attrvalue'] as $var => $gvalue) {
 						if (trim($gvalue['name']) == trim($valuename)) {
 							$array1[$key]['attrvalue'][$var]['selected'] = 'selected';
 						}
 					}
 				} else {
-
 					foreach ($valuename as $vk => $attvalue) {
 						foreach ($value['attrvalue'] as $var => $gvalue) {
 							if (trim($attvalue) == trim($gvalue['name'])) {
@@ -791,10 +800,7 @@ class functioninc {
 
 	function getStr($len = 6) {
 		$str = 'ACBDEFGHIJKLMNOPQRSTUVWXYZacbdefghijklmnopqrstuvwxyZ0123456789';
-
-
 		$str = str_shuffle($str);
-
 		$str = str_repeat($str, 5);
 		return substr(str_shuffle($str), 0, $len);
 	}
@@ -854,8 +860,15 @@ class functioninc {
 				$rkey = $refield ? $value[$refield] : $key;
 			}
 		}
-
 		return $rkey;
+	}
+
+	function formatstring($formatval, $array = array()) {
+		if (!is_array($array) || count($array) <= 0) return false;
+		foreach ($array as $key => $value) {
+			$formatval = str_replace($key, $value, $formatval);
+		}
+		return $formatval;
 	}
 
 	function get_timemessage($timenow) {
@@ -909,21 +922,27 @@ class functioninc {
 		return $uri;
 	}
 
-	function real_server_ip() {
-		static $serverip = NULL;
-		if ($serverip !== NULL) {
-			return $serverip;
-		}
-		if (isset($_SERVER)) {
-			if (isset($_SERVER['SERVER_ADDR'])) {
-				$serverip = $_SERVER['SERVER_ADDR'];
-			} else {
-				$serverip = '0.0.0.0';
-			}
+	function real_remote_ip() {
+		$remoteip = getenv('REMOTE_ADDR');
+		if (!$remoteip) {
+			return $remoteip;
+		} elseif (!empty($_SERVER['REMOTE_ADDR'])) {
+			$remoteip = $_SERVER['REMOTE_ADDR'];
 		} else {
-			$serverip = getenv('SERVER_ADDR');
+			$remoteip = '0.0.0.0';
 		}
+		return $remoteip;
+	}
 
+	function real_server_ip() {
+		$serverip = getenv('SERVER_ADDR');
+		if (!$serverip) {
+			return $serverip;
+		} elseif (!empty($_SERVER['SERVER_ADDR'])) {
+			$serverip = $_SERVER['SERVER_ADDR'];
+		} else {
+			$serverip = '0.0.0.0';
+		}
 		return $serverip;
 	}
 
@@ -944,28 +963,19 @@ class functioninc {
 	}
 
 	function token() {
-
 		$token_name = $this->cache_id();
-
 		$token_key = md5($this->random(8) . $this->random(8, 1));
-
 		$this->setsession($token_name, $token_key);
-
 		return array('token_name' => $token_name, 'token_key' => $token_key);
 	}
 
 	function is_token() {
 		session_start();
-
 		$token_currut_key = $this->accept('tokenkey', 'R');
-
 		$tokenname = md5($_SERVER['HTTP_REFERER']);
-
 		$tokenkey_session = $_SESSION[$tokenname];
 		$return = $token_currut_key != $tokenkey_session ? false : true;
 		unset($_SESSION[$tokenname]);
-
-
 		return $return;
 	}
 
@@ -1022,6 +1032,55 @@ class functioninc {
 		}
 	}
 
-}
+	function postdb_curl($url, $data) {
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+		curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+		curl_setopt($curl, CURLOPT_HEADER, 0);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		$tmpInfo = curl_exec($curl);
+		if (curl_errno($curl)) {
+			echo 'Errno' . curl_error($curl);
+		}
+		curl_close($curl);
+		return $tmpInfo;
+	}
 
-?>
+	function getCurl($url) {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		$result = curl_exec($ch);
+		curl_close($ch);
+		return $result;
+	}
+
+	function getAccessToken($appArray) {
+		if (empty($appArray['wxappid']) || empty($appArray['wxappsecret'])) {
+			return false;
+		}
+		$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" . $appArray['wxappid'] . "&secret=" . $appArray['wxappsecret'];
+		$data = $this->getCurl($url);
+		$resultArr = json_decode($data, true);
+		return $resultArr["access_token"];
+	}
+
+	function creatMenu($menuPost = null, $weixinAPI = array()) {
+		if (empty($menuPost) || !is_array($weixinAPI)) {
+			return false;
+		}
+		$accessToken = $this->getAccessToken($weixinAPI);
+		$menuPostUrl = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" . $accessToken;
+		$menu = $this->postdb_curl($menuPostUrl, $menuPost);
+		$returnArray = json_decode($menu, true);
+		return $returnArray;
+	}
+
+}

@@ -1,0 +1,6 @@
+[%#%]日志查看/ 模板列表[%#%]
+[%if $menutype == 'loglist' || $menutype == 'templatelist'%]
+<ul class="listbottonul" id="listbottonul">
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+</ul>
+[%/if%]

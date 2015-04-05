@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>{%$lngpack.sitename%}</title>
+<meta name="keywords" content="{%$lngpack.keyword%}" />
+<meta name="description" content="{%$lngpack.description%}" />
+<script type="text/javascript" src="{%$rootdir%}js/jquery.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/basicrun.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/jquery.Slide.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/menuthree.js"></script>
+<script type="text/javascript" src="{%$rootdir%}js/treeviewcookie.js"></script>
+<link href="{%$rootpath%}css/espcms_three.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_public.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_v5div.css" rel="stylesheet" type="text/css" />
+<link href="{%$rootpath%}css/espcms_page.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{%$rootdir%}js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+var seccode_empty = "{%$lngpack.seescodeerr%}";
+function {%$form.formcode%}form(seccodetype) {
+	{%forlist from=$array key=i%}
+		{%if $array[i].isvalidate==1%}
+			{%if $array[i].validatetext!=''%}
+				if(document.{%$form.formcode%}.{%$array[i].attrname%}.value.match({%$array[i].validatetext%}ig)==null) {
+			{%else%}
+				if(document.{%$form.formcode%}.{%$array[i].attrname%}.value==''){
+			{%/if%}
+			document.{%$form.formcode%}.{%$array[i].attrname%}.focus();
+			alert('{%$array[i].typename%}输入错误，请返回重新输入');
+			return false;
+		}
+		{%/if%}
+	{%/forlist%}
+
+	if(seccodetype=='1' && document.{%$form.formcode%}.seccode.value.match(/^[A-Z]{4}$/ig)==null) {
+		document.{%$form.formcode%}.seccode.focus();
+		alert(seccode_empty);
+		return false;
+	}
+}
+</script>
+<script type="text/javascript">
+	$(window).load(function() {
+		$("#clickmenubotton li span").hover(function() {
+			$(this).addClass("menuhover");
+			$(this).parent().find("ul.subnav").slideDown('fast').show();
+			$(this).parent().hover(function() {
+			}, function() {
+				$(this).parent().find("ul.subnav").fadeOut('fast');
+				$(this).parent().find("span").removeClass("menuhover");
+			});
+		});
+		$("#three").treeview({collapsed: true, control: "#sidetreecontrol", prerendered: false, persist: "location"});
+	});
+</script>
+</head>
+
+<body>
+{%link file="cn/public/head.html"%}
+{%if $form.pic!=''%}
+<div class="espcms_page_bannpic"><img src="{%$rootdir%}{%$form.pic%}" alt="{%$form.formgroupname%}"/></div>
+{%/if%}
+
+<div class="espcms_page espcms_page_left_linkbg">
+	<div class="espcms_page_left">
+		{%get name=typelist class=utid:3%}
+		<h2>{%$uptypeview.typename%}</h2>
+		<ul id="three" class="treeview">
+			{%forlist from=$array key=i%}
+			<li{%if count( $array[i].childArray ) <= 0%} class="onefast"{%/if%}>
+				<a href="{%$array[i].link%}" {%if $array[i].selected==1 %}class="hover"{%/if%} title="{%$array[i].typename%}">{%$array[i].typename%}</a>
+				{%if count( $array[i].childArray ) > 0 %}
+				<ul>
+					{%forlist from=$array[i].childArray key=ii%}
+					<li class="treeone">
+						<a href="{%$array[i].childArray[ii].link%}" {%if $array[i].childArray[ii].selected==1 %}class="hover"{%/if%}  title="{%$array[i].childArray[ii].typename%}">{%$array[i].childArray[ii].typename%}</a>
+						{%if count( $array[i].childArray[ii].childArray ) > 0 %}
+							<ul>
+								{%forlist from=$array[i].childArray[ii].childArray key=iii%}
+								<li class="treetow">
+									<a href="{%$array[i].childArray[ii].childArray[iii].link%}" {%if $array[i].childArray[ii].childArray[iii].selected==1 %}class="hover"{%/if%} title="{%$array[i].childArray[ii].childArray[iii].typename%}">{%$array[i].childArray[ii].childArray[iii].typename%}</a>
+									{%if count( $array[i].childArray[ii].childArray[iii].childArray ) > 0 %}
+										<ul>
+											{%forlist from=$array[i].childArray[ii].childArray[iii].childArray key=iiii%}
+											<li class="treefour">
+												<a href="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].link%}" {%if $array[i].childArray[ii].childArray[iii].childArray[iiii].selected==1 %}class="hover"{%/if%} title="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].typename%}">{%$array[i].childArray[ii].childArray[iii].childArray[iiii].typename%}</a>
+												{%if count( $array[i].childArray[ii].childArray[iii].childArray[iiii].childArray ) > 0 %}
+													<ul>
+														{%forlist from=$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray key=iiiii%}
+														<li class="treefive"><a href="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].link%}" {%if $array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].selected==1 %}class="hover"{%/if%} title="{%$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%}">{%$array[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%}</a></li>
+														{%/forlist%}
+													</ul>
+												{%/if%}
+											</li>
+											{%/forlist%}
+										</ul>
+									{%/if%}
+								</li>
+								{%/forlist%}
+							</ul>
+						{%/if%}
+					</li>
+					{%/forlist%}
+				</ul>
+				{%/if%}
+			</li>
+			{%/forlist%}
+		</ul>
+		{%/get%}
+	</div>
+	<div class="espcms_page_right">
+		<div class="espcms_page_typename">{%$form.formgroupname%}</div>
+		<div class="espcms_page_location">您现在的位置：<a href="{%$homelink%}">首页</a> » <b>{%$form.formgroupname%}</b></div>
+		<div class="espcms_page_right_line"></div>
+
+		<div class="espcms_book">
+			<form name="{%$form.formcode%}" id="{%$form.formcode%}" method="post" action="{%$form.action%}"  onSubmit="return {%$form.formcode%}form('{%$form.isseccode%}')">
+			<input type="hidden" name="tokenkey" value="{%$tokenkey.token_key%}"/>
+			<input type="hidden" name="linkurl" value="add"/>
+			<input type="hidden" name="fgid" id="fgid" value="{%$form.fgid%}"/>
+			<input type="hidden" name="formcode" id="formcode" value="{%$form.formcode%}"/>
+				{%forlist from=$array key=i%}
+				<div class="espcms_form_group">
+					<label for="username" class="control_label">{%if $array[i].isvalidate==1%}* {%/if%}{%$array[i].typename%}</label>
+					<div class="control_required">
+						{%if $array[i].inputtype=='string' || $array[i].inputtype=='int' || $array[i].inputtype=='float' || $array[i].inputtype=='decimal'%}<input type="text" name="{%$array[i].attrname%}" size="{%$array[i].attrsize%}" maxlength="{%$array[i].attrlenther%}" value="{%$array[i].attrvalue%}" class="infoInput"/>{%/if%}
+						{%if $array[i].inputtype=='datetime'%}
+							 <input type="text" name="{%$array[i].attrname%}" size="{%$array[i].attrsize%}" id="{%$array[i].attrname%}" onclick="WdatePicker({el:'{%$array[i].attrname%}',readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" maxlength="{%$array[i].attrlenther%}" class="infoInput"/>
+						{%/if%}
+						{%if $array[i].inputtype=='selectinput'%}
+						<input type="text" name="{%$array[i].attrname%}" size="{%$array[i].attrsize%}" id="{%$array[i].attrname%}" value="" maxlength="{%$array[i].attrlenther%}" class="infoInput"/>
+						<select size="1" name="{%$array[i].attrname%}selectinputvalue" onchange="javascript:$('#{%$array[i].attrname%}').val(this.value)">
+							<option value="">{%$array[i].typename%}</option>
+							{%forlist from=$array[i].selectinputvalue key=ii%}
+							<option value="{%$array[i].selectinputvalue[ii].name%}">{%$array[i].selectinputvalue[ii].name%}</option>
+							{%/forlist%}
+						</select>
+						{%/if%}
+						{%if $array[i].inputtype=='img'%}
+							<input type="text" name="{%$array[i].attrname%}" size="{%$array[i].attrsize%}" value="{%$array[i].attrvalue%}" class="infoInput"/>
+						{%/if%}
+						{%if $array[i].inputtype=='addon'%}
+							<input type="text" name="{%$array[i].attrname%}" size="{%$array[i].attrsize%}" value="{%$array[i].attrvalue%}" class="infoInput"/>
+						{%/if%}
+						{%if $array[i].inputtype=='text'%}<textarea name="{%$array[i].attrname%}" cols="{%$array[i].attrsize%}" rows="{%$array[i].attrrow%}"  class="col11 infoInput">{%$array[i].attrvalue%}</textarea>{%/if%}
+						{%if $array[i].inputtype=='htmltext'%}<textarea name="{%$array[i].attrname%}" cols="{%$array[i].attrsize%}" rows="{%$array[i].attrrow%}"  class="col11 infoInput">{%$array[i].attrvalue%}</textarea>{%/if%}
+						{%if $array[i].inputtype=='editor'%}<textarea name="{%$array[i].attrname%}" cols="{%$array[i].attrsize%}" rows="{%$array[i].attrrow%}"  class="col11 infoInput">{%$array[i].attrvalue%}</textarea>{%/if%}
+						{%if $array[i].inputtype=='select'%}
+							<select size="1" name="{%$array[i].attrname%}">
+							{%forlist from=$array[i].attrvalue key=ii%}
+								<option {%if $array[i].attrvalue[ii].selected=='selected'%}selected="selected" {%/if%}value="{%$array[i].attrvalue[ii].name%}">{%$array[i].attrvalue[ii].name%}</option>
+							{%/forlist%}
+							</select>
+						{%/if%}
+						{%if $array[i].inputtype=='radio'%}
+							{%forlist from=$array[i].attrvalue key=ii%}
+								<input {%if $array[i].attrvalue[ii].selected=='selected'%}checked="checked" {%/if%}name="{%$array[i].attrname%}" type="radio" value="{%$array[i].attrvalue[ii].name%}" /> {%$array[i].attrvalue[ii].name%}
+							{%/forlist%}
+						{%/if%}
+						{%if $array[i].inputtype=='checkbox'%}
+							{%forlist from=$array[i].attrvalue key=ii%}
+								<input {%if $array[i].attrvalue[ii].selected=='selected'%}checked="checked" {%/if%}name="{%$array[i].attrname%}[]" type="checkbox" value="{%$array[i].attrvalue[ii].name%}" /> {%$array[i].attrvalue[ii].name%}
+							{%/forlist%}
+						{%/if%}
+						{%if $array[i].typeremark!=''%}<span class="form_message">{%$array[i].typeremark%}</span>{%/if%}
+					</div>
+				</div>
+				{%/forlist%}
+				{%if $form.isseccode==1%}
+				<div class="espcms_form_group">
+					<label for="username" class="control_label">验证码</label>
+					<div class="control_required">
+						<input type="text" id="seccode" name="seccode" class=" infoInput" maxlength="4" size="5" style="text-transform: uppercase;"/>
+						<img title="点击更换验证码" id="{%$form.formcode%}seccodesrc" onclick="sessionimg('{%$form.formcode%}seccodesrc','{%$rootdir%}')" src="{%$seccodelink%}" style="cursor: pointer;height:28px;margin-left:5px;" align="absmiddle"/>
+					</div>
+				</div>
+				{%/if%}
+				<div class="espcms_form_group">
+					<label class="control_label"> </label>
+					<div class="control_required"><input type="submit" id="{%$form.formcode%}botton" class="button blue2" value="确认提交"> </div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{%link file="cn/public/footer.html"%}
+</body>
+</html>

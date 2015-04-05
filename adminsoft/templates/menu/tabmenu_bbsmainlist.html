@@ -1,0 +1,61 @@
+[%#%]话题列表[%#%]
+[%if $menutype == 'bbsmainlist'%]
+<ul class="listbottonul" id="listbottonul">
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	<li class="menumain"><a id="bolt" href="#body" hidefocus="true" hidefocus="true">[%$ST.bolt_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.formmessmain_isreply_botton%]</span>
+				<ul>
+					<li><a class="menunoclick" id="bbsnoreply0" href="#body" onclick="javascript:dbfilter('bbsnoreply','noreply',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="bbsnoreply1" href="#body" onclick="javascript:dbfilter('bbsnoreply','noreply',1,1,3,'selectform','selectall','check_all')" title="[%$ST.formmessmain_isreply_botton1%]" hidefocus="true">[%$ST.formmessmain_isreply_botton1%]</a></li>
+					<li><a class="menuclick" id="bbsnoreply2" href="#body" onclick="javascript:dbfilter('bbsnoreply','noreply',2,2,3,'selectform','selectall','check_all')" title="[%$ST.formmessmain_isreply_botton2%]" hidefocus="true">[%$ST.formmessmain_isreply_botton2%]</a></li>
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.forummain_istop_botton%]</span>
+				<ul>
+					<li><a class="menunoclick" id="bbsistop0" href="#body" onclick="javascript:dbfilter('bbsistop','istop',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="bbsistop1" href="#body" onclick="javascript:dbfilter('bbsistop','istop',1,1,3,'selectform','selectall','check_all')" title="[%$ST.open_botton_title%]" hidefocus="true">[%$ST.open_botton_title%]</a></li>
+					<li><a class="menuclick" id="bbsistop2" href="#body" onclick="javascript:dbfilter('bbsistop','istop',2,2,3,'selectform','selectall','check_all')" title="[%$ST.close_botton_title%]" hidefocus="true">[%$ST.close_botton_title%]</a></li>
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.lock_botton%]</span>
+				<ul>
+					<li><a class="menunoclick" id="bbsisclass0" href="#body" onclick="javascript:dbfilter('bbsisclass','isclass',0,0,3,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="bbsisclass1" href="#body" onclick="javascript:dbfilter('bbsisclass','isclass',1,1,3,'selectform','selectall','check_all')" title="[%$ST.infook_botton%]" hidefocus="true">[%$ST.infook_botton%]</a></li>
+					<li><a class="menuclick" id="bbsisclass2" href="#body" onclick="javascript:dbfilter('bbsisclass','isclass',2,2,3,'selectform','selectall','check_all')" title="[%$ST.lockok_botton%]" hidefocus="true">[%$ST.lockok_botton%]</a></li>
+				</ul>
+			</li>
+			<li><a class="menuclick" id="articleisorder0" href="#body" onclick="javascript:refreshurl('index.php?archive=bbsmain&action=forumlist&lng=&btid=&isclass=&blid=&linkebid=&istop=&recommend=&purview=&noreply=&limitkey=&limitclass=','selectform')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.getalllist_botton%]</a></li>
+		</ul>
+	</li>
+	<li class="menumain"><a id="search" href="javascript:parent.windowsdig('[%$ST.forummain_search_title%]','iframe:index.php?archive=bbsmain&action=search&iframename='+self.frameElement.getAttribute('name'),'550px','250px','iframe',true);" title="[%$ST.forummain_search_title%]" hidefocus="true">[%$ST.search_botton%]</a></li>
+	[%if @this->powercheck('communicate','bbsmaindel')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:callrun('index.php?archive=bbsmain&action=bbsmaindel','selectinfoid',false,null,null,'index.php?archive=management&action=load','[%$ST.del_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+	[%if @this->powercheck('communicate','bbsmainedit')==true %]
+	<li class="menumain"><a id="setbotton" href="#body" hidefocus="true" title="[%$ST.set_botton%]">[%$ST.set_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.lock_set_botton%]</span>
+				<ul>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=bbsmain&action=setting','selectinfoid',true,'isclass',1,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.open_botton_title%]" hidefocus="true">[%$ST.open_botton_title%]</a></li>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=bbsmain&action=setting','selectinfoid',true,'isclass',0,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.close_botton_title%]" hidefocus="true">[%$ST.close_botton_title%]</a></li>
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.forummain_istop_botton%]</span>
+				<ul>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=bbsmain&action=setting','selectinfoid',true,'istop',1,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.open_botton_title%]" hidefocus="true">[%$ST.open_botton_title%]</a></li>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=bbsmain&action=setting','selectinfoid',true,'istop',0,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.close_botton_title%]" hidefocus="true">[%$ST.close_botton_title%]</a></li>
+				</ul>
+			</li>
+			<li><span class="menufont">[%$ST.formmessmain_isreply_botton%]</span>
+				<ul>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=bbsmain&action=setting','selectinfoid',true,'replynum',0,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.formmessmain_isreply_botton2%]" hidefocus="true">[%$ST.formmessmain_isreply_botton2%]</a></li>
+					<li><a class="menuclick" href="#body" onclick="javascript:callrun('index.php?archive=bbsmain&action=setting','selectinfoid',true,'replynum',1,'index.php?archive=management&action=load','[%$ST.update_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" title="[%$ST.formmessmain_isreply_botton1%]" hidefocus="true">[%$ST.formmessmain_isreply_botton1%]</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	[%/if%]
+</ul>
+[%/if%]      

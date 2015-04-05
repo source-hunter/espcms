@@ -69,3 +69,4 @@ function insertHelpIFrame() {
 }
 
 tinyMCEPopup.onInit.add(init);
+      

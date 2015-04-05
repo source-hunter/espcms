@@ -1,29 +1,20 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onmesslist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
@@ -35,11 +26,8 @@ class important extends connector {
 			if ($isreply == 2) $isreply = 0;
 			$db_where.=' AND isreply=' . $isreply;
 		}
-
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'fvid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_table = db_prefix . 'form_value';
@@ -59,7 +47,6 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('form/form_mess_list');
 	}
-
 	function onread() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'R');
@@ -88,12 +75,10 @@ class important extends connector {
 				}
 			}
 		}
-
 		if (!empty($forumread['did'])) {
 			$docread = $this->get_documentview($forumread['did']);
 			$docread['readlink'] = $this->get_link('doc', $docread, $docread['lng']);
 		}
-
 		if (!empty($forumread['userid'])) {
 			$memread = $this->get_member(null, $forumread['userid']);
 		}
@@ -109,7 +94,6 @@ class important extends connector {
 		$this->ectemplates->assign('tab', 'true');
 		$this->ectemplates->display('form/form_mess_read');
 	}
-
 	function onsave() {
 		parent::start_template();
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -126,7 +110,6 @@ class important extends connector {
 			$db_where = 'fvid=' . $fvid;
 			$db_set = "retime=$date,username='$username',recontent='$content'";
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
-
 			if ($this->CON['is_email'] && $isreply == 0 && $ismail) {
 				$this->formmailsend('formreremind', $fvid, $email);
 			}
@@ -134,7 +117,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onformmessagedel() {
 		$db_table = db_prefix . 'form_value';
 		$selectinfoid = $this->fun->accept('messselectinfoid', 'P');
@@ -149,7 +131,6 @@ class important extends connector {
 		$this->writelog($this->lng['formmessmain_del_log'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 	function onsetting() {
 		$db_table = db_prefix . 'form_value';
 		$selectinfoid = $this->fun->accept('messselectinfoid', 'P');
@@ -163,7 +144,4 @@ class important extends connector {
 		$this->writelog($this->lng['formmessmain_log_istype'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 }
-
-?>

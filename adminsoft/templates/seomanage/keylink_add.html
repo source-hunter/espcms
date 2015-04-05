@@ -20,7 +20,7 @@
 			sizewindow();
 			resizewindow=h;
 		}
-	}
+	};
 
 	function sizewindow(){
 		var h = $(window).height();
@@ -43,14 +43,14 @@
 		var options = {
 			beforeSubmit: formverify,
 			success:saveResponse,
-			resetForm: true
-		}
+			resetForm: false
+		};
 		$('#keylinkadd').submit(function() {
 			$(this).ajaxSubmit(options);
 			return false;
 		});
 		parent.scrolclear();
-	})
+	});
 
 
 
@@ -170,8 +170,8 @@
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr>
-				<td id="right"><input type="submit" id="docaddsubmitbotton" name="Submit" value="[%$ST.botton_add%]" class="buttonface" /></td>
-				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:closewindow();" value="[%$ST.botton_add_reset%]" class="buttonface" /></td>
+				<td id="right"><input type="submit" id="docaddsubmitbotton" name="Submit" value="[%$ST.botton_add%]" class="button orange" /></td>
+				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:closewindow();" value="[%$ST.botton_add_reset%]" class="button orange" /></td>
 			</tr>
 		</table>
 	</div>

@@ -1,13 +1,11 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 function daddslashes($string, $force = 0, $strip = FALSE) {
 	if (!MAGIC_QUOTES_GPC || $force) {
 		if (is_array($string)) {
@@ -20,7 +18,6 @@ function daddslashes($string, $force = 0, $strip = FALSE) {
 	}
 	return $string;
 }
-
 function accept($k, $var = 'R', $ectype = 'bu') {
 	switch ($var) {
 		case 'G':
@@ -39,7 +36,6 @@ function accept($k, $var = 'R', $ectype = 'bu') {
 	$vluer = $var[$k];
 	return isset($vluer) ? daddslashes($vluer, 1) : NULL;
 }
-
 function message($mess, $btname, $messageid = 0, $classbotton = 0) {
 	require_once admin_ROOT . '/public/ectemplates/ectemplates_class.php';
 	$ectemplates = new Ectemplates();
@@ -61,7 +57,6 @@ function message($mess, $btname, $messageid = 0, $classbotton = 0) {
 	$ectemplates->display('mess');
 	exit;
 }
-
 function show_install() {
 	require_once admin_ROOT . '/public/ectemplates/ectemplates_class.php';
 	$ectemplates = new Ectemplates();
@@ -78,7 +73,6 @@ function show_install() {
 	$ectemplates->templatesDIR = '';
 	$ectemplates->display('install');
 }
-
 function syscheck($items) {
 	foreach ($items as $key => $item) {
 		if ($item['list'] == 'php') {
@@ -105,7 +99,6 @@ function syscheck($items) {
 	}
 	return $items;
 }
-
 function dircheck($diritems) {
 	foreach ($diritems as $key => $item) {
 		$item_path = $item['path'];
@@ -133,30 +126,22 @@ function dircheck($diritems) {
 	}
 	return $diritems;
 }
-
 function filemode($file, $checktype = 'w') {
-
 	if (!file_exists($file)) {
 		return false;
 	}
 	if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-
 		$testfile = $file . 'writetest.txt';
-
 		if (is_dir($file)) {
-
 			$dir = @opendir($file);
-
 			if ($dir === false) {
 				return false;
 			}
-
 			if ($checktype == 'r') {
 				$mode = (@readdir($dir) != false) ? true : false;
 				@closedir($dir);
 				return $mode;
 			}
-
 			if ($checktype == 'w') {
 				$fp = @fopen($testfile, 'wb');
 				if ($fp != false) {
@@ -170,14 +155,12 @@ function filemode($file, $checktype = 'w') {
 				}
 			}
 		} elseif (is_file($file)) {
-
 			if ($checktype == 'r') {
 				$fp = @fopen($file, 'rb');
 				@fclose($fp);
 				$mode = ($fp != false) ? true : false;
 				return $mode;
 			}
-
 			if ($checktype == 'w') {
 				$fp = @fopen($file, 'ab+');
 				if ($fp != false) {
@@ -191,13 +174,11 @@ function filemode($file, $checktype = 'w') {
 			}
 		}
 	} else {
-
 		if ($checktype == 'r') {
 			$fp = @is_readable($file);
 			$mode = ($fp) ? true : false;
 			return $mode;
 		}
-
 		if ($checktype == 'w') {
 			$fp = @is_writable($file);
 			$mode = ($fp) ? true : false;
@@ -205,7 +186,6 @@ function filemode($file, $checktype = 'w') {
 		}
 	}
 }
-
 function dir_writeable($dir) {
 	$writeable = 0;
 	if (!is_dir($dir)) {
@@ -222,7 +202,6 @@ function dir_writeable($dir) {
 	}
 	return $writeable;
 }
-
 function function_check($funcitems) {
 	foreach ($funcitems as $key => $item) {
 		$funcitemslist[$key]['name'] = $item['name'];
@@ -230,51 +209,34 @@ function function_check($funcitems) {
 	}
 	return $funcitemslist;
 }
-
 function config_edit($postlist) {
 	extract($postlist, EXTR_SKIP);
 	$substr_s = rand('1', '20');
 	$substr_c = rand('20', '40');
 	$pscode_con = config_onkey(1000);
-	$pscode_pass = md5($pscode_con).md5(time());
-	$pscode_lan= substr($pscode_pass,$substr_s,$substr_c);
-	
+	$pscode_pass = md5($pscode_con) . md5(time());
+	$pscode_lan = substr($pscode_pass, $substr_s, $substr_c);
 	$db_link = empty($db_link) ? 0 : $db_link;
-
 	$config = "<?php \r\ndefine('db_host', '$dbhost');\r\n";
-
 	$config .= "define('db_user', '$dbuser');\r\n";
-
 	$config .= "define('db_pw', '$dbpw');\r\n";
-
 	$config .= "define('db_name', '$dbname');\r\n";
-
 	$config .= "define('db_charset', '" . DBCHARSET . "');\r\n";
-
 	$config .= "define('db_prefix', '$tablepre');\r\n";
 	$config .= "define('db_lan', 'cn');\r\n";
-
 	$config .= "define('db_err', 0);\r\n";
-
 	$config .= "define('db_sql', 0);\r\n";
-
 	$config .= "define('db_link', $db_link);\r\n";
-
 	$config .= "define('headcharset', 'utf-8');\r\n";
-
 	$config .= "define('db_version', '" . SOFT_VERSION . "');\r\n";
-
 	$config .= "define('db_release', '" . SOFT_RELEASE . "');\r\n";
-
 	$config .= "define('db_keycode', '" . db_keycode . "');\r\n";
-
 	$config .= "define('db_pscode', '" . $pscode_lan . "');\r\n";
 	$config .= "define('softtitle', '" . SOFT_TITLE . "');\r\n?>";
 	$fp = fopen(CONFIG, 'w');
 	fwrite($fp, $config);
 	fclose($fp);
 }
-
 function config_onkey($length = 10) {
 	$seed = md5(microtime());
 	$pwd = '';
@@ -284,5 +246,11 @@ function config_onkey($length = 10) {
 	$hash = md5($pwd);
 	return substr($hash, 0, $length);
 }
-
-?>
+function delfile($file) {
+	if (is_file($file)) {
+		if (!@is_writable($file)) @chmod($file, 0777);
+		return unlink($file);
+	}else {
+		return false;
+	}
+}

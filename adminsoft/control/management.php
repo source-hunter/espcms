@@ -2,11 +2,11 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2010 ECISP.CN
-  声明：这不是一个免费的软件，请在许可范围内使用
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
 
-  作者：Bili E-mail:huangqyun@163.com  QQ:6326420
-  http://www.ecisp.cn	http://www.easysitepm.com
  */
 
 class important extends connector {
@@ -14,10 +14,8 @@ class important extends connector {
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onhome() {
 		parent::start_template();
-
 		$db_table = db_prefix . 'admin_member';
 		$db_where = "username='$this->esp_username'";
 		$rsMember = $this->db->fetch_first('SELECT id,username,password,name,sex,intotime,intime,outtime,ipadd,hit,powergroup,inputclassid,isclass FROM ' . $db_table . ' WHERE ' . $db_where);
@@ -28,16 +26,12 @@ class important extends connector {
 		} else {
 			$rsMember['sextype'] = $this->lng['select_sex_0'];
 		}
-
-
 		$db_table = db_prefix . 'admin_powergroup';
 		if (empty($rsMember['powergroup']) && empty($rsMember['username'])) {
 			exit('Cookie err');
 		}
 		$db_where = 'id=' . $rsMember['powergroup'];
-
 		$rsPower = $this->db->fetch_first('SELECT id,powername,powerlist,delclass FROM ' . $db_table . ' WHERE ' . $db_where);
-
 		$serverinfo['phpinfo'] = PHP_OS . ' / PHP v' . PHP_VERSION;
 		$serverinfo['getprc'] = get_magic_quotes_gpc() ? 'ON' : '<span style="color:red;"><b>OFF</b></span>';
 		$serverinfo['upinfo'] = @ini_get('file_uploads') ? ini_get('upload_max_filesize') : '<font color="red">' . $this->lng['management_login_phpinfo07'] . '</font>';
@@ -50,13 +44,8 @@ class important extends connector {
 		$serverinfo['mcrypt'] = extension_loaded('mcrypt') ? 'ON' : '<span style="color:red;"><b>OFF</b></span>';
 		$serverinfo['curl'] = extension_loaded('curl') ? 'ON' : '<span style="color:red;"><b>OFF</b></span>';
 		$serverinfo['sockets'] = extension_loaded('sockets') ? 'ON' : '<span style="color:red;"><b>OFF</b></span>';
-
-		$volstr = $this->CON['softvolstr'];
-		$dbostr = $this->CON['isdbo'] == 0 ?
-			'<div class="volmessage">
-				<span class="padding-left5 colorgorningage" id="softkyemessage">' . $this->lng['management_login_vol'] . $this->lng['management_login_vol_messvol_mess'] . '</span>
-			</div>' : null;
-
+		$serverinfo['fsockopen'] = function_exists('fsockopen') ? 'ON' : '<span style="color:red;"><b>OFF</b></span>';
+		$serverinfo['pfsockopen'] = function_exists('pfsockopen') ? 'ON' : '<span style="color:red;"><b>OFF</b></span>';
 		$db_table = db_prefix . 'lng';
 		$db_where = "isopen=1 ORDER BY pid DESC,id DESC";
 		$sql = ('SELECT id,lngtitle,lng FROM ' . $db_table . ' WHERE ' . $db_where);
@@ -64,9 +53,8 @@ class important extends connector {
 		while ($rsLanlist = $this->db->fetch_assoc($rs)) {
 			$lngarray[] = $rsLanlist;
 		}
-
 		$db_table = db_prefix . 'menulink';
-		$db_where = "ismenu=1 ORDER BY topmlid";
+		$db_where = "ismenu=1 AND isclass=1 ORDER BY topmlid";
 		$sql = ('SELECT * FROM ' . $db_table . ' WHERE ' . $db_where);
 		$rs = $this->db->query($sql);
 		while ($rsMenu = $this->db->fetch_assoc($rs)) {
@@ -74,9 +62,22 @@ class important extends connector {
 				$menubotton[] = $rsMenu;
 			}
 		}
+		$volstr = $this->CON['softvolstr'];
+		$volarray = $this->oncheckvol();
+		if ($volarray['vol'] > $this->CON['softvol']) {
+			$volstr = $volstr . '<span class="padding-left5">' . $this->lng['management_login_vol'] . '</span><a class="volcheck" hidefocus="true" href="#body" onclick="parent.windowsdig(\'' . $this->lng['management_login_volupdatetitle'] . '\',\'iframe:index.php?archive=upgrademain&action=upgrade&iframename=\',\'680px\',\'440px\',\'iframe\');">' . $this->lng['management_login_volupdatebotton'] . '</a>';
+		}
+		if ($this->CON['isdbo'] == 0) {
+			if ($this->CON['checkclass'] == 'true') {
+				$str = '%E5%BD%93%E5%89%8D%E7%B3%BB%E7%BB%9F%E6%8E%88%E6%9D%83%E7%B1%BB%E5%9E%8B%EF%BC%9A%3Cb%3E%E6%8E%88%E6%9D%83%E7%89%88%3C%2Fb%3E%26nbsp%3B+%26nbsp%3B+%26nbsp%3B%26nbsp%3B+%26nbsp%3B+%26nbsp%3B%E6%8E%88%E6%9D%83%E5%8F%B7%EF%BC%9A';
+				$dbostr = '<div class="volmessage"><span class="padding-left5 colorgorningage" id="softkyemessage">' . urldecode($str) . '<b>' . $this->CON['codesoftkey'] . '</b></span></div>';
+			} else {
+				$dbostr = '<div class="volmessage"><span class="padding-left5 colorgorningage" id="softkyemessage">' . $this->lng['management_login_vol_str'] . $this->lng['management_login_vol_messvol'] . $this->lng['management_login_vol_messvol_mess'] . '</span></div>';
+			}
+		}
+
 		$outstr = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
-
 		<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 		<title>' . $this->CON['sitename'] . '</title>
@@ -89,11 +90,9 @@ class important extends connector {
 		<script type="text/javascript" src="js/pngfix.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){sdmenuvol();});
-
 			function locationout(){
 				window.location.replace(\'index.php?archive=adminuser&action=loingout\');
 			}
-
 			function sizewindow(){
 				if ($.browser.version==6.0){
 					var h=document.body.clientHeight;
@@ -102,9 +101,7 @@ class important extends connector {
 				}
 				$(\'.managebottonadd\').css({height:h});
 			}
-
 			var resizewindow= null;
-
 			window.onresize = function(){
 				var h = $(window).height();
 				if(resizewindow!=h){
@@ -126,7 +123,7 @@ class important extends connector {
 				</div>
 				<div class="loginmessage">
 					<div class="logincenterdiv">
-					' . $dbostr . '<table class="logincenterdivtable">
+						' . $dbostr . '<table class="logincenterdivtable">
 							<tr class="trstyle1">
 								<td class="trtitle01">' . $this->lng['management_login_nowlogininfotitle02'] . '：</td>
 								<td class="trtitle02 colorgorning3 fontdec">' . long2ip($rsMember['ipadd']) . '</td>
@@ -152,8 +149,8 @@ class important extends connector {
 								<td class="trtitle02 colorgorning3">' . $serverinfo['gdver'] . '</td>
 							</tr>
 							<tr class="trstyle1">
-								<td class="trtitle01">' . $this->lng['management_login_phpinfo03'] . '</td>
-								<td class="trtitle02 colorgorning3 fontdec">' . $serverinfo['safemode'] . '</td>
+								<td class="trtitle01">' . $this->lng['management_login_phpinfo13'] . '</td>
+								<td class="trtitle02 colorgorning3 fontdec">' . $serverinfo['fsockopen'] . '</td>
 								<td class="trtitle01">' . $this->lng['management_login_phpinfo04'] . '</td>
 								<td class="trtitle02 colorgorning3 fontdec">' . $serverinfo['register'] . '</td>
 								<td class="trtitle01">' . $this->lng['management_login_phpinfo05'] . '</td>
@@ -180,24 +177,20 @@ class important extends connector {
 		}
 		$outstr.='</td></tr></table></div></div><table style="width: 100%"><tr><td valign="top" style="padding-top: 30px;"><table style="width: 100%"><tr><td><div class="formdiv"><ul class="orderbottonlist" class="style:100%;">';
 		foreach ($menubotton as $key => $value) {
-			$outstr.= '<li><a class="' . $value['classname'] . '" target="_top" title="' . $value['menuname'] . '" href="' . $value['linkurl'] . '&menuid=' . $value['topmlid'] . '"></a></li>';
+			$outstr.= '<li title="' . $value['menuname'] . '" ><a class="' . $value['classname'] . '" target="_top" title="' . $value['menuname'] . '" href="' . $value['linkurl'] . '&menuid=' . $value['topmlid'] . '"></a></li>';
 		}
-		$outstr.='</ul></div></td></tr></table></td></tr></table></div></div><div id="loadingmessage"></div></body></html>';
-		exit($outstr);
+		exit($this->get_rwindowsmessage($outstr));
 	}
-
 	function onpassword() {
 		parent::start_template();
 		$db_table = db_prefix . 'admin_member';
 		$db_where = 'id=' . $this->esp_adminuserid . ' and username=\'' . $this->esp_username . '\' and isclass=1';
 		$rsMember = $this->db->fetch_first('SELECT id,username,password,name,sex,outtime,ipadd FROM ' . $db_table . ' WHERE ' . $db_where);
-
 		$digheight = $this->fun->accept('digheight', 'R');
 		$this->ectemplates->assign('digheight', $digheight);
 		$this->ectemplates->assign('memberinfo', $rsMember);
 		$this->ectemplates->display('admin/admin_password');
 	}
-
 	function oneditpassword() {
 		parent::start_template();
 		$db_table = db_prefix . 'admin_member';
@@ -223,7 +216,6 @@ class important extends connector {
 		$this->ectemplates->assign('errconter', $errconter);
 		$this->ectemplates->display('admin/admin_password');
 	}
-
 	function ontab() {
 		parent::start_template();
 		$loadfun = $this->fun->accept('loadfun', 'G');
@@ -238,25 +230,19 @@ class important extends connector {
 		$mobtid = $this->fun->accept('mobtid', 'G');
 		$menuname_title = $this->fun->accept('menuname_title', 'G');
 		$groupid = $this->fun->accept('groupid', 'G');
-
 		$out = $this->fun->accept('out', 'G');
 		$loadfun = $this->fun->accept('loadfun', 'G');
 		include_once admin_ROOT . adminfile . '/include/command_list.php';
-
 		$tab['url'] = $CONLIST[$loadfun]['tabloadurl'];
-
 		$tab['title'] = $menuname_title ? $menuname_title : $CONLIST[$loadfun]['tabloadtitle'];
-
 		$tabarray = $mid . '-' . $tid . '-' . $mcid . '-' . $atid . '-' . $mobtid;
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->assign('mid', $mid);
 		$this->ectemplates->assign('tid', $tid);
 		$this->ectemplates->assign('atid', $atid);
-
 		$this->ectemplates->assign('mcid', $mcid);
 		$this->ectemplates->assign('loadfun', $loadfun);
 		$this->ectemplates->assign('tabarray', $tabarray);
-
 		if ($out == 'tabcenter') {
 			$out = 'admin/admin_tab_center';
 		} elseif ($out == 'tabeditor') {
@@ -265,7 +251,6 @@ class important extends connector {
 		$fileout = empty($out) ? 'admin/admin_tab' : $out;
 		$this->ectemplates->display($fileout);
 	}
-
 	function onlist() {
 		parent::start_template();
 		$listfunction = $this->fun->accept('listfunction', 'G');
@@ -283,21 +268,19 @@ class important extends connector {
 		$amid = $this->fun->accept('amid', 'G');
 		$mlvid = $this->fun->accept('mlvid', 'G');
 		$mobtid = $this->fun->accept('mobtid', 'G');
+		$wxid = $this->fun->accept('wxid', 'G');
+		$amid = $this->fun->accept('amid', 'G');
 		$logusername = $this->fun->accept('logusername', 'G');
 		if (empty($listfunction)) {
 			exit('err');
 		}
 		include_once admin_ROOT . adminfile . '/include/command_list.php';
-
-		$tabarray = $mid . '-' . $tid . '-' . $fgid . '-' . $atid . '-' . $did . '-' . $mobtid;
-
+		$tabarray = $mid . '-' . $tid . '-' . $fgid . '-' . $atid . '-' . $did . '-' . $mobtid . '-' . $wxid . '-' . $amid;
 		$cookpage = $this->fun->accept($CONLIST[$listfunction]['pagecoock'], 'C');
 		$nowpage = empty($cookpage) ? 0 : $cookpage;
 		$this->ectemplates->assign('nowpage', $nowpage);
 		$this->ectemplates->assign('loadurl', $CONLIST[$listfunction]['loadurl']);
-
 		$this->ectemplates->assign('MaxPerPage', $this->CON['max_list']);
-
 		$this->ectemplates->assign('MaxHit', $this->CON['max_page']);
 		$this->ectemplates->assign('listtype', $listtype);
 		$this->ectemplates->assign('listfunction', $listfunction);
@@ -310,26 +293,20 @@ class important extends connector {
 		$this->ectemplates->assign('mcid', $mcid);
 		$this->ectemplates->assign('tabarray', $tabarray);
 		$this->ectemplates->assign('isclass', $isclass);
-
 		$fileout = empty($pagetype) ? 'admin_tab_list' : $pagetype;
 		$this->ectemplates->display('admin/' . $fileout);
 	}
-
 	function onloglist() {
 		parent::start_template();
-
 		$MinPageid = intval($this->fun->accept('MinPageid', 'R'));
 		$loguser = $this->fun->accept('loguser', 'R');
 		$logusername = $this->fun->accept('logusername', 'R');
-
 		$counttype = $this->fun->accept('countnum', 'R');
-
 		$page_id = intval($this->fun->accept('page_id', 'R'));
 		$MaxPerPage = intval($this->fun->accept('MaxPerPage', 'R'));
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
 		}
-
 		$db_table = db_prefix . 'logs';
 		if (!empty($loguser) && empty($logusername)) {
 			$db_where = ' WHERE username=\'' . $loguser . '\'';
@@ -337,7 +314,6 @@ class important extends connector {
 			$db_where = ' WHERE username=\'' . $logusername . '\'';
 		}
 		if (!empty($counttype)) {
-
 			$countnum = $this->db_numrows($db_table, $db_where);
 			exit($countnum);
 		}
@@ -346,20 +322,15 @@ class important extends connector {
 		while ($rsList = $this->db->fetch_assoc($rs)) {
 			$array[] = $rsList;
 		}
-
 		$this->fun->setcookie($this->fun->noncefile() . 'pgid', $page_id, 600);
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->display('admin/admin_log_list');
 	}
-
 	function onmangerlist() {
 		parent::start_template();
-
 		$MinPageid = intval($this->fun->accept('MinPageid', 'R'));
 		$loguser = $this->fun->accept('loguser', 'R');
-
 		$page_id = intval($this->fun->accept('page_id', 'R'));
-
 		$countnum = $this->fun->accept('countnum', 'R');
 		$MaxPerPage = intval($this->fun->accept('MaxPerPage', 'R'));
 		if (empty($MaxPerPage)) {
@@ -383,7 +354,6 @@ class important extends connector {
 		$db_where = " WHERE id>0" . $wheretext;
 		$db_table = db_prefix . 'admin_member';
 		if (!empty($countnum)) {
-
 			$countnum = $this->db_numrows($db_table, $db_where);
 			exit($countnum);
 		}
@@ -393,38 +363,26 @@ class important extends connector {
 			$rsList['powername'] = $this->get_power_view($rsList['powergroup'], 'powername');
 			$array[] = $rsList;
 		}
-
 		$this->fun->setcookie($this->fun->noncefile() . 'pgid', $page_id, 600);
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('admin/admin_manager_list');
 	}
-
 	function onload() {
 		$this->start_template();
-
 		$this->ectemplates->assign('calltitle', $calltitle);
-
 		$this->ectemplates->assign('bottonName', $bottonName);
 		$this->ectemplates->display('admin/admin_load');
 	}
-
-	function onbannload() {
-		$this->start_template();
-	}
-
 	function onmanageradd() {
 		parent::start_template();
-
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
-
 		$powergrouplist = $this->get_power_array();
 		$this->ectemplates->assign('powerlist', $powergrouplist['list']);
 		$this->ectemplates->assign('tab', $tab);
 		$this->ectemplates->display('admin/admin_manager_add');
 	}
-
 	function onmanageedit() {
 		parent::start_template();
 		$db_table = db_prefix . 'admin_member';
@@ -439,7 +397,6 @@ class important extends connector {
 		$this->ectemplates->assign('powerlist', $powergrouplist['list']);
 		$this->ectemplates->display('admin/admin_manager_edit');
 	}
-
 	function onmanagesava() {
 		$db_table = db_prefix . 'admin_member';
 		$inputclass = $this->fun->accept('inputclass', 'P');
@@ -465,7 +422,6 @@ class important extends connector {
 			$this->writelog($this->lng['mangerlist_add_log'], $this->lng['log_extra_ok'] . ' user=' . $username);
 			exit('true');
 		}
-
 		if ($inputclass == 'edit') {
 			$id = $this->fun->accept('id', 'P');
 			$db_where = "id=$id";
@@ -478,7 +434,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onusercheck() {
 		$db_table = db_prefix . 'admin_member';
 		$username = $this->fun->accept('username', 'R');
@@ -494,7 +449,6 @@ class important extends connector {
 			exit('false');
 		}
 	}
-
 	function ondelmanage() {
 		$db_table = db_prefix . 'admin_member';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
@@ -509,15 +463,12 @@ class important extends connector {
 		$this->writelog($this->lng['mangerlist_del_log'], $this->lng['log_extra_ok'] . ' userid=' . $selectinfoid);
 		exit('true');
 	}
-
 	function onsetting() {
 		$db_table = db_prefix . 'admin_member';
 		$selectinfoid = $this->fun->accept('selectinfoid', 'P');
 		$selectinfoid = $selectinfoid . '0';
 		if (empty($selectinfoid)) exit('false');
-
 		$value = $this->fun->accept('value', 'P');
-
 		$dbname = $this->fun->accept('dbname', 'P');
 		$db_set = "$dbname=$value";
 		$db_where = "id IN ( $selectinfoid )";
@@ -525,77 +476,6 @@ class important extends connector {
 		$this->writelog($this->lng['mangerlist_isclass_log'], $this->lng['log_extra_ok'] . ' userid=' . $selectinfoid);
 		exit('true');
 	}
-
-	function onsysinfo() {
-		parent::start_template();
-
-		$templatesdirsize = $this->fun->format_size($this->fun->dirsize(admin_ROOT . '/cache/admin/templates'));
-
-		$cachedirsize = $this->fun->format_size($this->fun->dirsize(admin_ROOT . '/cache/admin/cache'));
-
-		$backupdirsize = $this->fun->format_size($this->fun->dirsize(admin_ROOT . '/public/backup/'));
-
-		$upfiledirsize = $this->fun->format_size($this->fun->dirsize("../upfile/"));
-
-		$serverinfo = PHP_OS . ' / PHP v' . PHP_VERSION;
-		$dbversion = $this->db->version();
-		$fileupload = @ini_get('file_uploads') ? ini_get('upload_max_filesize') : '<font color="red">' . $lang['no'] . '</font>';
-		$query = $tables = $this->db->fetch_all("SHOW TABLE STATUS LIKE '$tablepre%'");
-		foreach ($tables as $table) {
-			$dbsize+=$table['Data_length'] + $table['Index_length'];
-		}
-
-		$serverip = $_SERVER['SERVER_ADDR'];
-
-		$web_server = $_SERVER['SERVER_SOFTWARE'];
-		$this->ectemplates->assign('lngselect', $this->lngselect($lng));
-		$this->ectemplates->assign('templatesdirsize', $templatesdirsize);
-		$this->ectemplates->assign('cachedirsize', $cachedirsize);
-		$this->ectemplates->assign('backupdirsize', $backupdirsize);
-		$this->ectemplates->assign('upfiledirsize', $upfiledirsize);
-		$this->ectemplates->assign('getGPC', get_magic_quotes_gpc());
-		$this->ectemplates->assign('md5link', md5(time()));
-
-		$this->ectemplates->assign('serverinfo', $serverinfo);
-		$this->ectemplates->assign('serverip', $serverip);
-		$this->ectemplates->assign('web_server', $web_server);
-
-		$this->ectemplates->assign('dbversion', $dbversion);
-
-		$this->ectemplates->assign('fileupload', $fileupload);
-
-		$this->ectemplates->assign('dbsize', $this->fun->format_size($dbsize));
-		$this->ectemplates->assign('skintitle', $this->lng);
-		$this->ectemplates->display('admin/admin_sysinfo');
-	}
-
-	function onlinkecisp() {
-		parent::start_template();
-		$getnetval = convert_uudecode($this->CON['getnetval']);
-		$xmlfile = $getnetval . 'sitemap/rss_news.xml';
-
-		$inforss = @simplexml_load_file($xmlfile, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-		$this->fun->objectToArray($inforss);
-
-		$outrssinfo = $inforss['channel']['item'];
-		$this->ectemplates->assign('array', $outrssinfo);
-		$this->ectemplates->assign('infoclass', 'news');
-		$this->ectemplates->display('admin/admin_xmlinfo');
-	}
-
-	function oncheckvol() {
-		parent::start_template();
-		$getnetval = convert_uudecode($this->CON['getnetval']);
-		$softvol = $this->CON['softvol'];
-		$ipadd = $this->fun->ip($_SERVER['REMOTE_ADDR']);
-		$xmlfile = $getnetval . 'index.php?ac=siteauthentication&at=softvol&vol=' . $softvol . '&dbosn=' . $this->CON['dbosn'] . '&isdbo=' . $this->CON['isdbo'] . '&siteurl=' . urlencode(admin_ClassURL) . '&sitename=' . urlencode($this->CON['sitename']) . '&iplong=' . $ipadd . '&email=' . urlencode($this->CON['admine_mail']) . '&dbcode=' . db_pscode;
-
-		$inforss = @simplexml_load_file($xmlfile, 'SimpleXMLElement', LIBXML_NOCDATA);
-		$this->fun->objectToArray($inforss);
-		return $inforss['channel'];
-	}
-
 	function onclearlog() {
 		parent::start_template();
 		$execute = $this->fun->accept('execute', 'R');
@@ -610,12 +490,10 @@ class important extends connector {
 			$this->writelog($this->lng['clear_log_del_log'], $this->lng['log_extra_ok']);
 			exit('true');
 		}
-
 		$digheight = $this->fun->accept('digheight', 'R');
 		$this->ectemplates->assign('digheight', $digheight);
 		$this->ectemplates->display('admin/admin_clear_log');
 	}
-
 	function onclearcache() {
 		parent::start_template();
 		$execute = $this->fun->accept('execute', 'P');
@@ -662,83 +540,12 @@ class important extends connector {
 		$this->ectemplates->assign('digheight', $digheight);
 		$this->ectemplates->display('admin/admin_manager_clearcache');
 	}
-
 	function onfilecheck() {
 		parent::start_template();
-		$execute = $this->fun->accept('execute', 'R');
-
-		$file_htmldir = admin_ROOT . $this->CON['file_htmldir'];
-
-		$file_sitemapdir = admin_ROOT . $this->CON['file_sitemapdir'];
-
-		$file_sqlbakdir = admin_ROOT . $this->CON['file_sqlbakdir'];
-
-		$upfile_dir = admin_ROOT . $this->CON['upfile_dir'];
-
-		$cache_dir = admin_ROOT . "datacache/";
-		$cache_dirlist = array(
-		    0 => array('dir' => 'datacache/dbcache/', 'key' => '1'),
-		    1 => array('dir' => 'datacache/admin/cache/', 'key' => '1'),
-		    2 => array('dir' => 'datacache/admin/templates/', 'key' => '1'),
-		    3 => array('dir' => 'datacache/main/cache/', 'key' => '1'),
-		    4 => array('dir' => 'datacache/pic/', 'key' => '1'),
-		    5 => array('dir' => 'datacache/main/templates/', 'key' => '1')
-		);
-		if ($execute == 1) {
-			$str = '{';
-			if (!$this->fun->filemode($file_htmldir)) {
-				$str .='"htmldir":"false",';
-			} else {
-				$str .='"htmldir":"true",';
-			}
-			if (!$this->fun->filemode($file_sitemapdir)) {
-				$str .='"sitemapdir":"false",';
-			} else {
-				$str .='"sitemapdir":"true",';
-			}
-			if (!$this->fun->filemode($file_sqlbakdir)) {
-				$str .='"sqlbakdir":"false",';
-			} else {
-				$str .='"sqlbakdir":"true",';
-			}
-			if (!$this->fun->filemode($upfile_dir)) {
-				$str .='"upfiledir":"false",';
-			} else {
-				$str .='"upfiledir":"true",';
-			}
-			$filestr = '';
-			foreach ($cache_dirlist as $key => $value) {
-				if (!$this->fun->filemode(admin_ROOT . $value['dir'])) {
-					$cache_dirlist[$key]['key'] = '0';
-					$filestr .='0';
-				} else {
-					$cache_dirlist[$key]['key'] = '1';
-					$filestr .='1';
-				}
-			}
-			if ($filestr == '111111') {
-				$str .='"cachedir":"true",';
-			} else {
-				$str .='"cachedir":"false",';
-			}
-			$str .='"cachedirkey":"' . $filestr . '"';
-			$str.='}';
-			exit($str);
-		}
-		$filedirlist = array(
-		    'htmldir' => $this->CON['file_htmldir'],
-		    'sitemapdir' => $this->CON['file_sitemapdir'],
-		    'sqlbakdir' => $this->CON['file_sqlbakdir'],
-		    'upfiledir' => $this->CON['upfile_dir'],
-		    'cachedir' => "/datacache/",
-		);
 		$digheight = $this->fun->accept('digheight', 'R');
 		$this->ectemplates->assign('digheight', $digheight);
-		$this->ectemplates->assign('filedirlist', $filedirlist);
-		$this->ectemplates->assign('cachelist', $cache_dirlist);
 		$this->ectemplates->display('admin/admin_manager_filecheck');
 	}
-
 	function onsyssetting() {
 		parent::start_template();
 		$db_table = db_prefix . 'config';
@@ -747,9 +554,22 @@ class important extends connector {
 		$nowgroupid = $this->fun->accept('groupid', 'G');
 		$nowgroupid = empty($nowgroupid) ? 1 : $nowgroupid;
 		$siteocddb = md5(md5(db_keycode));
-		for ($i = 0; $i < 6; $i++) {
+		$keynum = 0;
+		for ($i = 0; $i < 8; $i++) {
 			$array = array();
 			$groupid = $i + 1;
+			if ($groupid == 5 && !$this->get_app_view('bbs', 'isetup')) {
+				continue;
+			}
+
+			if ($groupid == 7 && !$this->get_app_view('touch', 'isetup')) {
+				continue;
+			}
+
+			if ($groupid == 8 && !$this->get_app_view('im', 'isetup')) {
+				continue;
+			}
+
 			$db_where = " WHERE groupid=$groupid";
 			$sql = 'SELECT * FROM ' . $db_table . $db_where . ' ORDER BY pid,groupid';
 			$rs = $this->db->query($sql);
@@ -776,19 +596,21 @@ class important extends connector {
 				}
 				$array[] = $rsList;
 			}
-			$setingarray[$i]['key'] = $groupid;
-			$setingarray[$i]['list'] = $array;
+			$setingarray[$keynum]['key'] = $groupid;
+			$lanname = 'setting_edit_title' . $groupid;
+			$setingarray[$keynum]['name'] = $this->lng[$lanname];
+			$setingarray[$keynum]['list'] = $array;
+			$keynum++;
 		}
-
 		$lngarray = $this->get_lng_array($this->CON['home_lng'], 1);
 
 		$this->ectemplates->assign('tab', $tab);
+		$this->ectemplates->assign('keynum', $keynum);
 		$this->ectemplates->assign('lngarray', $lngarray['list']);
 		$this->ectemplates->assign('groupid', $nowgroupid);
 		$this->ectemplates->assign('array', $setingarray);
 		$this->ectemplates->display('admin/admin_manager_setting');
 	}
-
 	function onsetsave() {
 		$db_table = db_prefix . 'config';
 		$commandfile = admin_ROOT . 'datacache/command.php';
@@ -796,27 +618,36 @@ class important extends connector {
 			exit('false');
 		}
 		$old_ishtml = $this->CON['is_html'];
-		$sql = 'SELECT id,valname,value FROM ' . $db_table . ' WHERE groupid<7 AND isline=0 ORDER BY groupid';
+		$sql = 'SELECT * FROM ' . $db_table . ' WHERE groupid<=8 AND isline=0 ORDER BY groupid';
 		$rs = $this->db->query($sql);
 		while ($rsList = $this->db->fetch_assoc($rs)) {
+
+			if ($rsList['groupid'] == 5 && !$this->get_app_view('bbs', 'isetup')) {
+				continue;
+			}
+
+			if ($rsList['groupid'] == 7 && !$this->get_app_view('touch', 'isetup')) {
+				continue;
+			}
+
+			if ($rsList['groupid'] == 8 && !$this->get_app_view('im', 'isetup')) {
+				continue;
+			}
+
 			$db_set = "value='" . $this->fun->accept($rsList['valname'], 'P') . "'";
 			$db_where = 'id=' . $rsList['id'];
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
 		}
+		$this->db->query("UPDATE $db_table SET value='" . admin_URL . "' WHERE valname='domain'");
 		$this->systemfile(true);
-
 		if ($old_ishtml == 1 && $this->CON['is_html'] == 0) {
-
 			$file_fileex = $this->CON['file_fileex'];
-
 			$entrance_file = empty($this->CON['entrance_file']) ? 'index' : $this->CON['entrance_file'];
 			$indexhtmlfile = admin_ROOT . $entrance_file . '.' . $file_fileex;
-
 			if (@is_file($indexhtmlfile)) {
 				$this->fun->delfile($indexhtmlfile);
 			}
 			$db_table2 = db_prefix . 'lng';
-
 			$file_htmldir = $this->CON['file_htmldir'];
 			$htmdirpath = admin_ROOT . $file_htmldir;
 			$sql = 'SELECT id,lng,ispack,packname FROM ' . $db_table2 . ' WHERE isopen=1';
@@ -825,43 +656,32 @@ class important extends connector {
 				$lanhtmlindexfile = $rsList['ispack'] == 1 && !empty($rsList['packname']) ?
 					admin_ROOT . $file_htmldir . $rsList['packname'] . '/' . $entrance_file . '.' . $file_fileex :
 					admin_ROOT . $file_htmldir . $rsList['lng'] . '/' . $entrance_file . '.' . $file_fileex;
-
 				if (@is_file($lanhtmlindexfile)) {
 					$this->fun->delfile($lanhtmlindexfile);
 				}
 			}
 		}
-
 		$this->writelog($this->lng['setting_edit_log'], $this->lng['log_extra_ok']);
 		exit('true');
 	}
-
 	function onupcerfile() {
 		parent::start_template();
-
 		$digheight = $this->fun->accept('digheight', 'R');
+		$commandfile = admin_ROOT . 'datacache/command.php';
+		$iscommand = !@is_writable($commandfile) || !is_file($commandfile) ? 'false' : 'true';
 		$this->ectemplates->assign('digheight', $digheight);
+		$this->ectemplates->assign('iscommand', $iscommand);
 		$this->ectemplates->display('admin/admin_upfile');
 	}
-
 	function oncerfilecheck() {
 		parent::start_template();
-
 		$filename = $_FILES['cerupfilepath']['name'];
-
-
-
 		$filetmpname = $_FILES['cerupfilepath']['tmp_name'];
-
-
-
-
 		$digheight = $this->fun->accept('digheight', 'R');
 		$isupfiletrue = 'true';
 		if (empty($filename) || empty($filetmpname)) {
 			$isupfiletrue = 'false';
 		}
-
 		if (!file_exists($filetmpname)) {
 			$isupfiletrue = 'false';
 		}
@@ -869,13 +689,17 @@ class important extends connector {
 		if (empty($datacontent)) {
 			$isupfiletrue = 'false';
 		}
-		if ($isupfiletrue != 'false') {
+		$commandfile = admin_ROOT . 'datacache/command.php';
+		if (!@is_writable($commandfile) || !is_file($commandfile)) {
+			$isupfiletrue = 'false';
+		}
+		if ($isupfiletrue != 'false' && !empty($datacontent)) {
 			$db_table = db_prefix . 'config';
 			$db_where = "valname='cer_key'";
 			$db_set = "value='$datacontent'";
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
 			$db_where = "valname='cer_file'";
-			$db_set = "value='111111'";
+			$db_set = "value='" . time() . "'";
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
 			$this->systemfile(true);
 			$this->calldialogmessage($this->lng['management_upfile_text_ok_js'], $this->lng['management_upfile_text_exit_bottonok'], '', 0, 1, 'locationout');
@@ -884,7 +708,33 @@ class important extends connector {
 		$this->ectemplates->assign('isupfiletrue', $isupfiletrue);
 		$this->ectemplates->display('admin/admin_upfile');
 	}
+	function onbannload() {
+		$this->start_template();
+	}
+	function oncheckvol() {
+		$ipadd = $this->fun->ip($_SERVER['REMOTE_ADDR']);
+		$data = array(
+		    'ac' => 'sitejsondb',
+		    'at' => 'softvol',
+		    'dbosn' => $this->CON['dbosn'],
+		    'isdbo' => $this->CON['isdbo'],
+		    'vol' => $this->CON['softvol'],
+		    'siteurl' => urlencode(admin_ClassURL),
+		    'sitename' => urlencode($this->CON['sitename']),
+		    'iplong' => $ipadd,
+		    'email' => urlencode($this->CON['admine_mail']),
+		    'dbcode' => db_pscode,
+		    'db_keycode' => db_keycode
+		);
+		$getval = convert_uudecode($this->CON['getnetval']);
+		$posthttp = $getval . 'index.php';
+		$postout = trim($this->fun->postdb($posthttp, $data));
+		$postout_array = json_decode($postout, true);
+		if (is_array($postout_array) || count($postout_array) > 0) {
+			return $postout_array;
+		} else {
+			return false;
+		}
+	}
 
 }
-
-?>

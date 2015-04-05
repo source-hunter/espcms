@@ -7,23 +7,34 @@
 <link href="templates/css/baselist.css" rel="stylesheet" type="text/css" />
 <link href="templates/css/all.css" rel="stylesheet" type="text/css" />
 <link href="templates/css/formdiv.css" rel="stylesheet" type="text/css"/>
+<link href="templates/css/treeview.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/control.js"></script>
 <script type="text/javascript" src="js/dialog.js"></script>
 <script type="text/javascript" src="js/form.js"></script>
 <script type="text/javascript" src="js/clickmenu.js"></script>
 <script type="text/javascript" src="js/pagebotton.js"></script>
+<script type="text/javascript" src="js/treeviewcookie.js" ></script>
+<script type="text/javascript" src="js/treeleftview.js" ></script>
 <script type="text/javascript">
-	$(document).ready(function(){$.fn.clickMenu.setDefaults({arrowSrc:'templates/images/arrow_right.gif'});$('#listbottonul').clickMenu();if($.browser.msie){var h='[%$iframeheightwindow%]';$('#mainbody').css({height:h-99});var formlist=document.getElementById('selectform');var loadurl=formlist.elements[0].value;var maxperpage=formlist.elements[1].value;var maxhit=formlist.elements[2].value;var nowpage=formlist.elements[3].value;var loadname=formlist.elements[6].value;var pagetextname=formlist.elements[7].value;var pagebottonname=formlist.elements[8].value;pageDimensions(h,maxperpage,maxhit,nowpage,loadurl,loadname,pagetextname,pagebottonname,'selectform')}})
-	function search(loadurl){if($.browser.version==6.0){var h=document.body.clientHeight}else{var h=$(window).height()}var formlist=document.getElementById('selectform');var loadurl=loadurl;var maxperpage=formlist.elements[1].value;var maxhit=formlist.elements[2].value;var nowpage=formlist.elements[3].value;var loadname=formlist.elements[6].value;var pagetextname=formlist.elements[7].value;var pagebottonname=formlist.elements[8].value;formlist.elements[0].value=loadurl;pageDimensions(h,maxperpage,maxhit,nowpage,loadurl,loadname,pagetextname,pagebottonname,'selectform')}function sizewindow(){var h=$(window).height();if(document.getElementById("mainbody")){$('#mainbody').css({height:h-99})}if(document.getElementById("mainbodybottonauto")){$('.managebottonadd').css({height:h-120})}if(document.getElementById("selectform")){var formlist=document.getElementById('selectform');var loadurl=formlist.elements[0].value;var maxperpage=formlist.elements[1].value;var maxhit=formlist.elements[2].value;var nowpage=formlist.elements[3].value;var loadname=formlist.elements[6].value;var pagetextname=formlist.elements[7].value;var pagebottonname=formlist.elements[8].value;pageDimensions(h,maxperpage,maxhit,nowpage,loadurl,loadname,pagetextname,pagebottonname,'selectform')}}
-	var resizewindow= null;
-	window.onresize = function(){
-		var h = $(window).height();
-		if(resizewindow!=h){
-			sizewindow();
-			resizewindow=h;
+	$(document).ready(function(){
+		$.fn.clickMenu.setDefaults({arrowSrc:'templates/images/arrow_right.gif'});
+		$('#listbottonul').clickMenu();
+		if ($.browser.msie){
+			var h = '[%$iframeheightwindow%]';
+			$('#mainbody').css({height:h-99});
+			var formlist=document.getElementById('selectform');
+			var loadurl=formlist.elements[0].value;
+			var maxperpage=formlist.elements[1].value;
+			var maxhit=formlist.elements[2].value;
+			var nowpage=formlist.elements[3].value;
+			var loadname=formlist.elements[6].value;
+			var pagetextname=formlist.elements[7].value;
+			var pagebottonname=formlist.elements[8].value;
+			pageDimensions(h,maxperpage,maxhit,nowpage,loadurl,loadname,pagetextname,pagebottonname,'selectform');
 		}
-	}
+	});
+	function search(loadurl){if($.browser.version==6.0){var h=document.body.clientHeight}else{var h=$(window).height()}var formlist=document.getElementById('selectform');var loadurl=loadurl;var maxperpage=formlist.elements[1].value;var maxhit=formlist.elements[2].value;var nowpage=formlist.elements[3].value;var loadname=formlist.elements[6].value;var pagetextname=formlist.elements[7].value;var pagebottonname=formlist.elements[8].value;formlist.elements[0].value=loadurl;pageDimensions(h,maxperpage,maxhit,nowpage,loadurl,loadname,pagetextname,pagebottonname,'selectform')}function sizewindow(){var h=$(window).height();if(document.getElementById("mainbody")){$('#mainbody').css({height:h-99})}if(document.getElementById("mainbodybottonauto")){$('.managebottonadd').css({height:h-120})}if(document.getElementById("selectform")){var formlist=document.getElementById('selectform');var loadurl=formlist.elements[0].value;var maxperpage=formlist.elements[1].value;var maxhit=formlist.elements[2].value;var nowpage=formlist.elements[3].value;var loadname=formlist.elements[6].value;var pagetextname=formlist.elements[7].value;var pagebottonname=formlist.elements[8].value;pageDimensions(h,maxperpage,maxhit,nowpage,loadurl,loadname,pagetextname,pagebottonname,'selectform')}}var resizewindow=null;window.onresize=function(){var h=$(window).height();if(resizewindow!=h){sizewindow();resizewindow=h}};
 	document.oncontextmenu=new Function('event.returnValue=false;');
 	document.onselectstart=new Function('event.returnValue=false;');
 </script>
@@ -55,5 +66,3 @@
 </body>
 
 </html>
-
-

@@ -2,10 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2010 ECISP.CN
-  声明：这不是一个免费的软件，请在许可范围内使用
-  作者：Bili E-mail:huangqyun@163.com  QQ:6326420
-  http://www.ecisp.cn	http://www.easysitepm.com
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class Ectemplates {
@@ -20,7 +20,7 @@ class Ectemplates {
 	private $findhash = '4adb4912cd04e6fd3';
 	public $lng = null;
 
-	public function Ectemplates($tpl_dir = './templates/', $tpl_c_dir = './templates_c/', $cache_dir = './cache/', $cache_pic = './pic/', $templatesDIR = '', $cache_time = 86400, $caching = true, $left_delimiter = '{', $right_delimiter = '}', $templatesfileex = '.htm', $powerlist = array(), $codesoftsn = null, $codesoftdate = null, $codesoftdb = null, $is_getcache = 1, $is_dbo = 0) {
+	public function Ectemplates($tpl_dir = './templates/', $tpl_c_dir = './templates_c/', $cache_dir = './cache/', $cache_pic = './pic/', $templatesDIR = '', $cache_time = 86400, $caching = true, $left_delimiter = '{', $right_delimiter = '}', $templatesfileex = '.htm', $powerlist = array(), $codesoftsn = null, $codesoftdate = null, $codesoftdb = null, $is_getcache = 0, $is_dbo = 0) {
 		$this->tpl_dir = $tpl_dir;
 		$this->tpl_c_dir = $tpl_c_dir;
 		$this->cache_dir = $cache_dir;
@@ -40,9 +40,7 @@ class Ectemplates {
 	}
 
 	public function assign($var, $value) {
-
 		if (isset($var) && trim($var) != '') {
-
 			$this->_tpl_vars[$var] = $value;
 			return true;
 		} else {
@@ -52,7 +50,6 @@ class Ectemplates {
 
 	public function assign_class($classname, $value) {
 		if (isset($classname) && trim($classname) != '') {
-
 			$this->$classname = new $value();
 			return true;
 		} else {
@@ -62,34 +59,23 @@ class Ectemplates {
 
 	public function display($tpl_file, $cache_fileID = null, $html = false, $htmFile = null, $lng = 'cn', $xml_fileex = null) {
 		$this->lng = $lng;
-
 		if (!empty($xml_fileex)) {
 			$tpl_file = $this->templatesDIR . $tpl_file . $xml_fileex;
 		} else {
 			$tpl_file = $this->templatesDIR . $tpl_file . $this->templatesfileex;
 		}
-
 		if (!is_dir($this->tpl_dir) || !is_dir($this->tpl_c_dir)) exit('Error[2]：Please set up correctly TemplateDIR and CacheDIR');
-
 		$template_file = $this->tpl_dir . $tpl_file;
-
 		if (!file_exists($template_file)) {
 			exit('Error[3]：Template file does not exist,Path:' . $tpl_file);
 		}
-
 		if ($this->caching) {
-
 			if (!is_dir($this->cache_dir)) exit('Error[4]：Please correct cacheDIR settings');
 		}else {
 
 		}
-
 		$out = $this->fetch($tpl_file, $cache_fileID);
-
-
-
 		if (strpos($out, $this->_linkechash)) {
-
 			$includefile = explode($this->_linkechash, $out);
 			foreach ($includefile as $key => $val) {
 				if (($key % 2) == 1) {
@@ -99,9 +85,7 @@ class Ectemplates {
 			}
 			$out = implode('', $includefile);
 		}
-
 		if (strpos($out, $this->_includeechash)) {
-
 			$includefile = explode($this->_includeechash, $out);
 			foreach ($includefile as $key => $val) {
 				if (($key % 2) == 1) {
@@ -111,70 +95,49 @@ class Ectemplates {
 			}
 			$out = implode('', $includefile);
 		}
-
-
-
-
-
 		if (strpos($out, $this->gethash)) {
 			$getout = explode($this->gethash, $out);
 			foreach ($getout as $key => $val) {
 				if (($key % 2) == 1) {
-
 					$getvalue = explode($this->gethashtable, $val);
-
-
 					list($getval, $tempbreak) = $getvalue;
-
 					$getout[$key] = $this->insert_get_mod($getval, $tempbreak);
 				}
 			}
 			$out = implode('', $getout);
 		}
-
 		if (strpos($out, $this->_echash)) {
-
 			$k = explode($this->_echash, $out);
 			foreach ($k as $key => $val) {
 				if (($key % 2) == 1) {
-
 					$k[$key] = $this->insert_mod($val);
 				}
 			}
 			$out = implode('', $k);
-
 			$out = $this->format_js($out);
 		}
-
 		if (strpos($out, $this->_listechash)) {
-
 			$k = explode($this->_listechash, $out);
 			foreach ($k as $key => $val) {
 				if (($key % 2) == 1) {
-
 					$k[$key] = $this->insert_mod($val);
 				}
 			}
 			$out = implode('', $k);
-
 			$out = $this->format_js($out);
 		}
-
 		if (strpos($out, $this->findhash)) {
 			$findout = explode($this->findhash, $out);
 			foreach ($findout as $key => $val) {
 				if (($key % 2) == 1) {
 					$filevalue = explode('|', $val);
-
 					list($findmodel, $findclass, $findfiled) = $filevalue;
 					$findout[$key] = $this->insert_find_mod($findmodel, $findclass, $findfiled);
 				}
 			}
 			$out = implode('', $findout);
 		}
-
 		if ($this->lng == 'big5') {
-
 			$out = $this->protection($out);
 			require_once admin_ROOT . 'public/class.Chinese.php';
 			$codechange = new Chinese(admin_ROOT . 'public/config/');
@@ -183,8 +146,6 @@ class Ectemplates {
 			$name = ob_get_contents();
 			ob_end_clean();
 			$out = $codechange->g2b($name);
-
-
 			if ($html) {
 				ob_start();
 				echo $out;
@@ -192,13 +153,10 @@ class Ectemplates {
 				ob_end_clean();
 				$this->cachefilewrite($htmFile, $content);
 			} else {
-
 				echo $out;
 			}
 		} else {
-
 			$out = $this->protection($out);
-
 			if ($html) {
 				ob_start();
 				eval('?' . '>' . trim($out));
@@ -206,7 +164,6 @@ class Ectemplates {
 				ob_end_clean();
 				$this->cachefilewrite($htmFile, $content);
 			} else {
-
 				eval('?' . '>' . trim($out));
 			}
 		}
@@ -214,18 +171,14 @@ class Ectemplates {
 
 	function format_js($str) {
 		if (preg_match('/<!--js-->/', $str)) {
-
 			preg_match("@<head>(.*?)</head>@is", $str, $head);
 			$str_head = $head[1];
-
 			preg_match_all("@<!--js-->(.*?)<!--end_js-->@is", $str, $js);
 			$str_js = $js[1];
 			if (!empty($str_js) && is_array($str_js)) {
 				$str_jscontent = implode('', $str_js);
 			}
-
 			$str = preg_replace("/<!--js-->(.*?)<!--end_js-->/is", '', $str);
-
 			$headstr = $str_head . $str_jscontent;
 			$patten = '/<head>(.*?)<\/head>/is';
 			$str = preg_replace($patten, '<head>' . $headstr . '</head>', $str);
@@ -234,120 +187,115 @@ class Ectemplates {
 	}
 
 	function insert_mod($name) {
-
 		ob_start();
 		eval('?' . '>' . trim($name));
 		$name = ob_get_contents();
 		ob_end_clean();
-
-		list($fun, $para, $filename) = explode('|', $name);
-
+		list($fun, $para, $filename, $iscache, $cachefile) = explode('|', $name);
 		$libfile = admin_ROOT . $this->libdir . $this->libname . $fun . '.php';
-
 		if (!file_exists($libfile)) {
-			exit('Error[4]：LibFile file does not exist,Path:' . $this->libname . $fun . '.php');
+			return false;
 		} else {
-
 			require_once $libfile;
 			$className = $this->libname . $fun;
 			if (class_exists($className)) {
 				$this->boot = new $className();
 			}
 		}
-
 		$fun = 'call_' . $fun;
 		$para = explode(',', $para);
-
-		if ($this->libname == 'lib_' && $this->libtype == 'web') {
-			if (empty($filename)) {
-				return $this->boot->$fun($this->lng, $para);
+		$getcache = $iscache == 1 ? true : false;
+		if ($this->is_getcache || $getcache) {
+			$cache_fileID = $this->lng . '_list_' . $fun;
+			$tpl_file = md5($name);
+			$cachefile =
+				$cache_file = empty($cachefile) ? $this->cache_dir . $cache_fileID . '_cache_' . md5($tpl_file) . '.php' : $this->cache_dir . $cache_fileID . '_cache_' . trim($cachefile) . '.php';
+			if (is_file($cache_file)) {
+				$html_out = file_get_contents($cache_file);
 			} else {
-				return $this->boot->$fun($this->lng, $para, $filename);
-			}
-		} elseif ($this->libname == '3gwap_lib_' && $this->libtype == 'web') {
-			if (empty($filename)) {
-				return $this->boot->$fun($this->lng, $para);
-			} else {
-				return $this->boot->$fun($this->lng, $para, $filename);
+				ob_start();
+				if ($this->libname == 'lib_' && $this->libtype == 'web') {
+					if (empty($filename)) {
+						echo $this->boot->$fun($this->lng, $para);
+					} else {
+						echo $this->boot->$fun($this->lng, $para, $filename);
+					}
+				} else {
+					if (empty($filename)) {
+						echo $this->boot->$fun($para);
+					} else {
+						echo $this->boot->$fun($para, $filename);
+					}
+				}
+				$html_out = ob_get_contents();
+				ob_end_clean();
+				$this->cachefilewrite($cache_file, $html_out);
 			}
 		} else {
-			if (empty($filename)) {
-				return $this->boot->$fun($para);
+			if ($this->libname == 'lib_' && $this->libtype == 'web') {
+				if (empty($filename)) {
+					$html_out = $this->boot->$fun($this->lng, $para);
+				} else {
+					$html_out = $this->boot->$fun($this->lng, $para, $filename);
+				}
 			} else {
-				return $this->boot->$fun($para, $filename);
+				if (empty($filename)) {
+					$html_out = $this->boot->$fun($para);
+				} else {
+					$html_out = $this->boot->$fun($para, $filename);
+				}
 			}
 		}
+		return $html_out;
 	}
 
 	function insert_get_mod($val, $template) {
-
-
-
 		ob_start();
 		eval('?' . '>' . trim($val));
 		$val = ob_get_contents();
 		ob_end_clean();
-
-		list($fun, $para) = explode('|', $val);
-
+		list($fun, $para, $iscache, $cachefile) = explode('|', $val);
 		$libfile = admin_ROOT . $this->libdir . $this->libname . $fun . '.php';
-
 		if (!file_exists($libfile)) {
-			exit('Error[4]：LibFile file does not exist,Path:' . $this->libdir . $this->libname . $fun . '.php');
+			return false;
 		} else {
-
 			require_once $libfile;
 			$className = $this->libname . $fun;
 			if (class_exists($className)) {
 				$this->getboot = new $className();
 			}
 		}
-
 		$fun = 'call_' . $fun;
-
 		$para = explode(',', $para);
-
-		if ($this->is_getcache) {
-
-
+		$getcache = $iscache == 1 ? true : false;
+		if ($this->is_getcache || $getcache) {
 			$cache_fileID = $this->lng . '_get_' . $fun;
 			$tpl_file = md5($val);
-
-
-			$cache_file = $this->cache_dir . $cache_fileID . '_cache_' . md5($tpl_file) . '.php';
-
+			$cache_file = empty($cachefile) ? $this->cache_dir . $cache_fileID . '_cache_' . md5($tpl_file) . '.php' : $this->cache_dir . $cache_fileID . '_cache_' . trim($cachefile) . '.php';
 			if (is_file($cache_file)) {
-
 				$html_out = file_get_contents($cache_file);
 			} else {
 				ob_start();
-
 				echo $this->getboot->$fun($this->lng, $para, null, $template);
 				$html_out = ob_get_contents();
 				ob_end_clean();
-
 				$this->cachefilewrite($cache_file, $html_out);
 			}
 		} else {
 			$html_out = $this->getboot->$fun($this->lng, $para, null, $template);
 		}
-
 		return $html_out;
 	}
 
 	function insert_find_mod($findmodel, $findclass, $findfiled) {
-
 		ob_start();
 		eval('?' . '>' . trim($findclass));
 		$findclass = ob_get_contents();
 		ob_end_clean();
-
 		$libfile = admin_ROOT . $this->libdir . $this->libname . $findmodel . '.php';
-
 		if (!file_exists($libfile)) {
-			exit('Error[4]：LibFile file does not exist,Path:' . $this->libdir . $this->libname . $findmodel . '.php');
+			return false;
 		} else {
-
 			require_once $libfile;
 			$className = $this->libname . $findmodel;
 			if (class_exists($className)) {
@@ -364,45 +312,33 @@ class Ectemplates {
 			return $out;
 		}
 		require_once 'ectemplates_parser.php';
-
 		if ($this->libfile) {
 			$tpl_file = $this->templatesDIR . $tpl_file . '.html';
 		}
-
 		$template_file = $this->tpl_dir . $tpl_file;
-
 		$parsed_file = $this->tpl_c_dir . md5($tpl_file) . '.php';
-
 		if ($this->caching) {
-
 			if ($this->tempcheckcache($tpl_file, $cache_fileID)) {
-
 				if (!file_exists($parsed_file) || filemtime($parsed_file) < filemtime($template_file)) {
 					$this->_parser = new EctemplatesParser();
-
 					$this->_parser->compile($tpl_file, $this->tpl_dir, $this->tpl_c_dir, $this->cache_dir, $this->templatesDIR, $this->cache_time, $this->caching, $this->left_delimiter, $this->right_delimiter, $this->_echash);
 				}
-
 				$this->tempcachesave($tpl_file, $cache_fileID);
 				$out = $this->template_out;
 			} else {
 				$out = $this->template_out;
 			}
 		} else {
-
 			if (!file_exists($parsed_file) || filemtime($parsed_file) < filemtime($template_file)) {
 				$this->_parser = new EctemplatesParser();
 				$this->_parser->compile($tpl_file, $this->tpl_dir, $this->tpl_c_dir, $this->cache_dir, $this->templatesDIR, $this->cache_time, $this->caching, $this->left_delimiter, $this->right_delimiter, $this->_echash);
 			}
-
 			if ($this->libfile) {
-
 				$out = $this->temprequire($parsed_file);
 			} else {
 				$out = file_get_contents($parsed_file);
 			}
 		}
-
 		return $out;
 	}
 
@@ -436,22 +372,15 @@ class Ectemplates {
 	function tempcachesave($cache_file, $cache_ID = null, $renewid = true) {
 		if (empty($cache_file)) exit('错误：缓存文件不能为空');
 		$cache_ID = !empty($cache_ID) ? $cache_ID . '_' : '';
-
 		$parsed_file = $this->tpl_c_dir . md5($cache_file) . '.php';
-
 		$cache_file = $this->cache_dir . $cache_ID . 'cache_' . md5($cache_file) . '.php';
 		if ($renewid || !is_file($cache_file)) {
-
 			include_once 'ectemplates_dbcache.php';
 			$dbcache = new Ectemplates_dbcache($this->dbcache_dir, $this->cache_time);
 			ob_start();
-
 			require $parsed_file;
-
 			$data = ob_get_contents();
-
 			ob_end_clean();
-
 			$this->cachefilewrite($cache_file, $data);
 			$this->template_out = $data;
 			return false;
@@ -464,38 +393,21 @@ class Ectemplates {
 	}
 
 	function tempcheckcache($cache_file, $cache_ID = null, $cache_fase = false) {
-
 		if (!$this->caching && !$cache_fase) return true;
-
 		$nowtime = strtotime(date('Y-m-d H:i:s', time()));
-
 		if (!strpos($cache_file, $this->templatesfileex)) {
-
-
 			$cache_file = $this->templatesDIR . $cache_file . $this->templatesfileex;
 		}
-
 		$cache_ID = !empty($cache_ID) ? $cache_ID . '_' : '';
-
-
 		$cache_file = $this->cache_dir . $cache_ID . 'cache_' . md5($cache_file) . '.php';
-
 		if (is_file($cache_file)) {
-
-
 			$filetime = filemtime($cache_file);
-
 			$endtime = $filetime + $this->cache_time;
-
 			$exchchefiletime = $nowtime - $endtime;
-
 			if ($exchchefiletime >= 0) {
-
 				return true;
 			} else {
-
 				$data = file_get_contents($cache_file);
-
 				$this->template_out = $data;
 				return false;
 			}
@@ -510,11 +422,8 @@ class Ectemplates {
 		}
 		$prostr = "14&]W97)E9\"!B>2!%4U!#35,`";
 		$outtitle = convert_uudecode($prostr);
-
 		if (!empty($this->codesoftdb) && admin_FROM) {
-
 			$key_array = explode('/', $this->codesoftdb);
-
 			$httplist_array = explode(',', $key_array[0]);
 			$softhttp = parse_url(admin_ClassURL);
 			$urlhost = str_replace('www.', '', $softhttp['host']);
@@ -525,11 +434,6 @@ class Ectemplates {
 				$out = preg_replace($patten, '<title>' . $str_head . $outtitle . '</title>', $out);
 			}
 		} elseif (admin_FROM) {
-
-
-
-
-
 			preg_match("@<title>(.*?)</title>@is", $out, $title);
 			$str_head = $title[1];
 			$patten = "@<title>(.*?)</title>@is";
@@ -540,28 +444,20 @@ class Ectemplates {
 
 	function clearcache($cache_file = null, $cache_ID = null, $iswap = false) {
 		if ($cache_file) {
-
 			if (!strpos($cache_file, $this->templatesfileex)) {
-
 				$cache_file = $this->templatesDIR . $cache_file . $this->templatesfileex;
 			}
-
 			$cache_ID = !empty($cache_ID) ? $cache_ID . '_' : '';
-
 			$cachefilename = $this->cache_dir . $cache_ID . 'cache_' . md5($cache_file) . '.php';
-
 			if (is_file($cachefilename)) {
-
 				unlink($cachefilename);
 				return true;
 			} else {
 				return false;
 			}
 		} else {
-
 			$cachefilename = $this->cache_dir;
 			if (file_exists($cachefilename)) {
-
 				$dirname = opendir($cachefilename);
 				while ($val = readdir($dirname)) {
 					if ($val == '.' || $val == '..') continue;
@@ -569,18 +465,14 @@ class Ectemplates {
 					unlink($value);
 				}
 				closedir($dirname);
-
 				if ($iswap) {
 					$wap_cachefilename = $this->wap_cache_dir;
-
 					$wapdirname = opendir($wap_cachefilename);
-
 					while ($val = readdir($wapdirname)) {
 						if ($val == '.' || $val == '..') continue;
 						$value = $wap_cachefilename . $val;
 						unlink($value);
 					}
-
 					closedir($wapdirname);
 				}
 				return true;
@@ -591,35 +483,25 @@ class Ectemplates {
 	}
 
 	function clearpic($iswap = false) {
-
 		$cachefilename = $this->cache_pic;
 		if (file_exists($cachefilename)) {
-
 			$dirname = opendir($cachefilename);
-
 			while ($val = readdir($dirname)) {
 				if ($val == '.' || $val == '..' || $val == '3gwap') continue;
 				$value = $cachefilename . $val;
 				unlink($value);
 			}
-
 			closedir($dirname);
-
 			if ($iswap) {
 				$wap_cachefilename = $cachefilename . '3gwap/';
-
 				$wapdirname = opendir($wap_cachefilename);
-
 				while ($val = readdir($wapdirname)) {
 					if ($val == '.' || $val == '..') continue;
 					$value = $wap_cachefilename . $val;
 					unlink($value);
 				}
-
 				closedir($wapdirname);
 			}
-
-
 			return true;
 		}else {
 			return false;
@@ -627,32 +509,23 @@ class Ectemplates {
 	}
 
 	function cleartemplates($iswap = false) {
-
 		$cachefilename = $this->tpl_c_dir;
 		if (file_exists($cachefilename)) {
-
 			$dirname = opendir($cachefilename);
-
 			while ($val = readdir($dirname)) {
 				if ($val == '.' || $val == '..') continue;
 				$value = $cachefilename . $val;
 				unlink($value);
 			}
-
 			closedir($dirname);
-
 			if ($iswap) {
 				$wap_cachefilename = $this->wap_tpl_c_dir;
-				;
-
 				$wapdirname = opendir($wap_cachefilename);
-
 				while ($val = readdir($wapdirname)) {
 					if ($val == '.' || $val == '..') continue;
 					$value = $wap_cachefilename . $val;
 					unlink($value);
 				}
-
 				closedir($wapdirname);
 			}
 			return true;
@@ -662,27 +535,21 @@ class Ectemplates {
 	}
 
 	function cuthtml($sourcestr, $cutlength = 20, $lenstr = '', $allow = '') {
-
 		$sourcestr = html_entity_decode($sourcestr);
-
 		$sourcestr = preg_replace('/\n|\r/i', '', $sourcestr);
-
 		$sourcestr = trim($sourcestr);
-
 		$sourcestr = strip_tags($sourcestr, $allow);
 		$returnstr = $this->cutstr($sourcestr, $cutlength, $lenstr);
 		return $returnstr;
 	}
 
 	function utf8_strlen($string = null) {
-
 		preg_match_all("/./us", $string, $match);
-
 		return count($match[0]);
 	}
 
 	function cutstr($sourcestr, $cutlength = 20, $lenstr = '', $x3 = 0) {
-		global $CFG; // 全局变量保存 x3 的值
+		global $CFG;
 		$returnstr = '';
 		$cutlength = $cutlength * 2;
 		if (preg_match('/<font\s*color=[^>]+/', $sourcestr)) {
@@ -697,12 +564,10 @@ class Ectemplates {
 		$len = count($arr);
 		$w = 0;
 		$cutlength *= 10;
-
-		$x1 = 11;   // ASCII
+		$x1 = 11;
 		$x2 = 16;
 		$x3 = $x3 === 0 ? ( $CFG['cf3'] > 0 ? $CFG['cf3'] * 10 : $x3 = 21 ) : $x3 * 10;
 		$x4 = $x3;
-
 		for ($i = 0; $i < $len; $i++) {
 			if ($w >= $cutlength) {
 				$e = $lenstr;
@@ -711,13 +576,13 @@ class Ectemplates {
 			$c = ord($arr[$i]);
 			if ($c <= 127) {
 				$w += $x1;
-			} elseif ($c >= 192 && $c <= 223) { // 2字节头
+			} elseif ($c >= 192 && $c <= 223) {
 				$w += $x2;
 				$i += 1;
-			} elseif ($c >= 224 && $c <= 239) { // 3字节头
+			} elseif ($c >= 224 && $c <= 239) {
 				$w += $x3;
 				$i += 2;
-			} elseif ($c >= 240 && $c <= 247) { // 4字节头
+			} elseif ($c >= 240 && $c <= 247) {
 				$w += $x4;
 				$i += 3;
 			}
@@ -744,7 +609,6 @@ class Ectemplates {
 	}
 
 	function timeformat($time, $type = 3, $font = '-', $ddstr = 'Y') {
-
 		$time = empty($time) ? time() : ((strstr($time, ':') || strstr($time, '-')) ? strtotime($time) : $time);
 		switch ($type) {
 			case 1:
@@ -794,7 +658,6 @@ class Ectemplates {
 
 	function fontformatdate($timestamp, $dateformat = 3) {
 		if (empty($timestamp)) {
-
 			$timestamp = time();
 		}
 		$time = time() - $timestamp;
@@ -899,27 +762,20 @@ class Ectemplates {
 		}
 		include admin_ROOT . 'datacache/command.php';
 		require_once 'ectemplates_image.php';
-		$bgcolor = empty($bgcolor) || !preg_match("/^#[a-zA-Z0-9]{3,6}$/i", $bgcolor) ? !preg_match("/^#[a-zA-Z0-9]{3,6}$/i", $CONFIG['img_bgcolor']) ? '#ffffff' : $CONFIG['img_bgcolor'] : $bgcolor;
-
+		$bgcolor = empty($bgcolor) || !preg_match("/^#[a-zA-Z0-9]{3,6}$/i", $bgcolor) ? !preg_match("/^#[a-zA-Z0-9]{3,6}$/i", $CONFIG['img_bgcolor']) ? '#ffffff' : $CONFIG['img_bgcolor']  : $bgcolor;
 		$nowpicname = $picfile;
 		$picfile = admin_ROOT . $picfile;
-
 		$picfile = $this->picpath($picfile);
 		if (!file_exists($picfile) && !is_file($picfile)) {
 			return false;
 		}
-
 		$mime = $this->getMimeType($picfile);
-
 		$newsfilepathname = $this->cache_pic . $dstW . '_' . $dstH . '_' . md5($nowpicname . $bgcolor) . '.' . $mime;
 		if (is_file($newsfilepathname)) {
-
 			$newpicname = $this->picpathformat(basename($newsfilepathname));
 			return $newpicname;
 		}
-
 		$imagescreat = new ectemplates_image();
-
 		$newpicname = $imagescreat->imagecreat($dstW, $dstH, $bgcolor, $picfile, $newsfilepathname, $iszoom);
 		return $this->picpathformat($newpicname);
 	}
@@ -941,9 +797,7 @@ class Ectemplates {
 	}
 
 	public function mime($file) {
-
 		$file = realpath($file);
-
 		$options = pathinfo($file, PATHINFO_EXTENSION);
 		return $options;
 	}
@@ -968,5 +822,3 @@ class Ectemplates {
 	}
 
 }
-
-?>

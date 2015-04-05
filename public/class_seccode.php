@@ -1,16 +1,12 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class seccode {
-
 	var $code;
 	var $type = 0;
 	var $width = 0;
@@ -28,7 +24,6 @@ class seccode {
 	var $includepath = '';
 	var $bgcolor = '#1C9B1E';
 	var $im;
-
 	function seccodeconvert(&$seccode) {
 		$s = sprintf('%04s', base_convert($seccode, 10, 20));
 		$seccodeunits = 'CEFHKLMNOPQRSTUVWXYZ';
@@ -38,7 +33,6 @@ class seccode {
 			$seccode.= ( $unit >= 0x30 && $unit <= 0x39) ? $seccodeunits[$unit - 0x30] : $seccodeunits[$unit - 0x57];
 		}
 	}
-
 	function display() {
 		$this->type == 2 && !extension_loaded('ming') && $this->type = 0;
 		$this->width = $this->width >= 0 && $this->width <= 200 ? $this->width : 150;
@@ -46,11 +40,9 @@ class seccode {
 		$this->seccodeconvert($this->code);
 		$this->image();
 	}
-
 	function fileext($filename) {
 		return trim(substr(strrchr($filename, '.'), 1, 10));
 	}
-
 	function image() {
 		$bgcontent = $this->background();
 		if ($this->animator == 1 && function_exists('imagegif')) {
@@ -90,7 +82,6 @@ class seccode {
 			imagedestroy($this->im);
 		}
 	}
-
 	function background() {
 		$this->im = imagecreatetruecolor($this->width, $this->height);
 		$backgroundcolor = imagecolorallocate($this->im, 255, 255, 255);
@@ -129,7 +120,6 @@ class seccode {
 			$bG = hexdec(substr($this->bgcolor, 3, 2));
 			$bB = hexdec(substr($this->bgcolor, 5));
 			for ($i = 0; $i < $this->width; $i++) {
-
 				$color = imagecolorallocate($this->im, $bR, $bG, $bB);
 				imageline($this->im, $i, 0, $i - $angle, $this->height, $color);
 				$c[0]+=$step[0];
@@ -149,8 +139,6 @@ class seccode {
 		imagedestroy($this->im);
 		$bgcontent = ob_get_contents();
 		ob_end_clean();
-
-
 		if (empty($this->fontcolor)) $this->fontcolor = "#000";
 		$bR = hexdec(substr($this->fontcolor, 1, 2));
 		$bG = hexdec(substr($this->fontcolor, 3, 2));
@@ -158,7 +146,6 @@ class seccode {
 		$this->fontcolor = array($bR, $bG, $bB);
 		return $bgcontent;
 	}
-
 	function adulterate() {
 		$linenums = $this->height / 10;
 		for ($i = 0; $i <= $linenums; $i++) {
@@ -172,7 +159,6 @@ class seccode {
 			}
 		}
 	}
-
 	function adulteratefont() {
 		$seccodeunits = 'BCEFGHJKMPQRTVWXY2346789';
 		$x = $this->width / 4;
@@ -183,7 +169,6 @@ class seccode {
 			imagechar($this->im, 5, $x * $i + mt_rand(0, $x - 10), mt_rand($y, $this->height - 10 - $y), $adulteratecode, $text_color);
 		}
 	}
-
 	function ttffont() {
 		$seccode = $this->code;
 		$charset = $GLOBALS['charset'];
@@ -203,31 +188,21 @@ class seccode {
 		$widthtotal = 0;
 		for ($i = 0; $i < $seccodelength; $i++) {
 			$font[$i]['font'] = $seccoderoot . $seccodettf[array_rand($seccodettf)];
-
 			$font[$i]['angle'] = 0;
-
-
 			$font[$i]['size'] = 13;
 			$this->size && $font[$i]['size'] = mt_rand($font[$i]['size'] - $this->width / 60, $font[$i]['size'] + $this->width / 50);
 			$box = imagettfbbox($font[$i]['size'], 0, $font[$i]['font'], $seccode[$i]);
-
 			$font[$i]['zheight'] = 15;
 			$box = imagettfbbox($font[$i]['size'], $font[$i]['angle'], $font[$i]['font'], $seccode[$i]);
-
 			$font[$i]['height'] = 15;
-
 			$font[$i]['hd'] = 0;
-
 			$font[$i]['width'] = 15;
-
-
 			$widthtotal+=$font[$i]['width'];
 		}
 		$x = mt_rand($font[0]['angle'] > 0 ? cos(deg2rad(90 - $font[0]['angle'])) * $font[0]['zheight'] : 1, $this->width - $widthtotal);
 		!$this->color && $text_color = imagecolorallocate($this->im, $this->fontcolor[0], $this->fontcolor[1], $this->fontcolor[2]);
 		for ($i = 0; $i < $seccodelength; $i++) {
 			if ($this->color) {
-
 				$this->shadow && $text_shadowcolor = imagecolorallocate($this->im, 255 - $this->fontcolor[0], 255 - $this->fontcolor[1], 255 - $this->fontcolor[2]);
 				$text_color = imagecolorallocate($this->im, $this->fontcolor[0], $this->fontcolor[1], $this->fontcolor[2]);
 			} elseif ($this->shadow) {
@@ -239,7 +214,6 @@ class seccode {
 			$x+=$font[$i]['width'];
 		}
 	}
-
 	function giffont() {
 		$seccode = $this->code;
 		$seccodedir = array();
@@ -297,7 +271,4 @@ class seccode {
 			$x += $font[$i]['width'];
 		}
 	}
-
 }
-
-?>

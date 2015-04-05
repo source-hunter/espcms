@@ -2,11 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class important extends connector {
@@ -14,16 +13,11 @@ class important extends connector {
 	function important() {
 		$this->softbase(true);
 	}
-
 	function onorderlist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
-
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
@@ -71,10 +65,8 @@ class important extends connector {
 		if (!empty($serchekey)) {
 			$db_where.=" AND $keyname like '%$serchekey%'";
 		}
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'oid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_table = db_prefix . 'order';
@@ -93,7 +85,6 @@ class important extends connector {
 		$this->ectemplates->assign('sql', $sql);
 		$this->ectemplates->display('order/order_list');
 	}
-
 	function onsearch() {
 		parent::start_template();
 		$tab = $this->fun->accept('tab', 'R');
@@ -104,7 +95,6 @@ class important extends connector {
 		$this->ectemplates->assign('shipplug', $shipplug['list']);
 		$this->ectemplates->display("order/order_search");
 	}
-
 	function onorderadd() {
 		parent::start_template();
 		$payplug = $this->get_payplug_array($this->CON['order_pay']);
@@ -114,10 +104,8 @@ class important extends connector {
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->display('order/order_add');
 	}
-
 	function onorderedit() {
 		parent::start_template();
-
 		$type = $this->fun->accept('type', 'G');
 		$oid = $this->fun->accept('oid', 'G');
 		$db_table = db_prefix . 'order';
@@ -126,7 +114,6 @@ class important extends connector {
 		if (!empty($read['userid'])) {
 			$rsMember = $this->get_member(null, $read['userid']);
 		}
-
 		$db_table = db_prefix . 'order_info';
 		$db_where = " WHERE oid=$oid";
 		$sql = 'SELECT oiid,oid,did,tsn,title,oprice,bprice,countprice,amount,inventory FROM ' . $db_table . $db_where . ' ORDER BY oiid DESC';
@@ -134,7 +121,6 @@ class important extends connector {
 		$arrayList = array();
 		while ($rsList = $this->db->fetch_assoc($rs)) {
 			$didlist.=$rsList['did'] . ',';
-
 			$endid = $rsList['did'];
 			$array[] = $rsList;
 		}
@@ -144,13 +130,12 @@ class important extends connector {
 		$this->ectemplates->assign('read', $read);
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->assign('member', $rsMember);
+		$this->ectemplates->assign('barcode', $this->barcode($read['ordersn']));
 		if ($type == 'edit') {
 			$payplug = $this->get_payplug_array($read['opid']);
 			$shipplug = $this->get_shipplug_array($read['osid']);
 			$productmoney = $read['productmoney'];
-
 			$dis = 100 - ($read['discount'] / $productmoney) * 100;
-
 			$this->ectemplates->assign('productmoney', $productmoney);
 			$this->ectemplates->assign('dis', $dis);
 			$this->ectemplates->assign('payplug', $payplug['list']);
@@ -159,29 +144,19 @@ class important extends connector {
 		} else if ($type == 'read') {
 			$payList = $this->get_payplug_view($read['opid']);
 			$shipList = $this->get_shipplug_view($read['osid']);
-
 			$paylist = $this->fun->formatarray($payList['pluglist']);
-
 			$plugcode = $payList['paycode'];
 			if (!empty($plugcode)) {
-
 				include_once admin_ROOT . 'public/plug/payment/' . $plugcode . '.php';
-
 				$payobj = new $plugcode();
-
 				$codesn = $this->fun->eccode($plugcode . $read['ordersn'] . $oid, 'ENCODE', db_pscode, FALSE);
 
 				$respondArray = array('code' => $plugcode, 'ordersn' => $read['ordersn'], 'oid' => $oid, 'codesn' => $codesn);
-
 				$return_url = $this->get_link('paybackurl', $respondArray, $this->sitelng, 0, 1);
-
 				$orderonline = $payobj->get_code($read, $paylist, $return_url, $return_url);
-
 			}
 			$productmoney = $read['productmoney'];
-
 			$dis = 100 - ($read['discount'] / $productmoney) * 100;
-
 			$this->ectemplates->assign('payList', $payList);
 			$this->ectemplates->assign('shipList', $shipList);
 			$this->ectemplates->assign('productmoney', $productmoney);
@@ -190,7 +165,6 @@ class important extends connector {
 			$this->ectemplates->display('order/order_read');
 		}
 	}
-
 	function onsave() {
 		$inputclass = $this->fun->accept('inputclass', 'P');
 		$userid = $this->fun->accept('userid', 'R');
@@ -221,7 +195,6 @@ class important extends connector {
 		$db_table2 = db_prefix . 'order_info';
 		$db_table3 = db_prefix . 'document';
 		if ($inputclass == 'add') {
-
 			$install_values = '';
 			$arraycount = count($orderdid);
 			$did = substr($didlist, 0, strlen($didlist) - 1);
@@ -229,45 +202,32 @@ class important extends connector {
 			$sql = 'SELECT did,tsn,title,oprice,bprice FROM ' . $db_table3 . $db_where . ' ORDER BY did DESC';
 			$rs = $this->db->query($sql);
 			$key = 1;
-
 			$productmoney = 0;
 			while ($rsList = $this->db->fetch_assoc($rs)) {
-
 				$amount = $this->fun->accept('orderhow' . $rsList[did], 'R');
-
 				$countprice = $amount * $rsList['bprice'];
 				if ($key == $arraycount) {
 					$install_values.= "('insert_id',$rsList[did],'$rsList[tsn]','$rsList[title]',$rsList[oprice],$rsList[bprice],$countprice,$amount,1)";
 				} else {
 					$install_values.= "('insert_id',$rsList[did],'$rsList[tsn]','$rsList[title]',$rsList[oprice],$rsList[bprice],$countprice,$amount,1),";
 				}
-
 				$productmoney = $productmoney + $countprice;
 				$key++;
 			}
-
 			$order_discount = $this->CON['order_discount'];
 			if ($order_discount > 0) {
-
 				$discountmoney = $productmoney > 0 ? $productmoney - ($order_discount / 100) * $productmoney : 0;
 			}
-
 			$discount_productmoney = $productmoney - $discountmoney;
-
 			$productmoney_dis = $discountmoney > 0 ? $productmoney - $discountmoney : $productmoney;
 			$payprice = 0;
 			$shipprice = 0;
-
 			$payis_temp = $opid ? $this->get_payplug_view($opid, 'payis') : 0;
-
 			$shipprice = $osid ? $this->get_shipplug_view($osid, 'price') : 0;
 			if ($payis_temp > 0) {
-
 				$payprice = ($payis_temp / 100) * $productmoney_dis;
 			}
-
 			$orderamount = $productmoney_dis + $payprice + $shipprice;
-
 			$order_snfont = $this->CON['order_snfont'];
 			$ordersn = $order_snfont . date('YmdHis') . rand(100, 9999);
 
@@ -286,7 +246,6 @@ class important extends connector {
 			$this->writelog($this->lng['ordermain_add_log'], $this->lng['log_extra_ok'] . ' OrderSN=' . $ordersn);
 			exit('true');
 		} else if ($inputclass == 'edit') {
-
 			$didlist = $this->fun->accept('orderdid', 'P');
 			if (count($didlist) < 1 && !is_array($didlist)) {
 				exit('false');
@@ -296,29 +255,16 @@ class important extends connector {
 				$amountnewarray[$key]['id'] = $value;
 				$amountnewarray[$key]['amount'] = $this->fun->accept('orderhow' . $value, 'P');
 			}
-
 			$oid = $this->fun->accept('oid', 'P');
 			$db_where = 'oid=' . $oid;
-
 			$productmoney = $this->fun->accept('productmoney', 'R');
-
 			$ordersn = $this->fun->accept('ordersn2', 'R');
-
 			$orderamount = $this->fun->accept('orderamount', 'R');
-
 			$shippingmoney = $this->fun->accept('shippingmoney', 'R');
-
 			$paymoney = $this->fun->accept('paymoney', 'R');
-
 			$orderamountold = $this->fun->accept('orderamountold', 'R');
-
 			$discount = $productmoney - ($orderamount - $shippingmoney - $paymoney);
-
-
-
-
 			$this->db->query('DELETE FROM ' . $db_table2 . ' WHERE ' . $db_where);
-
 			$db_values = '';
 			$arraycount = count($amountnewarray) - 1;
 			foreach ($amountnewarray as $key => $value) {
@@ -343,7 +289,6 @@ class important extends connector {
 			exit('true');
 		}
 	}
-
 	function onordermode() {
 		$db_table = db_prefix . 'order';
 		$oid = $this->fun->accept('oid', 'P');
@@ -355,7 +300,6 @@ class important extends connector {
 		$this->writelog($this->lng['ordermain_edit_log'], $this->lng['log_extra_ok'] . ' oid=' . $oid);
 		exit('true');
 	}
-
 	function onorderdel() {
 		$db_table = db_prefix . 'order';
 		$db_table1 = db_prefix . 'order_info';
@@ -375,7 +319,6 @@ class important extends connector {
 		$this->writelog($this->lng['ordermain_del_log'], $this->lng['log_extra_ok'] . ' id=' . $selectinfoid);
 		exit('true');
 	}
-
 	function onshipprintselect() {
 		parent::start_template();
 		$oid = $this->fun->accept('oid', 'G');
@@ -384,26 +327,18 @@ class important extends connector {
 		$this->ectemplates->assign('array', $array['list']);
 		$this->ectemplates->display('order/order_shipprintselect');
 	}
-
 	function onprintlist() {
 		parent::start_template();
-
 		$title = $this->fun->accept('title', 'R');
-
 		$othercontent = $this->fun->accept('othercontent', 'R');
-
 		$oid = $this->fun->accept('oid', 'G');
-
 		$printid = $this->fun->accept('printid', 'R');
-
 		$db_table = db_prefix . 'order';
 		$db_where = 'oid=' . $oid;
 		$read = $this->db->fetch_first('SELECT * FROM ' . $db_table . ' WHERE ' . $db_where);
-
 		$read['province'] = $this->get_cityview($read['province'], 'cityname');
 		$read['city'] = $this->get_cityview($read['city'], 'cityname');
 		$read['district'] = $this->get_cityview($read['district'], 'cityname');
-
 		$sread = array();
 		$sread['order_companyname'] = $this->CON['order_companyname'];
 		$sread['order_contact'] = $this->CON['order_contact'];
@@ -420,35 +355,28 @@ class important extends connector {
 		$tempcontent = stripslashes(htmlspecialchars_decode($rstemp['templatecontent']));
 		require admin_ROOT . adminfile . '/include/inc_print.php';
 		foreach ($printinc as $key => $vlaue) {
-
 			$tempcontent = str_replace($vlaue['title'], $vlaue['content'], $tempcontent);
 		}
+		$this->ectemplates->assign('barcode', $this->barcode($read['ordersn']));
 		$this->ectemplates->assign('templist', $tempcontent);
 		$this->ectemplates->assign('pic', $rstemp['pic']);
 		$this->ectemplates->display('order/order_shipprint');
 	}
-
 	function onprintorder() {
 		parent::start_template();
-
 		$class = $this->fun->accept('class', 'G');
 		$oid = $this->fun->accept('oid', 'G');
-
 		$db_table = db_prefix . 'order';
 		$db_where = 'oid=' . $oid;
 		$read = $this->db->fetch_first('SELECT * FROM ' . $db_table . ' WHERE ' . $db_where);
-
 		$read['payname'] = $this->get_payplug_view($read['opid'], 'payname');
 		$read['shipname'] = $this->get_shipplug_view($read['osid'], 'title');
-
 		$read['province'] = $this->get_cityview($read['province'], 'cityname');
 		$read['city'] = $this->get_cityview($read['city'], 'cityname');
 		$read['district'] = $this->get_cityview($read['district'], 'cityname');
 
 		$productmoney = $read['productmoney'];
-
 		$dis = 100 - ($read['discount'] / $productmoney) * 100;
-
 		$db_table = db_prefix . 'order_info';
 		$db_where = " WHERE oid=$oid";
 		$sql = 'SELECT oiid,oid,did,tsn,title,oprice,bprice,countprice,amount,inventory FROM ' . $db_table . $db_where . ' ORDER BY oiid DESC';
@@ -456,11 +384,9 @@ class important extends connector {
 		$arrayList = array();
 		while ($rsList = $this->db->fetch_assoc($rs)) {
 			$didlist.=$rsList['did'] . ',';
-
 			$endid = $rsList['did'];
 			$array[] = $rsList;
 		}
-
 		$sread = array();
 		$sread['order_companyname'] = $this->CON['order_companyname'];
 		$sread['order_contact'] = $this->CON['order_contact'];
@@ -472,7 +398,7 @@ class important extends connector {
 		$sread['order_moblie'] = $this->CON['order_moblie'];
 		$sread['admine_mail'] = $this->CON['admine_mail'];
 		$sread['domain'] = $this->CON['domain'];
-
+		$this->ectemplates->assign('barcode', $this->barcode($read['ordersn']));
 		$this->ectemplates->assign('dis', $dis);
 		$this->ectemplates->assign('sread', $sread);
 		$this->ectemplates->assign('order', $read);
@@ -481,6 +407,15 @@ class important extends connector {
 		if ($class == 2) $this->ectemplates->display('order/order_orderprint2');
 	}
 
-}
+	function barcode($code = null) {
+		if (empty($code)) {
+			return false;
+		}
+		$ipadd = $this->fun->ip($_SERVER['REMOTE_ADDR']);
+		$getnetval = convert_uudecode($this->CON['getnetval']);
+		$softvol = $this->CON['softvol'];
+		$codeurl = $getnetval . 'index.php?ac=siteauthentication&at=barcode&code=' . $code . '&vol=' . $softvol . '&siteurl=' . urlencode(admin_ClassURL) . '&sitename=' . urlencode($this->CON['sitename']) . '&iplong=' . $ipadd . '&email=' . urlencode($this->CON['admine_mail']) . '&dbcode=' . db_pscode;
+		return $codeurl;
+	}
 
-?>
+}

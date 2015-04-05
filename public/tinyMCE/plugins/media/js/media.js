@@ -44,14 +44,14 @@ function init() {
 				break;
 		}
 
-		document.forms[0].insert.value = ed.getLang('update', 'Insert', true); 
+		document.forms[0].insert.value = ed.getLang('update', 'Insert', true);
 	}
 
-	document.getElementById('filebrowsercontainer').innerHTML = getBrowserHTML('filebrowser','src','media','media');
-	document.getElementById('qtsrcfilebrowsercontainer').innerHTML = getBrowserHTML('qtsrcfilebrowser','qt_qtsrc','media','media');
-	document.getElementById('bgcolor_pickcontainer').innerHTML = getColorPickerHTML('bgcolor_pick','bgcolor');
+	document.getElementById('filebrowsercontainer').innerHTML = getBrowserHTML('filebrowser', 'src', 'media', 'media');
+	document.getElementById('qtsrcfilebrowsercontainer').innerHTML = getBrowserHTML('qtsrcfilebrowser', 'qt_qtsrc', 'media', 'media');
+	document.getElementById('bgcolor_pickcontainer').innerHTML = getColorPickerHTML('bgcolor_pick', 'bgcolor');
 
-	var html = getMediaListHTML('medialist','src','media','media');
+	var html = getMediaListHTML('medialist', 'src', 'media', 'media');
 	if (html == "")
 		document.getElementById("linklistrow").style.display = 'none';
 	else
@@ -75,7 +75,19 @@ function init() {
 				setStr(pl, 'flash', 'wmode');
 				setStr(pl, 'flash', 'base');
 				setStr(pl, 'flash', 'flashvars');
-			break;
+				break;
+			case "flv":
+				setBool(pl, 'flash', 'play');
+				setBool(pl, 'flash', 'loop');
+				setBool(pl, 'flash', 'menu');
+				setBool(pl, 'flash', 'swliveconnect');
+				setStr(pl, 'flash', 'quality');
+				setStr(pl, 'flash', 'scale');
+				setStr(pl, 'flash', 'salign');
+				setStr(pl, 'flash', 'wmode');
+				setStr(pl, 'flash', 'base');
+				setStr(pl, 'flash', 'flashvars');
+				break;
 
 			case "qt":
 				setBool(pl, 'qt', 'loop');
@@ -95,7 +107,7 @@ function init() {
 				setStr(pl, 'qt', 'qtsrcchokespeed');
 				setStr(pl, 'qt', 'volume');
 				setStr(pl, 'qt', 'qtsrc');
-			break;
+				break;
 
 			case "shockwave":
 				setBool(pl, 'shockwave', 'sound');
@@ -106,7 +118,7 @@ function init() {
 				setStr(pl, 'shockwave', 'swstretchstyle');
 				setStr(pl, 'shockwave', 'swstretchhalign');
 				setStr(pl, 'shockwave', 'swstretchvalign');
-			break;
+				break;
 
 			case "wmp":
 				setBool(pl, 'wmp', 'autostart');
@@ -127,7 +139,7 @@ function init() {
 				setStr(pl, 'wmp', 'rate');
 				setStr(pl, 'wmp', 'uimode');
 				setStr(pl, 'wmp', 'volume');
-			break;
+				break;
 
 			case "rmp":
 				setBool(pl, 'rmp', 'autostart');
@@ -143,7 +155,7 @@ function init() {
 				setStr(pl, 'rmp', 'controls');
 				setStr(pl, 'rmp', 'numloop');
 				setStr(pl, 'rmp', 'scriptcallbacks');
-			break;
+				break;
 		}
 
 		setStr(pl, null, 'src');
@@ -226,7 +238,7 @@ function insertMedia() {
 		fe.style.height = f.height.value + (f.height.value.indexOf('%') == -1 ? 'px' : '');
 		fe.align = f.align.options[f.align.selectedIndex].value;
 	} else {
-		h = '<img src="' + tinyMCEPopup.getWindowArg("plugin_url") + '/img/trans.gif"' ;
+		h = '<img src="' + tinyMCEPopup.getWindowArg("plugin_url") + '/img/trans.gif"';
 
 		switch (f.media_type.options[f.media_type.selectedIndex].value) {
 			case "flash":
@@ -280,13 +292,13 @@ function updatePreview() {
 }
 
 function getMediaListHTML() {
-	if (typeof(tinyMCEMediaList) != "undefined" && tinyMCEMediaList.length > 0) {
+	if (typeof (tinyMCEMediaList) != "undefined" && tinyMCEMediaList.length > 0) {
 		var html = "";
 
 		html += '<select id="linklist" name="linklist" style="width: 250px" onchange="this.form.src.value=this.options[this.selectedIndex].value;updatePreview();">';
 		html += '<option value="">---</option>';
 
-		for (var i=0; i<tinyMCEMediaList.length; i++)
+		for (var i = 0; i < tinyMCEMediaList.length; i++)
 			html += '<option value="' + tinyMCEMediaList[i][1] + '">' + tinyMCEMediaList[i][0] + '</option>';
 
 		html += '</select>';
@@ -302,12 +314,14 @@ function getType(v) {
 
 	fo = ed.getParam("media_types", "flash=swf;flv=flv;shockwave=dcr;qt=mov,qt,mpg,mp3,mp4,mpeg;shockwave=dcr;wmp=avi,wmv,wm,asf,asx,wmx,wvx;rmp=rm,ra,ram").split(';');
 
-	if (v.match(/watch\?v=(.+)(.*)/)) {
-		f.width.value = '425';
-		f.height.value = '350';
-		f.src.value = 'http://www.youtube.com/v/' + v.match(/v=(.*)(.*)/)[0].split('=')[1];
-		return 'flash';
-	}
+	f.width.value = '600';
+	f.height.value = '450';
+
+	f.allowfullscreen.value = 'true';
+	f.quality.value = 'high';
+	f.flashvars.value = v.match(/v=(.*)(.*)/)[0].split('=')[1] + '&p=\'1\'';
+	f.src.value = 'http://www.youtube.com/v/' + v.match(/v=(.*)(.*)/)[0].split('=')[1];
+	return 'flash';
 
 	if (v.indexOf('http://video.google.com/videoplay?docid=') == 0) {
 		f.width.value = '425';
@@ -316,13 +330,13 @@ function getType(v) {
 		return 'flash';
 	}
 
-	for (i=0; i<fo.length; i++) {
+	for (i = 0; i < fo.length; i++) {
 		c = fo[i].split('=');
 
 		el = c[1].split(',');
-		for (x=0; x<el.length; x++)
-		if (v.indexOf('.' + el[x]) != -1)
-			return c[0];
+		for (x = 0; x < el.length; x++)
+			if (v.indexOf('.' + el[x]) != -1)
+				return c[0];
 	}
 
 	return null;
@@ -374,8 +388,20 @@ function serializeParameters() {
 			s += getStr('flash', 'wmode');
 			s += getStr('flash', 'base');
 			s += getStr('flash', 'flashvars');
-		break;
+			break;
 
+		case "flv":
+			s += getBool('flash', 'play', true);
+			s += getBool('flash', 'loop', true);
+			s += getBool('flash', 'menu', true);
+			s += getBool('flash', 'swliveconnect', false);
+			s += getStr('flash', 'quality');
+			s += getStr('flash', 'scale');
+			s += getStr('flash', 'salign');
+			s += getStr('flash', 'wmode');
+			s += getStr('flash', 'base');
+			s += getStr('flash', 'flashvars');
+			break;
 		case "qt":
 			s += getBool('qt', 'loop', false);
 			s += getBool('qt', 'autoplay', true);
@@ -394,7 +420,7 @@ function serializeParameters() {
 			s += getStr('qt', 'qtsrcchokespeed');
 			s += getStr('qt', 'volume');
 			s += getStr('qt', 'qtsrc');
-		break;
+			break;
 
 		case "shockwave":
 			s += getBool('shockwave', 'sound');
@@ -405,7 +431,7 @@ function serializeParameters() {
 			s += getStr('shockwave', 'swstretchstyle');
 			s += getStr('shockwave', 'swstretchhalign');
 			s += getStr('shockwave', 'swstretchvalign');
-		break;
+			break;
 
 		case "wmp":
 			s += getBool('wmp', 'autostart', true);
@@ -426,7 +452,7 @@ function serializeParameters() {
 			s += getStr('wmp', 'rate');
 			s += getStr('wmp', 'uimode');
 			s += getStr('wmp', 'volume');
-		break;
+			break;
 
 		case "rmp":
 			s += getBool('rmp', 'autostart', false);
@@ -442,7 +468,7 @@ function serializeParameters() {
 			s += getStr('rmp', 'controls');
 			s += getStr('rmp', 'numloop');
 			s += getStr('rmp', 'scriptcallbacks');
-		break;
+			break;
 	}
 
 	s += getStr(null, 'id');
@@ -461,7 +487,7 @@ function serializeParameters() {
 }
 
 function setBool(pl, p, n) {
-	if (typeof(pl[n]) == "undefined")
+	if (typeof (pl[n]) == "undefined")
 		return;
 
 	document.forms[0].elements[p + "_" + n].checked = pl[n] != 'false';
@@ -470,7 +496,7 @@ function setBool(pl, p, n) {
 function setStr(pl, p, n) {
 	var f = document.forms[0], e = f.elements[(p != null ? p + "_" : '') + n];
 
-	if (typeof(pl[n]) == "undefined")
+	if (typeof (pl[n]) == "undefined")
 		return;
 
 	if (e.type == "text")
@@ -482,8 +508,8 @@ function setStr(pl, p, n) {
 function getBool(p, n, d, tv, fv) {
 	var v = document.forms[0].elements[p + "_" + n].checked;
 
-	tv = typeof(tv) == 'undefined' ? 'true' : "'" + jsEncode(tv) + "'";
-	fv = typeof(fv) == 'undefined' ? 'false' : "'" + jsEncode(fv) + "'";
+	tv = typeof (tv) == 'undefined' ? 'true' : "'" + jsEncode(tv) + "'";
+	fv = typeof (fv) == 'undefined' ? 'false' : "'" + jsEncode(fv) + "'";
 
 	return (v == d) ? '' : n + (v ? ':' + tv + ',' : ":\'" + fv + "\',");
 }
@@ -545,6 +571,11 @@ function generatePreview(c) {
 
 	switch (f.media_type.options[f.media_type.selectedIndex].value) {
 		case "flash":
+			cls = 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000';
+			codebase = 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0';
+			type = 'application/x-shockwave-flash';
+			break;
+		case "flv":
 			cls = 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000';
 			codebase = 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0';
 			type = 'application/x-shockwave-flash';
@@ -619,3 +650,4 @@ function generatePreview(c) {
 }
 
 tinyMCEPopup.onInit.add(init);
+      

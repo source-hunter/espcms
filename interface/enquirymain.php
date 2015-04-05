@@ -2,11 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2010 ECISP.CN
-  声明：这不是一个免费的软件，请在许可范围内使用
-
-  作者：Bili E-mail:huangqyun@163.com  QQ:6326420
-  http://www.ecisp.cn	http://www.easysitepm.com
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class mainpage extends connector {
@@ -15,29 +14,23 @@ class mainpage extends connector {
 		$this->softbase(false);
 		$this->mlink = $this->memberlink(array(), admin_LNG);
 	}
-
 	function in_list() {
 		parent::start_pagetemplate();
 		parent::member_purview(0, $this->mlink['enquirylist']);
 		include_once admin_ROOT . 'public/class_pagebotton.php';
 		$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
-
 		$page = $this->fun->accept('page', 'G');
 		$page = isset($page) ? intval($page) : 1;
-
 		$pagesylte = 1;
-
 		$pagemax = intval($this->CON['order_max_list']);
 		$userid = $this->ec_member_username_id;
 		if (empty($userid)) {
 			$this->callmessage($this->lng['db_err'], $_SERVER['HTTP_REFERER'], $this->lng['gobackurlbotton']);
 		}
-
 		$db_table = db_prefix . 'enquiry';
 		$db_where = " WHERE userid=$userid";
 		$countnum = $this->db_numrows($db_table, $db_where);
 		if ($countnum > 0) {
-
 			$numpage = ceil($countnum / $pagemax);
 		} else {
 			$numpage = 1;
@@ -47,17 +40,15 @@ class mainpage extends connector {
 		$sql = $this->htmlpage->PageSQL('eid', 'down');
 		$rs = $this->db->query($sql);
 		while ($rsList = $this->db->fetch_assoc($rs)) {
-
 			$validtime = $this->fun->formatdate(4, $rsList['addtime']) + 3600;
-
 			$rsList['editclass'] = time() - $validtime > 1800 ? 'false' : 'true';
 			$rsList['link'] = $this->get_link('enquiryread', $rsList, admin_LNG);
 			$rsList['dlink'] = $this->get_link('enquirydel', $rsList, admin_LNG);
 			$array[] = $rsList;
 		}
-
+		$this->lng['sitename'] = $this->lng['member_title'] . '-' . $this->lng['sitename'];
+		$this->pagetemplate->assign('lngpack', $this->lng);
 		$templatesDIR = $this->get_templatesdir('member');
-
 		$templatefilename = $lng . '/' . $templatesDIR . '/member_center';
 		$this->pagetemplate->assign('out', 'enquirylist');
 		$this->pagetemplate->assign('mlink', $this->mlink);
@@ -68,10 +59,42 @@ class mainpage extends connector {
 		$this->pagetemplate->assign('pagevt', $this->htmlpage->Prevbotton());
 		$this->pagetemplate->assign('array', $array);
 		$this->pagetemplate->assign('path', 'member');
+		$this->pagetemplate->assign('limit', $pagemax);
+		$this->pagetemplate->assign('countnum', $countnum);
+		$this->pagetemplate->assign('maxpage', $numpage);
+		$this->pagetemplate->assign('nowpage', $page);
+
 		unset($array, $LANPACK, $this->lng);
 		$this->pagetemplate->display($templatefilename, 'member_enquiry_list', false, '', admin_LNG);
 	}
-
+	function in_ajaxlist() {
+		parent::start_pagetemplate();
+		parent::member_purview(0, $this->mlink['enquirylist']);
+		$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
+		$limitstard = $this->fun->accept('limitstard', 'R');
+		$limitstard = isset($limitstard) ? intval($limitstard) : 0;
+		$pagemax = intval($this->CON['order_max_list']);
+		$userid = $this->ec_member_username_id;
+		if (empty($userid)) {
+			$this->callmessage($this->lng['db_err'], $_SERVER['HTTP_REFERER'], $this->lng['gobackurlbotton']);
+		}
+		$db_table = db_prefix . 'enquiry';
+		$db_where = " WHERE userid=$userid";
+		$sql = "SELECT * FROM $db_table $db_where ORDER BY eid DESC LIMIT $limitstard,$pagemax";
+		$rs = $this->db->query($sql);
+		while ($rsList = $this->db->fetch_assoc($rs)) {
+			$validtime = $this->fun->formatdate(4, $rsList['addtime']) + 3600;
+			$rsList['editclass'] = time() - $validtime > 1800 ? 'false' : 'true';
+			$rsList['link'] = $this->get_link('enquiryread', $rsList, admin_LNG);
+			$rsList['dlink'] = $this->get_link('enquirydel', $rsList, admin_LNG);
+			$array[] = $rsList;
+		}
+		$templatesDIR = $this->get_templatesdir('ajax_list');
+		$templatefilename = $lng . '/' . $templatesDIR . '/member_ajax_enquiry_list';
+		$this->pagetemplate->assign('array', $array);
+		unset($array, $LANPACK, $this->lng);
+		$this->pagetemplate->display($templatefilename, 'member_ajax_enquiry_list', false, '', admin_LNG);
+	}
 	function in_read() {
 		parent::start_pagetemplate();
 		parent::member_purview(0, $this->mlink['enquirylist']);
@@ -92,7 +115,6 @@ class mainpage extends connector {
 		if (!$read['eid']) {
 			$this->callmessage($this->lng['db_err'], $_SERVER['HTTP_REFERER'], $this->lng['gobackurlbotton']);
 		}
-
 		$db_table = db_prefix . "enquiry_info a," . db_prefix . "document b";
 		$db_where = " WHERE a.eid=$read[eid] AND a.did=b.did";
 		$sql = 'SELECT a.*,b.pic,b.filename,b.filepath,b.ishtml FROM ' . $db_table . $db_where;
@@ -102,21 +124,20 @@ class mainpage extends connector {
 			$rsList['link'] = $this->get_link('doc', $rsList, admin_LNG);
 			$array[] = $rsList;
 		}
+		$this->lng['sitename'] = $this->lng['member_title'] . '-' . $this->lng['sitename'];
+		$this->pagetemplate->assign('lngpack', $this->lng);
 		$this->pagetemplate->assign('read', $read);
 		$this->pagetemplate->assign('array', $array);
 		$this->pagetemplate->assign('mlink', $this->mlink);
 		$this->pagetemplate->assign('path', 'member');
 		$this->pagetemplate->assign('tokenkey', $this->fun->token());
 		$this->pagetemplate->assign('mem_isaddress', $this->CON['mem_isaddress']);
-
 		$templatesDIR = $this->get_templatesdir('member');
-
 		$templatefilename = $lng . '/' . $templatesDIR . '/member_center';
 		$this->pagetemplate->assign('out', 'enquiryread');
 		unset($array, $LANPACK, $this->lng);
 		$this->pagetemplate->display($templatefilename, 'member_enquiry_read', false, '', admin_LNG);
 	}
-
 	function in_enquiryeditsave() {
 		$linkURL = $_SERVER['HTTP_REFERER'];
 		if (!$this->fun->is_token()) {
@@ -166,7 +187,6 @@ class mainpage extends connector {
 		$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
 		$this->callmessage($this->lng['enquiry_memberinfoedit_ok'], $_SERVER['HTTP_REFERER'], $this->lng['gobackurlbotton']);
 	}
-
 	function in_del() {
 		parent::member_purview(0, $this->mlink['enquirylist']);
 		$userid = intval($this->ec_member_username_id);
@@ -178,7 +198,6 @@ class mainpage extends connector {
 		if (empty($eid)) {
 			$this->callmessage($this->lng['db_err'], $_SERVER['HTTP_REFERER'], $this->lng['gobackurlbotton']);
 		}
-
 		$db_table = db_prefix . 'enquiry';
 		$db_where = 'isclass=0 and eid=' . $eid . ' AND userid=' . $userid;
 		$db_set = "isclass=2";
@@ -187,5 +206,3 @@ class mainpage extends connector {
 	}
 
 }
-
-?>

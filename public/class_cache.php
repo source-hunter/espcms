@@ -1,27 +1,22 @@
 <?php
-
 /*
   PHP version 5
   Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class cacheDB {
-
 	public $cachefile = 'dbcache/';
 	public $cachetime = 60;
 	public $cachefiletype = 'php';
 	public $caching = true;
-
 	function cacheDB($cachefile = 'dbcache/', $cachetime = 60, $cachefiletype = 'php', $caching = true) {
 		$this->cachefile = $cachefile;
 		$this->cachetime = $cachetime;
 		$this->cachefiletype = $cachefiletype;
 		$this->caching = $caching;
 	}
-
 	function cachefilewrite($fileName, $content, $type = "wb+") {
 		$fileName = $this->cachefile . $fileName . '.' . $this->cachefiletype;
 		if (!is_dir($this->cachefile)) {
@@ -36,30 +31,23 @@ class cacheDB {
 			return false;
 		}
 	}
-
 	function cachesave($cachefilename, $cachecontent, $renewid = true) {
 		if (!$this->caching) return false;
 		if (empty($cachefilename)) trigger_error('File name is not defined', E_USER_ERROR);
-
 		if (is_array($cachecontent)) {
 			if (count($cachecontent) == 0) return false;
-
 			$content = var_export($cachecontent, TRUE);
 		}else {
 			if (empty($content)) return false;
 			$content = "'" . $cachecontent . "'";
 		}
-
 		$filename = $this->cachefile . $cachefilename . '_' . md5($cachefilename) . '.' . $this->cachefiletype;
 		if ($renewid || !is_file($filename)) {
-
 			$sConfig = "<?php\n";
 			$sConfig = $sConfig . '/*uptime:' . date('Y-m-d H:i:s', time()) . "*/\n";
 			$sConfig = $sConfig . '$' . $cachefilename . '=' . $content . ";\n";
 			$sConfig = $sConfig . '?' . '>';
-
 			$cachefilename = $cachefilename . '_' . md5($cachefilename);
-
 			$this->cachefilewrite($cachefilename, $sConfig);
 		} else {
 			include ($filename);
@@ -67,21 +55,15 @@ class cacheDB {
 		}
 		return $cachecontent;
 	}
-
 	function checkcache($cachekey, $checkid = true) {
 		if (!$this->caching) return false;
 		if (empty($cachekey)) return false;
-
 		$cachefilename = $this->cachefile . $cachekey . '_' . md5($cachekey) . '.' . $this->cachefiletype;
 		if (is_file($cachefilename)) {
 			if ($checkid) {
-
 				$nowtime = time();
-
 				$filetime = filemtime($cachefilename);
-
 				$endtime = $filetime + $this->cachetime;
-
 				$exchchefiletime = $nowtime - $endtime;
 			} else {
 				$exchchefiletime = -1;
@@ -96,32 +78,24 @@ class cacheDB {
 			return false;
 		}
 	}
-
 	function clearcache($cachekey = false, $cachekeyseach = false) {
 		if ($cachekey) {
 			if (!$cachekeyseach) {
-
 				$cachefilename = $this->cachefile . $cachekey . '_' . md5($cachekey) . '.' . $this->cachefiletype;
 				if (is_file($cachefilename)) {
-
 					@unlink($cachefilename);
 					return true;
 				} else {
 					return false;
 				}
 			} else {
-
-
 				$cachefilename = $this->cachefile;
 				if (file_exists($cachefilename)) {
-
 					$dirname = @opendir($cachefilename);
 					while ($val = @readdir($dirname)) {
 						if ($val == '.' || $val == '..') continue;
-
 						if (stripos('@#!@@' . $val, $cachekey) == 5) {
 							$value = $cachefilename . $val;
-
 							@unlink($value);
 						}
 					}
@@ -132,10 +106,8 @@ class cacheDB {
 				}
 			}
 		} else {
-
 			$cachefilename = $this->cachefile;
 			if (file_exists($cachefilename)) {
-
 				$dirname = @opendir($cachefilename);
 				while ($val = @readdir($dirname)) {
 					if ($val == '.' || $val == '..') continue;
@@ -149,7 +121,4 @@ class cacheDB {
 			}
 		}
 	}
-
 }
-
-?>

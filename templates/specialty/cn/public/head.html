@@ -1,0 +1,46 @@
+<div class="espcms_head">
+	<div class="logo"><img src="{%$rootpath%}images/logo.jpg" alt="logo"/></div>
+	<div class="head_botton">
+		<ul class="unstyled">
+			{%get name=lng%}
+			{%forlist from=$array key=i%}
+			<li><a href="{%$array[i].link%}">{%$array[i].lngtitle%}</a></li>
+			{%/forlist%}
+			{%/get%}
+			<li><a href="{%$rootdir%}wap/">手机网站</a></li>
+			<li><a href="{%find:mlink class=1 out=login%}">会员中心</a></li>
+			<li><a href="{%find:mlink class=2 out=order%}">购物车</a></li>
+			<li><a href="{%find:mlink class=2 out=enquiry%}">询盘清单</a></li>
+		</ul>
+	</div>
+	{%get name=search class=mid:0%}
+	<form name="infosearch" method="post" action="{%$link%}">
+	<input type="hidden" name="lng" value="{%$lng%}">
+	<input type="hidden" name="mid" value="0">
+	<div class="head_search">
+		<ul class="unstyled">
+			<li id="search_left"></li>
+			<li id="search_input"><input id="keyword" name="keyword" type="text" class="search_input" size="20" value="请输入关键词" onfocus="if (this.value=='请输入关键词'){this.value=''}" onblur="if(this.value==''){this.value='请输入关键词'}"/></li>
+			<li id="search_botton"><input type="image"  name="botton" src="{%$rootpath%}images/search_botton_2.jpg" class="search_botton" value="开始搜索"/></li>
+		</ul>
+	</div>
+	</form>
+	{%/get%}
+</div>
+<div class="espcms_botton">
+	<ul class="menubotton unstyled" id="clickmenubotton">
+		{%get name=menu class=path:$path,current:$current,ishome:1%}
+		{%forlist from=$array key=i%}
+		<li {%if $array[i].path==$path && $array[i].current==$current%}class="hover"{%/if%}><span><a class="menu" title="{%$array[i].title%}" href="{%$array[i].link%}">{%$array[i].title%}</a></span>
+			{% if count( $array[i].larray ) > 0 %}
+			<ul class="subnav" style="display: none; ">
+				{%forlist from=$array[i].larray key=ii%}
+				<li><a class="novlink" href="{%$array[i].larray[ii].link%}" title="{%$array[i].larray[ii].title%}">{%$array[i].larray[ii].title%}</a></li>
+				{%/forlist%}
+			</ul>
+			{%/if%}
+		</li>
+		{%/forlist%}
+		{%/get%}
+	</ul>
+</div>

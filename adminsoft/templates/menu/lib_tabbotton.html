@@ -1,0 +1,246 @@
+[%if $loadfun=='articlelist'%]
+<script type="text/javascript">
+	$().ready(function() {
+		$("#three").treeview({collapsed: true, control: "#sidetreecontrol", prerendered: false, persist: "location"});
+	});
+</script>
+<div class="modeltitle">按所属模型查看</div>
+<div class="scrolltext">
+	<div class="srcolcontent" style="height:75px;">
+		<ul>
+			[%forlist from=$modelarray key=i%]
+			[%if $modelarray[i].selected=='selected'%]
+			<li><b>[%$modelarray[i].modelname%]</b></li>
+			[%else%]
+			<li><a href="[%$modelarray[i].url%]" title="[%$modelarray[i].modelname%]">[%$modelarray[i].modelname%]</a></li>
+			[%/if%]
+			[%/forlist%]
+		</ul>
+	</div>
+</div>
+
+<div class="modeltitle2">按分类查看</div>
+<div class="scrolltext">
+	<div class="srcolcontentThree" style="height:250px;" id="srcolcontent">
+		<ul id="three" class="treeview">
+			[%forlist from=$typelist key=i%]
+			<li[%if count( $typelist[i].childArray ) <= 0%] class="onefast"[%/if%]>
+				[%if $typelist[i].styleid==4%]
+				<p class="tabclick" datatype="iframe" datalink="index.php?archive=article&action=docedit&did=[%$typelist[i].linkid%]&tid=[%$typelist[i].tid%]&mid=[%$typelist[i].mid%]&type=edit&iframename=jerichotabiframe_0" iconimg="templates/images/tab.gif" jerichotabindex="10000"><a href="#body" class="tabclicklink" hidefocus="true">[%$typelist[i].typename%]</a></p>
+				[%else%]
+				<a href="[%$typelist[i].url%]" title="[%$typelist[i].typename%]">[%$typelist[i].typename%]</a>
+				[%/if%]
+				<!--II-->
+				[%if count( $typelist[i].childArray ) > 0%]
+				<ul>
+					[%forlist from=$typelist[i].childArray key=ii%]
+					<li class="one">
+						[%if $typelist[i].childArray[ii].styleid==4%]
+						<p class="tabclick" datatype="iframe" datalink="index.php?archive=article&action=docedit&did=[%$typelist[i].childArray[ii].linkid%]&tid=[%$typelist[i].childArray[ii].tid%]&mid=[%$typelist[i].childArray[ii].mid%]&type=edit&iframename=jerichotabiframe_0" iconimg="templates/images/tab.gif" jerichotabindex="10000"><a href="#body" class="tabclicklink" hidefocus="true">[%$typelist[i].childArray[ii].typename%]</a></p>
+						[%else%]
+						<a href="[%$typelist[i].childArray[ii].url%]" title="[%$typelist[i].childArray[ii].typename%]">[%$typelist[i].childArray[ii].typename%]</a>
+						[%/if%]
+						<!--III-->
+						[%if count( $typelist[i].childArray[ii].childArray ) > 0%]
+						<ul>
+							[%forlist from=$typelist[i].childArray[ii].childArray key=iii%]
+							<li class="tow">
+								[%if $typelist[i].childArray[ii].childArray[iii].styleid==4%]
+								<p class="tabclick" datatype="iframe" datalink="index.php?archive=article&action=docedit&did=[%$typelist[i].childArray[ii].childArray[iii].linkid%]&tid=[%$typelist[i].childArray[ii].childArray[iii].tid%]&mid=[%$typelist[i].childArray[ii].childArray[iii].mid%]&type=edit&iframename=jerichotabiframe_0" iconimg="templates/images/tab.gif" jerichotabindex="10000"><a href="#body" class="tabclicklink" hidefocus="true">[%$typelist[i].childArray[ii].childArray[iii].typename%]</a></p>
+								[%else%]
+								<a href="[%$typelist[i].childArray[ii].childArray[iii].url%]" title="[%$typelist[i].childArray[ii].childArray[iii].typename%]">[%$typelist[i].childArray[ii].childArray[iii].typename%]</a>
+								[%/if%]
+								<!--IIII-->
+								[%if count( $typelist[i].childArray[ii].childArray[iii].childArray ) > 0%]
+								<ul>
+									[%forlist from=$typelist[i].childArray[ii].childArray[iii].childArray key=iiii%]
+									<li class="four">
+										[%if $typelist[i].childArray[ii].childArray[iii].childArray[iiii].styleid==4%]
+										<p class="tabclick" datatype="iframe" datalink="index.php?archive=article&action=docedit&did=[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].linkid%]&tid=[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].tid%]&mid=[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].mid%]&type=edit&iframename=jerichotabiframe_0" iconimg="templates/images/tab.gif" jerichotabindex="10000"><a href="#body" class="tabclicklink" hidefocus="true">[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].typename%]</a></p>
+										[%else%]
+										<a href="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].url%]" title="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].typename%]">[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].typename%]</a>
+										[%/if%]
+										<!--IIIII-->
+										[%if count( $typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray ) > 0%]
+										<ul>
+											[%forlist from=$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray key=iiiii%]
+											<li class="five">
+												[%if $typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].styleid==4%]
+												<p class="tabclick" datatype="iframe" datalink="index.php?archive=article&action=docedit&did=[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].linkid%]&tid=[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].tid%]&mid=[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].mid%]&type=edit&iframename=jerichotabiframe_0" iconimg="templates/images/tab.gif" jerichotabindex="10000"><a href="#body" class="tabclicklink" hidefocus="true">[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%]</a></p>
+												[%else%]
+												<a href="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].url%]" title="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%]">[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%]</a>
+												[%/if%]
+												<!--IIIIII-->
+												[%if count( $typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray ) > 0%]
+												<ul>
+													[%forlist from=$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray key=iiiiii%]
+													<li class="six">
+														[%if $typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].styleid==4%]
+														<p class="tabclick" datatype="iframe" datalink="index.php?archive=article&action=docedit&did=[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].linkid%]&tid=[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].tid%]&mid=[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].mid%]&type=edit&iframename=jerichotabiframe_0" iconimg="templates/images/tab.gif" jerichotabindex="10000"><a href="#body" class="tabclicklink" hidefocus="true">[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename%]</a></p>
+														[%else%]
+														<a href="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].url%]" title="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename%]">[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename%]</a>
+														[%/if%]
+													</li>
+													[%/forlist%]
+												</ul>
+												[%/if%]
+											</li>
+											[%/forlist%]
+										</ul>
+										[%/if%]
+									</li>
+									[%/forlist%]
+								</ul>
+								[%/if%]
+							</li>
+							[%/forlist%]
+						</ul>
+						[%/if%]
+					</li>
+					[%/forlist%]
+				</ul>
+				[%/if%]
+			</li>
+			[%/forlist%]
+		</ul>
+	</div>
+</div>
+[%/if%]
+
+[%if $loadfun=='seolinklist' || $loadfun=='seolinktypelist'%]
+<script type="text/javascript">
+	$().ready(function() {
+		$("#three").treeview({collapsed: true, control: "#sidetreecontrol", prerendered: false, persist: "location"});
+	});
+</script>
+<div class="modeltitle">按所属模型查看</div>
+<div class="scrolltext">
+	<div class="srcolcontent" style="height:75px;">
+		<ul>
+			[%forlist from=$modelarray key=i%]
+			[%if $modelarray[i].selected=='selected'%]
+			<li><b>[%$modelarray[i].modelname%]</b></li>
+			[%else%]
+			<li><a title="[%$modelarray[i].modelname%]" href="[%$modelarray[i].url%]" title="[%$modelarray[i].modelname%]">[%$modelarray[i].modelname%]</a></li>
+			[%/if%]
+			[%/forlist%]
+		</ul>
+	</div>
+</div>
+
+<div class="modeltitle2">按分类查看</div>
+<div class="scrolltext">
+	<div class="srcolcontentThree" style="height:250px;" id="srcolcontent">
+		<ul id="three" class="treeview">
+			[%forlist from=$typelist key=i%]
+			<li[%if count( $typelist[i].childArray ) <= 0%] class="onefast"[%/if%]>
+				<a href="[%$typelist[i].url%]" title="[%$typelist[i].typename%]">[%$typelist[i].typename%]</a>
+				<!--II-->
+				[%if count( $typelist[i].childArray ) > 0%]
+				<ul>
+					[%forlist from=$typelist[i].childArray key=ii%]
+					<li class="one">
+						<a href="[%$typelist[i].childArray[ii].url%]" title="[%$typelist[i].childArray[ii].typename%]">[%$typelist[i].childArray[ii].typename%]</a>
+						<!--III-->
+						[%if count( $typelist[i].childArray[ii].childArray ) > 0%]
+						<ul>
+							[%forlist from=$typelist[i].childArray[ii].childArray key=iii%]
+							<li class="tow">
+								<a href="[%$typelist[i].childArray[ii].childArray[iii].url%]" title="[%$typelist[i].childArray[ii].childArray[iii].typename%]">[%$typelist[i].childArray[ii].childArray[iii].typename%]</a>
+								<!--IIII-->
+								[%if count( $typelist[i].childArray[ii].childArray[iii].childArray ) > 0%]
+								<ul>
+									[%forlist from=$typelist[i].childArray[ii].childArray[iii].childArray key=iiii%]
+									<li class="four">
+										<a href="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].url%]" title="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].typename%]">[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].typename%]</a>
+										<!--IIIII-->
+										[%if count( $typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray ) > 0%]
+										<ul>
+											[%forlist from=$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray key=iiiii%]
+											<li class="five">
+												<a href="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].url%]" title="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%]">[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].typename%]</a>
+												<!--IIIIII-->
+												[%if count( $typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray ) > 0%]
+												<ul>
+													[%forlist from=$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray key=iiiiii%]
+													<li class="six">
+														<a href="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].url%]" title="[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename%]">[%$typelist[i].childArray[ii].childArray[iii].childArray[iiii].childArray[iiiii].childArray[iiiiii].typename%]</a>
+													</li>
+													[%/forlist%]
+												</ul>
+												[%/if%]
+											</li>
+											[%/forlist%]
+										</ul>
+										[%/if%]
+									</li>
+									[%/forlist%]
+								</ul>
+								[%/if%]
+							</li>
+							[%/forlist%]
+						</ul>
+						[%/if%]
+					</li>
+					[%/forlist%]
+				</ul>
+				[%/if%]
+			</li>
+			[%/forlist%]
+		</ul>
+	</div>
+</div>
+[%/if%]
+
+[%if $loadfun=='typelist' || $loadfun=='subjectlist' || $loadfun=='recomlist'%]
+<div class="modeltitle">按所属模型查看</div>
+<div class="scrolltext">
+	<div class="srcolcontent" style="height:75px;" id="modelleftcontent">
+		<ul>
+			[%forlist from=$modelarray key=i%]
+			[%if $modelarray[i].selected=='selected'%]
+			<li><b>[%$modelarray[i].modelname%]</b></li>
+			[%else%]
+			<li><a href="[%$modelarray[i].url%]" title="[%$modelarray[i].modelname%]">[%$modelarray[i].modelname%]</a></li>
+			[%/if%]
+			[%/forlist%]
+		</ul>
+	</div>
+</div>
+[%/if%]
+
+[%if $loadfun=='memberlist'%]
+<div class="modeltitle">按会员等级查看</div>
+<div class="scrolltext">
+	<div class="srcolcontent" style="height:75px;" id="modelleftcontent">
+		<ul>
+			[%forlist from=$memberclass key=i%]
+			[%if $memberclass[i].selected=='selected'%]
+			<li><b>[%$memberclass[i].rankname%]</b></li>
+			[%else%]
+			<li><a href="[%$memberclass[i].url%]" title="[%$memberclass[i].rankname%]">[%$memberclass[i].rankname%]</a></li>
+			[%/if%]
+			[%/forlist%]
+		</ul>
+	</div>
+</div>
+[%/if%]
+
+[%if $loadfun=='advertlist'%]
+<div class="modeltitle">按广告位查看</div>
+<div class="scrolltext">
+	<div class="srcolcontent" style="height:75px;" id="modelleftcontent">
+		<ul>
+			[%forlist from=$adtype key=i%]
+			[%if $adtype[i].selected=='selected'%]
+			<li><b>[%$adtype[i].adtypename%]</b></li>
+			[%else%]
+			<li><a href="[%$adtype[i].url%]" title="[%$adtype[i].adtypename%]">[%$adtype[i].adtypename%]</a></li>
+			[%/if%]
+			[%/forlist%]
+		</ul>
+	</div>
+</div>
+[%/if%]
+
+

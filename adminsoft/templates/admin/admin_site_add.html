@@ -20,7 +20,7 @@
 			sizewindow();
 			resizewindow=h;
 		}
-	}
+	};
 
 	function sizewindow(){
 		var h = $(window).height();
@@ -34,7 +34,7 @@
 	var sitemain_js_siteip_err = "[%$ST.sitemain_js_siteip_err%]";
 	var sitemain_js_sitehttp_err = "[%$ST.sitemain_js_sitehttp_err%]";
 	var sitemain_js_adminusername_err = "[%$ST.sitemain_js_adminusername_err%]";
-	
+
 	var sitemain_js_add_ok = "[%$ST.sitemain_js_add_ok%]";
 	var sitemain_js_add_no = "[%$ST.sitemain_js_add_no%]";
 	var iframename = "[%$iframename%]";
@@ -47,13 +47,13 @@
 			beforeSubmit: formverify,
 
 			success:saveResponse,
-			resetForm: true
-		}
+			resetForm: false
+		};
 		$('#formmain').submit(function() {
 			$(this).ajaxSubmit(options);
 			return false;
 		});
-	})
+	});
 
 
 
@@ -158,8 +158,8 @@
 	<div id="subbotton">
 		<table border="0" width="100%">
 			<tr>
-				<td id="right"><input type="submit" id="submitbotton" name="Submit" value="[%$ST.botton_add%]" class="buttonface" /></td>
-				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_add_reset%]" class="buttonface" /></td>
+				<td id="right"><input type="submit" id="submitbotton" name="Submit" value="[%$ST.botton_add%]" class="button orange" /></td>
+				<td id="left" class="padding-left5"><input type="button" name="cancel" onClick="javascript:parent.onaletdoc();" value="[%$ST.botton_add_reset%]" class="button orange" /></td>
 			</tr>
 		</table>
 	</div>

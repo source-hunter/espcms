@@ -9,7 +9,7 @@
 			<td width="25%">[%$array[list].keytypename%]</td>
 			<td width="40%">[%$array[list].keyworklist|cutstr(25)%]</td>
 			<td width="10%" id="infotype">
-				[%if @this->powercheck('marketing','keylinktypeedit')==true %]
+				[%if @this->powercheck('article','keylinktypeedit')==true %]
 				<table>
 					<tr>
 						<td><a class="setedit" onclick="javascript:parent.onbotton('[%$array[list].keytypename|addslashes('hc')%][%$ST.seomanage_edit_title%]','index.php?archive=seomanage&action=keylinktypeedit&id=[%$array[list].ktid%]&freshid='+Math.random()+'&iframename='+self.frameElement.getAttribute('name'),false,'keylinktype[%$array[list].ktid%]',self.frameElement.getAttribute('name'));" id="keylinktype[%$array[list].ktid%]" href="#body" title="[%$ST.setedit_botton%]" hidefocus="true">[%$ST.setedit_botton%]</a></td>
@@ -29,4 +29,4 @@
 	</tr>
 </table>
 </div>
-[%/if%]
+[%/if%]      

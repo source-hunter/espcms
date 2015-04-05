@@ -1,3 +1,4 @@
+
 .notnull{
 	height:16px;
 	width:16px;
@@ -187,12 +188,11 @@
 	border: 1px solid #d0dbe8;
 	padding:1px;
 }
-.srcolcontent{
+.srcolcontent,.srcolcontentThree{
 	width:100%;
 	float:left;
 	overflow: hidden;
 }
-
 
 /**main**/
 #maintabbotton {
@@ -378,6 +378,62 @@ a:hover.addinfo {
 	color: #fff;
 	text-decoration: none;
 }
+/*dbfile*/
+a.dbupdatefile {
+	background: url(../images/botton.png) no-repeat;
+	background-position: 0px -862px;
+	height: 21px;
+	line-height: 21px;
+	width: 91px;
+	padding-left: 27px;
+	color: #fff;
+	display: block;
+	text-decoration: none;
+}
+a:visited.dbupdatefile{
+	display: block;
+	color: #fff;
+	text-decoration: none;
+}
+a:current.dbupdatefile{
+	display: block;
+	color: #fff;
+	text-decoration: none;
+}
+a:hover.dbupdatefile {
+	background: url(../images/botton.png) no-repeat;
+	background-position: 0px -883px;
+	color: #fff;
+	text-decoration: none;
+}
+/*dbfile*/
+a.dbupfilebotton {
+	background: url(../images/botton.png) no-repeat;
+	background-position: 0px -904px;
+	height: 21px;
+	line-height: 21px;
+	width: 63px;
+	padding-left: 27px;
+	color: #fff;
+	display: block;
+	text-decoration: none;
+}
+a:visited.dbupfilebotton{
+	display: block;
+	color: #fff;
+	text-decoration: none;
+}
+a:current.dbupfilebotton{
+	display: block;
+	color: #fff;
+	text-decoration: none;
+}
+a:hover.dbupfilebotton {
+	background: url(../images/botton.png) no-repeat;
+	background-position: 0px -925px;
+	color: #fff;
+	text-decoration: none;
+}
 /*selectAll*/
 a.selectall {
 	background: url(../images/botton.png) no-repeat;
@@ -432,19 +488,19 @@ a#bolt {
 	line-height: 21px;
 	width: 48px;
 	padding-left: 27px;
-	color: #737475;
+	color: #fff;
 	display: block;
 	text-decoration: none;
 }
 a:current#bolt {
 	display: block;
-	color: #737475;
+	color: #fff;
 	text-decoration: none;
 }
 a:hover#bolt {
 	background: url(../images/botton.png) no-repeat;
 	background-position: 0px -221px;
-	color: #384466;
+	color: #fff;
 	text-decoration: none;
 }
 /*del*/
@@ -501,19 +557,19 @@ a#setbotton {
 	line-height: 21px;
 	width: 48px;
 	padding-left: 27px;
-	color: #737475;
+	color: #fff;
 	display: block;
 	text-decoration: none;
 }
 a:current#setbotton {
 	display: block;
-	color: #737475;
+	color: #fff;
 	text-decoration: none;
 }
 a:hover#setbotton {
 	background: url(../images/botton.png) no-repeat;
 	background-position: 0px -347px;
-	color: #384466;
+	color: #fff;
 	text-decoration: none;
 }
 /*del*/
@@ -685,20 +741,20 @@ a.setedit {
 	text-align: center;
 	line-height: 22px;
 	width: 41px;
-	color: #a45303;
+	color: #fff;
 	display: block;
 	text-decoration: none;
 }
 a:visited.setedit {
 	display: block;
-	color: #a45303;
+	color: #fff;
 	text-decoration: none;
 }
 a:hover.setedit {
 	background: url(../images/botton_set.gif) no-repeat;
 	background-position: 0px -22px;
-	color: #384466;
-	text-decoration: underline;
+	color: #fff;
+	text-decoration: none;
 }
 a.setedit2 {
 	background: url(../images/botton_set.gif) no-repeat;
@@ -707,20 +763,20 @@ a.setedit2 {
 	height: 22px;
 	line-height: 22px;
 	width: 62px;
-	color: #a45303;
+	color: #fff;
 	display: block;
 	text-decoration: none;
 }
 a:visited.setedit2 {
 	display: block;
-	color: #a45303;
+	color: #fff;
 	text-decoration: none;
 }
 a:hover.setedit2 {
 	background: url(../images/botton_set.gif) no-repeat;
 	background-position: 0px -66px;
-	color: #384466;
-	text-decoration: underline;
+	color: #fff;
+	text-decoration: none;
 }
 a.setedit3 {
 	background: url(../images/botton_set.gif) no-repeat;
@@ -729,20 +785,20 @@ a.setedit3 {
 	text-align: center;
 	line-height: 22px;
 	width: 85px;
-	color: #a45303;
+	color: #fff;
 	display: block;
 	text-decoration: none;
 }
 a:visited.setedit3 {
 	display: block;
-	color: #a45303;
+	color: #fff;
 	text-decoration: none;
 }
 a:hover.setedit3 {
 	background: url(../images/botton_set.gif) no-repeat;
 	background-position: 0px -110px;
-	color: #384466;
-	text-decoration: underline;
+	color: #fff;
+	text-decoration: none;
 }
 a.setedit4 {
 	background: url(../images/botton_set.gif) no-repeat;
@@ -751,20 +807,20 @@ a.setedit4 {
 	text-align: center;
 	line-height: 22px;
 	width: 85px;
-	color: #384466;
+	color: #fff;
 	display: block;
 	text-decoration: none;
 }
 a:visited.setedit4 {
 	display: block;
-	color: #a45303;
+	color: #fff;
 	text-decoration: none;
 }
 a:hover.setedit4 {
 	background: url(../images/botton_set.gif) no-repeat;
 	background-position: 0px -88px;
-	color: #a45303;
-	text-decoration: underline;
+	color: #815003;
+	text-decoration: none;
 }
 /*mainbody*/
 #mainbody {
@@ -787,8 +843,9 @@ a:hover.setedit4 {
 	margin: 0px;
 	left: 0px;
 	width: 100%;
-	overflow-x: hidden;
+	height:auto;
 	overflow-y: auto;
+	overflow-x: hidden;
 }
 .tabnextlist {
 	float: left;
@@ -1109,7 +1166,7 @@ a:hover.setedit4 {
 }
 .pagelistdiv {
 	height: 35px;
-	line-height: 35px;
+	line-height: 40px;
 	text-align: center;
 	background: url(../images/class_bg.jpg) repeat-x;
 	background-position: 0px -72px;
@@ -1249,7 +1306,7 @@ a:hover.setedit4 {
 }
 #subbotton {
 	margin: 0px;
-	padding: 4px 0px 0px 0px;
+	padding: 8px 0px 0px 0px;
 	text-align: center;
 	overflow: hidden;
 }
@@ -1292,6 +1349,7 @@ a:hover.setedit4 {
 .logincenterdiv{
 	left:0px;
 	right:0px;
+	padding:10px;
 	background-color: #fff;
 	border-style: solid;
 	border-width: 1px;
@@ -1344,132 +1402,72 @@ a:hover.setedit4 {
 	display: inline-block;
 }
 /*hoembotton*/
-a.b01 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -0px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b02 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -60px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b03 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -120px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
+a.b01 {background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -0px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b01:hover{background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -70px;}
+
+a.b02 {background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -140px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b02:hover{background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -210px;}
+
+a.b03 {background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -280px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b03:hover{background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -350px;}
+
+a.b04 {background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -420px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b04:hover{background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -490px;}
+
+a.b05 {background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -700px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b05:hover{background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -770px;}
+
+a.b06 {background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -840px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b06:hover{background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -910px;}
+
+a.b07 {background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -980px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b07:hover{background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -1050px;}
+
+a.b08 {background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -560px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b08:hover{background: url(../images/inputbotton.jpg) no-repeat;background-position: 0px -630px;}
+
+a.b09 {background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -840px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b09:hover{background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -910px;}
+
+a.b10 {background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -0px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b10:hover{background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -70px;}
+
+a.b11 {background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -560px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b11:hover{background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -630px;}
+
+a.b12 {background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -280px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b12:hover{background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -350px;}
+
+a.b13 {background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -140px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b13:hover{background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -210px;}
+
+a.b14 {background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -700px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b14:hover{background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -770px;}
+
+a.b15 {background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -980px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b15:hover{background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -1050px;}
+
+a.b16 {background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -420px;height: 70px;line-height: 70px;width: 90px;display: block;}
+a.b16:hover{background: url(../images/inputbotton_2.jpg) no-repeat;background-position: 0px -490px;}
+
+.thDIV{
+	width: 100%;
+	float: left;
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
 }
 
-a.b04 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -180px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
+.typethree_icon {
+	float: left;
+	background: url(images/plus.gif) no-repeat 0px 3px ;
+	height:12px;
+	width:9px;
+	margin-right: 5px;
+	overflow: hidden;
 }
-a.b05 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -240px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b06 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -300px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b07 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -360px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b08 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -420px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b09 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -480px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b10 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -540px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b11 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -600px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b12 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -660px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b13 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -720px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b14 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -780px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b15 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -840px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
-a.b16 {
-	background: url(../images/inputbotton.jpg) no-repeat;
-	background-position: 0px -900px;
-	height: 60px;
-	line-height: 60px;
-	width: 90px;
-	display: block;
-}
+
+#filecheckloading ul{padding:10px 15px;margin: 0px auto;list-style:none;}
+#filecheckloading ul li{height:25px;line-height: 25px;background: url(../images/arrow_right.gif) no-repeat 0px 9px ;padding-left:11px;text-align: left;}
+#filecheckloading ul li span{padding-left:10px;text-align: left;}
+

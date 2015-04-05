@@ -1,21 +1,16 @@
 <?php
-
 /*
   PHP version 5
-  Copyright (c) 2002-2010 ECISP.CN
-  声明：这不是一个免费的软件，请在许可范围内使用
-
-  作者：Bili E-mail:huangqyun@163.com  QQ:6326420
-  http://www.ecisp.cn	http://www.easysitepm.com
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
-
 class mainpage extends connector {
-
 	function mainpage() {
 		$this->softbase(false);
 		$this->mlink = $this->memberlink(array(), admin_LNG);
 	}
-
 	function in_center() {
 		if ($this->CON['mem_isucenter']) {
 			include_once admin_ROOT . 'public/uc_client/client.php';
@@ -29,30 +24,27 @@ class mainpage extends connector {
 		$db_sql = "SELECT * FROM $db_table1 LEFT JOIN $db_table2 ON a.userid = b.userid  WHERE a.userid = $this->ec_member_username_id ";
 		$rsMember = $this->db->fetch_first($db_sql);
 		$rsMember['userid'] = $this->ec_member_username_id;
-
 		$rsMember['rankname'] = $this->get_member_purview($rsMember['mcid'], 'rankname');
 		$userid = intval($rsMember['userid']);
 		if (empty($userid)) {
 			exit('user err!');
 		}
 		$db_table = db_prefix . "order";
-
 		$db_where = " WHERE userid=$userid";
-
 		$db_where2 = " WHERE userid=$userid and ordertype=1";
-
 		$db_where3 = " WHERE userid=$userid and ordertype=3";
 		$this->pagetemplate->assign('ordernum', $this->db_numrows($db_table, $db_where));
 		$this->pagetemplate->assign('ordernum2', $this->db_numrows($db_table, $db_where2));
 		$this->pagetemplate->assign('ordernum3', $this->db_numrows($db_table, $db_where3));
-
-		$db_table = db_prefix . "bbs";
-		$db_where = " WHERE userid=$userid";
-
-		$this->pagetemplate->assign('messagenum', $this->db_numrows($db_table, $db_where));
-
+		$this->lng['sitename'] = $this->lng['member_title'] . '-' . $this->lng['sitename'];
+		$this->pagetemplate->assign('lngpack', $this->lng);
+		if ($this->get_app_view('bbs', 'isetup')) {
+			$db_table = db_prefix . "bbs";
+			$db_where = " WHERE userid=$userid";
+			$this->pagetemplate->assign('messagenum', $this->db_numrows($db_table, $db_where));
+			$this->pagetemplate->assign('bbsapp',1);
+		}
 		$templatesDIR = $this->get_templatesdir('member');
-
 		$templatefilename = $lng . '/' . $templatesDIR . '/member_center';
 		$this->pagetemplate->assign('out', 'center');
 		$this->pagetemplate->assign('mlink', $this->mlink);
@@ -61,13 +53,11 @@ class mainpage extends connector {
 		unset($rsMember, $mlink, $LANPACK, $this->lng);
 		$this->pagetemplate->display($templatefilename, 'center', false, null, admin_LNG);
 	}
-
 	function in_editinfo() {
 		parent::start_pagetemplate();
 		parent::member_purview();
 		$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
 		$rsMember = $this->get_member_attvalue($this->ec_member_username_id);
-
 		$modelatt = $this->get_memberatt_array($lng, false);
 		if (is_array($modelatt)) {
 			foreach ($modelatt as $key => $value) {
@@ -89,8 +79,9 @@ class mainpage extends connector {
 				}
 			}
 		}
+		$this->lng['sitename'] = $this->lng['member_title'] . '-' . $this->lng['sitename'];
+		$this->pagetemplate->assign('lngpack', $this->lng);
 		$templatesDIR = $this->get_templatesdir('member');
-
 		$templatefilename = $lng . '/' . $templatesDIR . '/member_center';
 		$this->pagetemplate->assign('mem_isaddress', $this->CON['mem_isaddress']);
 		$this->pagetemplate->assign('tokenkey', $this->fun->token());
@@ -103,15 +94,14 @@ class mainpage extends connector {
 		unset($rsMember, $mlink, $LANPACK, $this->lng);
 		$this->pagetemplate->display($templatefilename, 'center', false, null, admin_LNG);
 	}
-
 	function in_editpassword() {
 		parent::start_pagetemplate();
 		parent::member_purview();
 		$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
 		$rsMember = $this->get_member_attvalue($this->ec_member_username_id);
-
 		$templatesDIR = $this->get_templatesdir('member');
-
+		$this->lng['sitename'] = $this->lng['member_title'] . '-' . $this->lng['sitename'];
+		$this->pagetemplate->assign('lngpack', $this->lng);
 		$templatefilename = $lng . '/' . $templatesDIR . '/member_center';
 		$this->pagetemplate->assign('out', 'editpassword');
 		$this->pagetemplate->assign('tokenkey', $this->fun->token());
@@ -123,14 +113,14 @@ class mainpage extends connector {
 		unset($rsMember, $mlink, $LANPACK, $this->lng);
 		$this->pagetemplate->display($templatefilename, 'center', false, null, admin_LNG);
 	}
-
 	function in_editemail() {
 		parent::start_pagetemplate();
 		parent::member_purview();
 		$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
 		$rsMember = $this->get_member_attvalue($this->ec_member_username_id);
 		$templatesDIR = $this->get_templatesdir('member');
-
+		$this->lng['sitename'] = $this->lng['member_title'] . '-' . $this->lng['sitename'];
+		$this->pagetemplate->assign('lngpack', $this->lng);
 		$templatefilename = $lng . '/' . $templatesDIR . '/member_center';
 		$this->pagetemplate->assign('out', 'editemail');
 		$this->pagetemplate->assign('tokenkey', $this->fun->token());
@@ -142,7 +132,6 @@ class mainpage extends connector {
 		unset($rsMember, $mlink, $LANPACK, $this->lng);
 		$this->pagetemplate->display($templatefilename, 'center', false, null, admin_LNG);
 	}
-
 	function in_save() {
 		parent::start_pagetemplate();
 		parent::member_purview();
@@ -180,7 +169,6 @@ class mainpage extends connector {
 		$tel = $this->fun->substr($tel, 10);
 		$mobile = trim($this->fun->accept('mobile', 'P', true, true));
 		$mobile = $this->fun->substr($mobile, 10);
-
 		$birthday = $this->fun->accept('birthday', 'P');
 		if (!empty($birthday)) {
 			if (!preg_match("/^[0-9]{4}(\-|\/){0-9}{1,2}(\-|\/){0-9}{1,2}$/i", $birthday)) {
@@ -189,7 +177,6 @@ class mainpage extends connector {
 		} else {
 			$birthday = 0;
 		}
-
 		$country = intval($this->fun->accept('cityone', 'P'));
 		$country = empty($country) ? 0 : $country;
 		$province = intval($this->fun->accept('citytwo', 'P'));
@@ -200,56 +187,40 @@ class mainpage extends connector {
 		$district = empty($district) ? 0 : $district;
 		$address = trim($this->fun->accept('address', 'P', true, true));
 		$address = $this->fun->substr($address, 150);
-
 		$zipcode = trim($this->fun->accept('zipcode', 'P', true, true));
 		$zipcode = $this->fun->substr($zipcode, 10);
 		$zipcode = empty($zipcode) ? 0 : $zipcode;
-
 		$msn = trim($this->fun->accept('msn', 'P', true, true));
 		$qq = intval($this->fun->accept('qq', 'P'));
 		$qq = empty($qq) ? 0 : $qq;
-
 		$db_table = db_prefix . 'member';
 		$db_table2 = db_prefix . 'member_value';
 		$date = time();
 		$linkURL = $_SERVER['HTTP_REFERER'];
-
 		if ($inputclass == 'editinfo') {
 			$mvid = intval($this->fun->accept('mvid', 'P'));
-
 			$modelatt = $this->get_memberatt_array($lng);
 			if (is_array($modelatt)) {
 				$modelarray = array();
 				foreach ($modelatt as $key => $value) {
-
 					if ($value['inputtype'] == 'htmltext') {
-
 						$value['accept'] = 'html';
 					} elseif ($value['inputtype'] == 'checkbox') {
-
 						$value['accept'] = 'checkbox';
 					} elseif ($value['inputtype'] == 'string' || $value['inputtype'] == 'img' || $value['inputtype'] == 'addon' || $value['inputtype'] == 'video' || $value['inputtype'] == 'select' || $value['inputtype'] == 'radio' || $value['inputtype'] == 'selectinput') {
-
 						$value['accept'] = 'text';
 					} elseif ($value['inputtype'] == 'editor' || $value['inputtype'] == 'text') {
-
 						$value['accept'] = 'editor';
 					} elseif ($value['inputtype'] == 'int') {
-
 						$value['accept'] = 'int';
 					} elseif ($value['inputtype'] == 'float' || $value['inputtype'] == 'decimal') {
-
 						$value['accept'] = 'float';
 					} elseif ($value['inputtype'] == 'datetime') {
-
 						$value['accept'] = 'data';
 					}
 					$modelarray[] = $value;
 				}
-
-
 				$userinstall = null;
-
 				$userinstalldb = null;
 				foreach ($modelarray as $key => $value) {
 					$userinstall.=$value['attrname'] . ',';
@@ -282,7 +253,6 @@ class mainpage extends connector {
 						$valuestr = $this->fun->accept($value['attrname'], 'P', true, true);
 						$valuestr = empty($valuestr) ? 0 : strtotime($valuestr);
 						$valuestr = intval($valuestr);
-
 						$userinstalldb.="$valuestr,";
 						$userupdatedb.=$value['attrname'] . "=$valuestr,";
 					} elseif ($value['accept'] == 'checkbox') {
@@ -293,14 +263,11 @@ class mainpage extends connector {
 					}
 				}
 			}
-
 			$db_where = "userid=$this->ec_member_username_id AND username='$this->ec_member_username' ";
 			$db_set = "sex=$sex,birthday=$birthday,country=$country,province=$province,city=$city,district=$district,alias='$alias',
 			address='$address',zipcode='$zipcode',tel='$tel',qq=$qq,msn='$msn'";
 			$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
-
 			if ($userinstalldb) {
-
 				if ($mvid) {
 					$db_where = 'userid=' . $this->ec_member_username_id . ' AND mvid=' . $mvid;
 					$db_values = substr($userupdatedb, 0, strlen($userupdatedb) - 1);
@@ -314,7 +281,6 @@ class mainpage extends connector {
 			$linkURL = $this->mlink['center'];
 			$this->callmessage($this->lng['member_edit_ok'], $linkURL, $this->lng['gobackurlbotton']);
 		}
-
 		if ($inputclass == 'editpassword') {
 			if ($this->CON['mem_isucenter']) {
 				include_once admin_ROOT . 'public/uc_client/client.php';
@@ -323,7 +289,6 @@ class mainpage extends connector {
 			$password = md5($this->fun->accept('password', 'P'));
 			$password_uc = $this->fun->accept('password', 'P');
 			$oldpassword_uc = $this->fun->accept('oldpassword', 'P');
-
 			$db_where = "userid=$this->ec_member_username_id AND username='$this->ec_member_username' AND password='$oldpassword'";
 			$db_sql = "SELECT * FROM $db_table WHERE $db_where";
 			$rsMember = $this->db->fetch_first($db_sql);
@@ -340,7 +305,6 @@ class mainpage extends connector {
 						uc_user_edit($username, $oldpassword_uc, $password_uc, $email2);
 					}
 				}
-
 				if ($this->CON['is_moblie'] && $rsMember['ismoblie']) {
 					$rsMember = $this->get_member('', $this->ec_member_username_id);
 					$rsMember['newpassword'] = $password_uc;
@@ -350,13 +314,11 @@ class mainpage extends connector {
 				$this->callmessage($this->lng['password_ok'], $linkURL, $this->lng['out_botton']);
 			}
 		}
-
 		if ($inputclass == 'editmail') {
 			if ($this->CON['mem_isucenter']) {
 				include_once admin_ROOT . 'public/uc_client/client.php';
 			}
 			$linkURL = $this->mlink['memedit_email'];
-
 			if (!preg_match("/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/i", $email)) {
 				$this->callmessage($this->lng['email_err'], $linkURL, $this->lng['gobackbotton']);
 			}
@@ -382,22 +344,20 @@ class mainpage extends connector {
 			}
 		}
 	}
-
 	function in_moblievalidate() {
 		parent::start_pagetemplate();
 		parent::member_purview();
 		$lng = (admin_LNG == 'big5') ? $this->CON['is_lancode'] : admin_LNG;
 		$rsMember = $this->get_member('', $this->ec_member_username_id);
 		$templatesDIR = $this->get_templatesdir('member');
-
 		$templatefilename = $lng . '/' . $templatesDIR . '/member_center';
 		if ($rsMember['ismoblie'] && $rsMember['mobile'] && preg_match("/^1[0-9]{10}$/i", $rsMember['mobile'])) {
-
 			$out = 'moblievalidate';
 		} else {
-
 			$out = 'moblieedit';
 		}
+		$this->lng['sitename'] = $this->lng['member_title'] . '-' . $this->lng['sitename'];
+		$this->pagetemplate->assign('lngpack', $this->lng);
 		$this->pagetemplate->assign('out', $out);
 		$this->pagetemplate->assign('tokenkey', $this->fun->token());
 		$this->pagetemplate->assign('mlink', $this->mlink);
@@ -407,7 +367,6 @@ class mainpage extends connector {
 		unset($rsMember, $mlink, $LANPACK, $this->lng);
 		$this->pagetemplate->display($templatefilename, 'center', false, null, admin_LNG);
 	}
-
 	function in_moblievalidatecode() {
 		parent::start_pagetemplate();
 		parent::member_purview();
@@ -432,7 +391,6 @@ class mainpage extends connector {
 		}
 		$templatesDIR = $this->get_templatesdir('member');
 		$templatefilename = $lng . '/' . $templatesDIR . '/member_center';
-
 		if ($inputclass == 'add') {
 			$rsMember = $this->get_member(null, $userid);
 			$rsMember['moblie'] = $mobile;
@@ -444,7 +402,6 @@ class mainpage extends connector {
 			unset($rsMember, $mlink, $LANPACK, $this->lng);
 			$this->pagetemplate->display($templatefilename, 'center', false, null, admin_LNG);
 		}
-
 		if ($inputclass == 'edit') {
 			$db_table = db_prefix . 'member';
 			$mobliesn = trim($this->fun->accept('mobliesn', 'P', true, true));
@@ -452,7 +409,6 @@ class mainpage extends connector {
 				$this->callmessage($this->lng['seescodeerr'], $linkURL, $this->lng['gobackbotton']);
 			}
 			$password = md5($this->fun->accept('password', 'P'));
-
 			$date = time();
 			$db_where = "userid=$this->ec_member_username_id AND username='$this->ec_member_username' AND password='$password' AND mobliesn='$mobliesn' AND mobile='$mobile' AND ismoblie=1";
 			$db_sql = "SELECT * FROM $db_table WHERE $db_where";
@@ -472,7 +428,6 @@ class mainpage extends connector {
 			}
 		}
 	}
-
 	function in_moblievalidatesave() {
 		parent::start_pagetemplate();
 		parent::member_purview();
@@ -487,7 +442,6 @@ class mainpage extends connector {
 		if (empty($userid) || empty($username)) {
 			$this->callmessage($this->lng['member_edit_ok'], $linkURL, $this->lng['gobackurlbotton']);
 		}
-
 		if (!preg_match("/^[^!@~`\'\"#\$\%\^&\*\(\)\+\-\{\}\[\]\|\\/\?\<\>\,\.\:\;]{2,16}$/i", $username)) {
 			$this->callmessage($this->lng['username_err'], $linkURL, $this->lng['gobackbotton']);
 		}
@@ -495,18 +449,14 @@ class mainpage extends connector {
 		if (!preg_match("/^1[0-9]{10}$/i", $mobile)) {
 			$this->callmessage($this->lng['moblie_validate'], $linkURL, $this->lng['gobackbotton']);
 		}
-
 		$mobliesn = trim($this->fun->accept('mobliesn', 'P', true, true));
 		if (!preg_match("/^[0-9]{8}$/i", $mobliesn)) {
 			$this->callmessage($this->lng['seescodeerr'], $linkURL, $this->lng['gobackbotton']);
 		}
 		$password = md5($this->fun->accept('password', 'P'));
-
 		$date = time();
 		$db_table = db_prefix . 'member';
-
 		if ($inputclass == 1) {
-
 			$db_where = "userid=$this->ec_member_username_id AND username='$this->ec_member_username' AND password='$password' AND mobliesn='$mobliesn' AND ismoblie=0";
 			$db_sql = "SELECT * FROM $db_table WHERE $db_where";
 			$rsMember = $this->db->fetch_first($db_sql);
@@ -526,7 +476,6 @@ class mainpage extends connector {
 			}
 		}
 	}
-
 	function in_getvalidatecode() {
 		parent::start_pagetemplate();
 		parent::member_purview();
@@ -542,14 +491,12 @@ class mainpage extends connector {
 		$db_where = "userid=$this->ec_member_username_id AND username='$this->ec_member_username'";
 		$db_set = "mobliesn='$mobliesn',mobliesntime=$date";
 		$this->db->query('UPDATE ' . $db_table . ' SET ' . $db_set . ' WHERE ' . $db_where);
-
 		if ($this->CON['is_moblie']) {
 			$rsMember = $this->get_member('', $this->ec_member_username_id);
 			$rsMember['idcode'] = $mobliesn;
 			$this->membersmssend($rsMember, $mobile, 'mobliecode');
 		}
 	}
-
 	function checkdid($did, $dbname) {
 		if (empty($did)) {
 			return false;
@@ -563,7 +510,4 @@ class mainpage extends connector {
 			return false;
 		}
 	}
-
 }
-
-?>

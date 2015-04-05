@@ -1,0 +1,24 @@
+[%#%]询盘列表[%#%]
+[%if $menutype == 'enquirylist'%]
+<ul class="listbottonul" id="listbottonul">
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	<li class="menumain"><a id="bolt" href="#body" hidefocus="true" hidefocus="true">[%$ST.bolt_botton%]</a>
+		<ul class="menulist">
+			<li><span class="menufont">[%$ST.enquirymain_text_isclass%]</span>
+				<ul>
+					<li><a class="menunoclick" id="isclass0" href="#body" onclick="javascript:dbfilter('isclass','isclass',0,0,4,'selectform','selectall','check_all')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.all_botton%]</a></li>
+					<li><a class="menuclick" id="isclass1" href="#body" onclick="javascript:dbfilter('isclass','isclass',1,1,4,'selectform','selectall','check_all')" title="[%$ST.enquirymain_text_isclass1%]" hidefocus="true">[%$ST.enquirymain_text_isclass1%]</a></li>
+					<li><a class="menuclick" id="isclass2" href="#body" onclick="javascript:dbfilter('isclass','isclass',2,2,4,'selectform','selectall','check_all')" title="[%$ST.enquirymain_text_isclass2%]" hidefocus="true">[%$ST.enquirymain_text_isclass2%]</a></li>
+					<li><a class="menuclick" id="isclass3" href="#body" onclick="javascript:dbfilter('isclass','isclass',3,3,4,'selectform','selectall','check_all')" title="[%$ST.enquirymain_text_isclass3%]" hidefocus="true">[%$ST.enquirymain_text_isclass3%]</a></li>
+				</ul>
+			</li>
+			<li><a class="menuclick" id="searchall" href="#body" onclick="javascript:refreshurl('selectform')" title="[%$ST.all_botton%]" hidefocus="true">[%$ST.getalllist_botton%]</a></li>
+		</ul>
+	</li>
+	<li class="menumain"><a id="search" href="javascript:parent.windowsdig('[%$ST.enquirymain_search_botton%]','iframe:index.php?archive=enquirymain&action=search&iframename='+self.frameElement.getAttribute('name'),'600px','300px','iframe',true);" title="[%$ST.enquirymain_search_botton%]" hidefocus="true">[%$ST.search_botton%]</a></li>
+	[%if @this->powercheck('order','enquirydel')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:callrun('index.php?archive=enquirymain&action=enquirydel','selectinfoid',false,null,null,'index.php?archive=management&action=load','[%$ST.del_messok%]','[%$ST.select_no%]',true,'[%$ST.run_ok%]','[%$ST.run_no%]','selectform','selectall','check_all');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform','selectall','check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+</ul>
+[%/if%]      

@@ -1,0 +1,20 @@
+[%#%]文件管理[%#%]
+[%if $menutype == 'fileadminlist'%]
+<ul class="listbottonul" id="listbottonul">
+	[%if @this->powercheck('communicate','mkdir')==true %]
+	<li class="menumain"><a id="addinfo" class="addinfo" onclick="javascript:parent.onbotton('[%$ST.creatfile_botton|addslashes('hc')%]', 'index.php?archive=filemain&action=mkdir&path=' + escape(document.getElementById('filepath').value) + '&freshid=' + Math.random() + '&iframename=' + self.frameElement.getAttribute('name'), true, 'addinfo', self.frameElement.getAttribute('name'));"  href="#body" title="[%$ST.creatfile_botton%]" hidefocus="true">[%$ST.creatfile_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refreshfile" class="dbupdatefile" onclick="javascript:sortinput('index.php?archive=filemain&action=refreshfiledb&dirlist=' + escape(document.getElementById('filepath').value), 'index.php?archive=management&action=load', '[%$ST.update_filemessok%]', true, '[%$ST.run_ok%]', '[%$ST.run_no%]', 'selectform', 'selectall', 'check_all', 'selectinfoid', 'selectinfoid');" href="#body" title="[%$ST.refreshfile_botton%]" hidefocus="true">[%$ST.refreshfile_botton%]</a></li>
+
+	[%if @this->powercheck('communicate','upfile')==true %]
+	<li class="menumain"><a id="upfiledir" class="dbupfilebotton" onclick="javascript:parent.windowsdig('[%$ST.imgupload_botton%]', 'iframe:index.php?archive=filemanage&action=filewindow&listfunction=filelist&filetype=img&isgetback=1&checkfrom=list&path=' + escape(document.getElementById('filepath').value) + '&iframename=' + self.frameElement.getAttribute('name'), '900px', '480px', 'iframe')" href="#body" title="[%$ST.imgupload_botton%]" hidefocus="true">[%$ST.imgupload_botton%]</a></li>
+	<li class="menumain"><a id="upfiledir" class="dbupfilebotton" onclick="javascript:parent.windowsdig('[%$ST.fileupload_botton%]', 'iframe:index.php?archive=filemanage&action=filewindow&listfunction=filelist&filetype=file&isgetback=1&checkfrom=list&path=' + escape(document.getElementById('filepath').value) + '&iframename=' + self.frameElement.getAttribute('name'), '900px', '480px', 'iframe')" href="#body" title="[%$ST.fileupload_botton%]" hidefocus="true">[%$ST.fileupload_botton%]</a></li>
+	<li class="menumain"><a id="upfiledir" class="dbupfilebotton" onclick="javascript:parent.windowsdig('[%$ST.movieupload_botton%]', 'iframe:index.php?archive=filemanage&action=filewindow&listfunction=filelist&filetype=mover&isgetback=1&checkfrom=list&path=' + escape(document.getElementById('filepath').value) + '&iframename=' + self.frameElement.getAttribute('name'), '900px', '480px', 'iframe')" href="#body" title="[%$ST.movieupload_botton%]" hidefocus="true">[%$ST.movieupload_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="selectall" class="selectall" href="javascript:select_change(true,'selectform','selectall','check_all')" title="[%$ST.selAll_botton%]" hidefocus="true">[%$ST.selAll_botton%]</a></li>
+	[%if @this->powercheck('communicate','delfile')==true %]
+	<li class="menumain"><a id="del" onclick="javascript:delfile('index.php?archive=filemain&action=delfile', 'selectinfoid', false, null, null, 'index.php?archive=management&action=load', '[%$ST.del_messok%]', '[%$ST.select_no%]', true, '[%$ST.run_ok%]', '[%$ST.run_no%]', 'selectform', 'selectall', 'check_all', 'filepath');" href="#body" hidefocus="true">[%$ST.del_botton%]</a></li>
+	[%/if%]
+	<li class="menumain"><a id="refresh" href="#body" onclick="javascript:refresh('selectform', 'selectall', 'check_all');" title="[%$ST.refresh_botton%]" hidefocus="true">[%$ST.refresh_botton%]</a></li>
+</ul>
+[%/if%]

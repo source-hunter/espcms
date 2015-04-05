@@ -1,15 +1,12 @@
 <?php
-
 /*
- * PHP version 5
-  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM、EarcLink.COM
- * 警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
- * 作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
- * http://www.ecisp.cn		官方网址
- * http://www.easysitepm.com	系统演示网址
+  PHP version 5
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
+  作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 error_reporting(0);
-
 ini_set("magic_quotes_runtime", 0);
 ini_set('memory_limit', '640M');
 define('adminfile', 'public');
@@ -39,23 +36,15 @@ $code->type = 0;
 $code->width = 70;
 $code->height = 23;
 $code->background = 30;
-
 $code->adulterate = $CONFIG['scode_adulterate'];
-
 $code->ttf = 0;
 $code->angle = 0;
-
 $code->color = 0;
 $code->size = 1;
-
 $code->shadow = $CONFIG['scode_shadow'];
 $code->animator = 0;
-
 $code->bgcolor = $CONFIG['scode_bgcolor'];
-
 $code->fontcolor = $CONFIG['scode_fontcolor'];
-
 $code->datapath = admin_ROOT . 'datacache/';
 $code->includepath = '';
 $code->display();
-?>

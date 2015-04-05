@@ -4,11 +4,13 @@
      <table border="0" style="border-collapse:collapse" width="100%" bordercolor="#FFFFFF">
 		<tr>
 			<td width="5%"><input type="checkbox" name="selectinfoid" value="[%$array[list].afid%]"></td>
+			<td width="8%"><input type="hidden" name="infoid" value="[%$array[list].afid%]"><input type="text" name="infopid" size="3" value="[%$array[list].pid%]" class="infoInput" onclick="if(this.value=='[%$array[list].pid%]'){this.value = '';}else {this.select();}" onblur="if(this.value ==''){this.value ='[%$array[list].pid%]';}"></td>
 			<td width="8%">[%$array[list].afid%]</td>
-			<td width="40%">[%$array[list].filetitle%]</td>
+			<td width="25%">[%$array[list].filetitle%]</td>
 			<td width="20%">[%$array[list].filename%]</td>
 			<td width="14%">[%$array[list].addtime|timeformat(3)%]</td>
-			<td width="13%" id="infotype">
+			<td width="8%">[%if $array[list].isrecomm==1%][%$ST.seomanage_audit_ok%][%else%][%$ST.seomanage_audit_no%][%/if%]</td>
+			<td width="12%" id="infotype">
 				<table border="0" style="border-collapse:collapse" bordercolor="#FFFFFF">
 					<tr>
 						<td>
@@ -33,4 +35,4 @@
 		</tr>
 	</table>
 </div>
-[%/if%]
+[%/if%]      

@@ -2,11 +2,10 @@
 
 /*
   PHP version 5
-  Copyright (c) 2002-2013 ECISP.CN、EarcLink.COM
-  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖！
-
+  Copyright (c) 2002-2014 ECISP.CN、EarcLink.COM
+  警告：这不是一个免费的软件，请在许可范围内使用，请尊重知识产权，侵权必究，举报有奖
   作者：黄祥云 E-mail:6326420@qq.com  QQ:6326420 TEL:18665655030
-  ESPCMS官网介绍：http://www.ecisp.cn 企业建站：http://www.earclink.cn
+  ESPCMS官网介绍：http://www.ecisp.cn	企业建站：http://www.earclink.cn
  */
 
 class important extends connector {
@@ -17,26 +16,20 @@ class important extends connector {
 
 	function onsitelist() {
 		parent::start_template();
-
 		$MinPageid = $this->fun->accept('MinPageid', 'R');
-
 		$page_id = $this->fun->accept('page_id', 'R');
-
 		$countnum = $this->fun->accept('countnum', 'R');
 		$MaxPerPage = $this->fun->accept('MaxPerPage', 'R');
 		if (empty($MaxPerPage)) {
 			$MaxPerPage = $this->CON['max_list'];
 		}
-
 		$limitkey = $this->fun->accept('limitkey', 'R');
 		$limitkey = empty($limitkey) ? 'slid' : $limitkey;
-
 		$limitclass = $this->fun->accept('limitclass', 'R');
 		$limitclass = empty($limitclass) ? 'DESC' : $limitclass;
 		$db_where = " ";
 		$db_table = db_prefix . 'site';
 		if (!empty($countnum)) {
-
 			$countnum = $this->db_numrows($db_table, $db_where);
 			exit($countnum);
 		}
@@ -47,7 +40,6 @@ class important extends connector {
 			$rsList['link'] = $rsList['sitehttp'] . '/' . $rsList['sitedir'] . "/index.php?archive=adminuser&action=sitecode&siteid=$rsList[slid]&code=$codelist&adminid=$rsList[adminusername]";
 			$array[] = $rsList;
 		}
-
 		$this->fun->setcookie($this->fun->noncefile() . 'pgid', $page_id, 600);
 		$this->ectemplates->assign('array', $array);
 		$this->ectemplates->assign('sql', $sql);
@@ -56,7 +48,6 @@ class important extends connector {
 
 	function onsiteadd() {
 		parent::start_template();
-
 		$tab = $this->fun->accept('tab', 'G');
 		$tab = empty($tab) ? 'true' : $tab;
 		$this->ectemplates->assign('tab', $tab);
@@ -135,5 +126,3 @@ class important extends connector {
 	}
 
 }
-
-?>
